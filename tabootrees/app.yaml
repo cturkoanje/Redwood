@@ -18,6 +18,12 @@ handlers:
 - url: /stylesheets
   static_dir: resources/stylesheets
 
+- url: /templates/elements
+  static_dir: resources/templates/elements
+
+- url: /stylesheets/elements
+  static_dir: resources/stylesheets/elements
+
 - url: .*
   script: main.app
 
