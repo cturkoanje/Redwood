@@ -1,65 +1,51 @@
+<!DOCTYPE html>
+
 <html>
-<head>
-  <style type="text/css"><
-
-@font-face {
-    font-family: 'Carrosserie-Light';
-    src: url('fonts/Carrosserie-Light.eot?#iefix') format('embedded-opentype'),
-         url('fonts/Carrosserie-Light.woff') format('woff'),
-         url('fonts/Carrosserie-Light.ttf')  format('truetype'),
-         url('fonts/Carrosserie-Light.svg#webfont') format('svg');
-}
-
-div
-{
-font-family:Carrosserie-Light;
-}
-
-</style>
-
-<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-<script type="text/javascript">
+  <head>
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script type="text/javascript">
       (function() {
-       var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-       po.src = 'https://apis.google.com/js/client:plusone.js';
-       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-     })();
+        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+        po.src = 'https://apis.google.com/js/client:plusone.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+      })();
 
 
-     function signinCallback(authResult) {
-  if (authResult['access_token']) {
-    // Successfully authorized
-    // Hide the sign-in button now that the user is authorized, for example:
-    document.getElementById('signinButton').setAttribute('style', 'display: none');
-    $('#YO').text('You are already logged in!');
+      function signinCallback(authResult) {
+        if (authResult['access_token']) {
+        // Successfully authorized
+        // Hide the sign-in button now that the user is authorized, for example:
+          document.getElementById('signinButton').setAttribute('style', 'display: none');
+          $('#YO').text('You are already logged in!');
 
-  } else if (authResult['error']) {
-    // There was an error.
-    // Possible error codes:
-    //   "access_denied" - User denied access to your app
-    //   "immediate_failed" - Could not automatically log in the user
-    // console.log('There was an error: ' + authResult['error']);
-  }
-}
+        } else if (authResult['error']) {
+          // There was an error.
+          // Possible error codes:
+          //   "access_denied" - User denied access to your app
+          //   "immediate_failed" - Could not automatically log in the user
+          // console.log('There was an error: ' + authResult['error']);
+        }
+      }
     </script>
 
-</head>
+  </head>
 
-<body>
-<div id="container">
-	<span id="YO"></span>
-<span id="signinButton">
-<span
-class="g-signin"
-data-callback="signinCallback"
-
-data-clientid="394867862713.apps.googleusercontent.com"
-data-cookiepolicy="single_host_origin"
-data-requestvisibleactions="http://schemas.google.com/AddActivity"
-data-scope="https://www.googleapis.com/auth/plus.login">
-</span>
-</span>
-</div>
-<footer>
-</footer>
-
+  <body>
+    <div id="container">
+      <span id="YO"></span>
+      <span id="signinButton">
+        <span
+          class="g-signin"
+          data-callback="signinCallback"
+          data-clientid="394867862713.apps.googleusercontent.com"
+          data-cookiepolicy="single_host_origin"
+          data-requestvisibleactions="http://schemas.google.com/AddActivity"
+          data-scope="https://www.googleapis.com/auth/plus.login">
+        </span>
+      </span>
+    </div>
+    <footer>
+    </footer>
+  </body>
+</html>

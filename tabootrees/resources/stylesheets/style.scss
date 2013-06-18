@@ -1,1 +1,13 @@
 @import 'reset';
+
+@font-face {
+  font-family: 'Carrosserie-Light';
+  src: url('../fonts/Carrosserie-Light.eot?#iefix') format('embedded-opentype'),
+       url('../fonts/Carrosserie-Light.woff') format('woff'),
+       url('../fonts/Carrosserie-Light.ttf')  format('truetype'),
+       url('../fonts/Carrosserie-Light.svg#webfont') format('svg');
+}
+
+div {
+	font-family: "Carrosserie-Light";
+}
