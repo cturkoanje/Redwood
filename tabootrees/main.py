@@ -146,6 +146,7 @@ class MainHandler(webapp2.RequestHandler):
         output = {
                 'url': users.create_login_url("/login_response"),
                 'quarterlist': quarterlist
+                }
         path = os.path.join(os.path.dirname(__file__), 'resources/templates/test.html')
         self.response.write(template.render(path, output))
         # self.response.write(str(self.session_store))
