@@ -5,25 +5,19 @@
     <link rel="stylesheet" href="stylesheets/style.css">
     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
     <script src="javascripts/polymer-all/polymer/polymer.min.js"></script>
+    <script src="https://apis.google.com/js/client:plusone.js"></script>
     <script src="javascripts/gplus.js"></script>
 
     <link rel="import" href="templates/elements/lumber-btn.html">
   </head>
 
   <body>
-    <div id="colorify"></div>
     <div id="container">
-      <span class="btn-shadow"><a href="#">lumbergrammers!</a></span>
-      <span id="YO"></span>
-      <span id="signinButton">
-        <span
-          class="g-signin"
-          data-callback="signinCallback"
-          data-clientid="394867862713.apps.googleusercontent.com"
-          data-cookiepolicy="single_host_origin"
-          data-requestvisibleactions="http://schemas.google.com/AddActivity"
-          data-scope="https://www.googleapis.com/auth/plus.login">
-        </span>
+      <section id="logo">
+        <img src="images/logo.png" />
+      </section>
+      <span id="signin">
+        <a href="#" id="login">Log In!</a>
       </span>
     </div>
     <footer>
