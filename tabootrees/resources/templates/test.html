@@ -26,8 +26,8 @@ font-family:Carrosserie-Light;
      })();
 
 
-     function signinCallback(authResult) {
-  if (authResult['access_token']) {
+  function signinCallback(authResult) {
+    if (authResult['access_token']) {
     // Successfully authorized
     // Hide the sign-in button now that the user is authorized, for example:
     document.getElementById('signinButton').setAttribute('style', 'display: none');
@@ -59,6 +59,7 @@ data-requestvisibleactions="http://schemas.google.com/AddActivity"
 data-scope="https://www.googleapis.com/auth/plus.login">
 </span>
 </span>
+{{url}}
 </div>
 <footer>
 </footer>
