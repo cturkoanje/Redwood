@@ -4,6 +4,9 @@
 	}
 	float: $side;
 	width: 43%;
+	@media only screen and (max-width: 720px) {
+		width: 40%;
+	}
 }
 
 .left {
