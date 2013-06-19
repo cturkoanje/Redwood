@@ -22,6 +22,6 @@ function signinCallback(authResult) {
 
 $(document).ready(function() {
 
-  $(".g-signin").click();
+  $("#signinButton").click();
 
 });
