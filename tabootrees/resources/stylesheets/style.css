@@ -41,8 +41,6 @@ table {
   border-collapse: collapse;
   border-spacing: 0; }
 
-
-=======
 @font-face {
   font-family: 'Carrosserie-Light';
   src: url("../fonts/Carrosserie-Light.eot?#iefix") format("embedded-opentype"), url("../fonts/Carrosserie-Light.woff") format("woff"), url("../fonts/Carrosserie-Light.ttf") format("truetype"), url("../fonts/Carrosserie-Light.svg#webfont") format("svg"); }
@@ -59,7 +57,11 @@ body {
   border: 1px blue solid; }
 
 #counter {
-  color: #04B404;
+  color: #0B3B0B;
+  font-size: 1.5em;
+  transition-property: color;
+  transition-delay: 15s;
+  transition-duration: 30s;
 }
 
 a {
