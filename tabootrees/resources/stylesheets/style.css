@@ -133,8 +133,7 @@ body {
   top: 0;
   width: 100%;
   position: fixed;
-  min-height: 60px;
-  height: 15%;
+  height: 40px;
   text-align: center;
   background-color: #cc4429; }
 
@@ -173,12 +172,13 @@ body {
 
 #myteam {
   min-height: 20px;
-  background-color: #203157; }
+  background-color: #203157;
+  box-shadow: 0 5px 0 #101A30, 0px 5px 6px black; }
 
 #avatar {
   position: absolute;
   left: 5%;
   display: inline-block;
-  width: 45px;
-  height: 45px;
+  width: 30px;
+  height: 30px;
   background-color: gray; }
