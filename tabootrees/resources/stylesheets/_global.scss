@@ -2,7 +2,7 @@ body {
 	background: url("../images/flannel.png") repeat;
 }
 
-#container {
+#content {
 	margin: 5% auto;
 	width: 80%;
 }
@@ -38,4 +38,8 @@ body {
 .btn:active {
 	top: 4px;
 	box-shadow: 0 1px 0 $btnshadow, 0 1px 3px black;
+}
+
+#load {
+	display: none;
 }

@@ -18,6 +18,9 @@ handlers:
 - url: /stylesheets
   static_dir: resources/stylesheets
 
+- url: /partials
+  static_dir: resources/partials
+
 - url: /templates/elements
   static_dir: resources/templates/elements
 
