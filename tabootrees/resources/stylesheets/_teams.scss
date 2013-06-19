@@ -6,12 +6,12 @@
 	width: 43%;
 }
 
-#left {
+.left {
 	@include column(left);
 	@include clickable($sec-dark);
 }
 
-#right {
+.right {
 	@include column(right);
 	@include clickable($pri-dark);
 }

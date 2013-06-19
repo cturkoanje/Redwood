@@ -61,6 +61,7 @@ body {
 #content {
   margin: 70px auto;
   width: 80%;
+  height: 80%;
   max-width: 960px; }
 
 #colorify {
@@ -166,26 +167,26 @@ body {
   display: none;
   opacity: 0; }
 
-#left {
+.left {
   float: left;
   width: 43%;
   position: relative;
   transition: all 0.1s;
   cursor: pointer; }
-  #left h1 {
+  .left h1 {
     font-size: 1.5em; }
-  #left:active {
+  .left:active {
     top: 4px;
     box-shadow: 0 1px 0 #101a30, 0 1px 3px black; }
 
-#right {
+.right {
   float: right;
   width: 43%;
   position: relative;
   transition: all 0.1s;
   cursor: pointer; }
-  #right h1 {
+  .right h1 {
     font-size: 1.5em; }
-  #right:active {
+  .right:active {
     top: 4px;
     box-shadow: 0 1px 0 #99331f, 0 1px 3px black; }
