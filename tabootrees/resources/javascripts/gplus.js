@@ -5,6 +5,13 @@ $(document).ready(function() {
     // Successfully authorized
     // Hide the sign-in button now that the user is authorized, for example:
       $("#login").css({ display: "none" });
+      $("#maketeam").css({ display: "block" });
+      $("#jointeam").css({ display: "block" });
+      $("#help").css({ display: "block" });
+      $("body").css({ transition: "none", "-webkit-transition": "none"});
+      $("#maketeam").animate({ opacity: 1 }, 200);
+      $("#jointeam").animate({ opacity: 1 }, 200);
+      $("#help").animate({ opacity: 1 }, 200);
     } else if (authResult['error']) {
       // There was an error.
       // Possible error codes:
@@ -20,6 +27,24 @@ $(document).ready(function() {
     'cookiepolicy': 'single_host_origin',
     'requestvisibleactions': 'http://schemas.google.com/AddActivity',
     'scope': 'https://www.googleapis.com/auth/plus.login'
+  });
+
+  $('a').click(function(e){
+    e.preventDefault();
+    var toLoad = $(this).attr('href')+' #container';
+    $('#container').hide('fast',loadContent);
+    $('#load').remove();
+    $('body').append('<span id="load">LOADING...</span>');
+    $('#load').fadeIn('normal');
+    function loadContent() {
+        $('#container').load(toLoad, showNewContent());
+    }
+    function showNewContent() {
+        $('#container').show('normal', hideLoader());
+    }
+    function hideLoader() {
+        $('#load').fadeOut('normal');
+    }
   });
 
 });
