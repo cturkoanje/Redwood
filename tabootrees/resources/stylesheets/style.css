@@ -51,6 +51,9 @@ body {
   color: white;
   text-shadow: .18em .18em 0 #333333; }
 
+html {
+  height: 100%; }
+
 a {
   color: white;
   text-decoration: none; }
@@ -60,7 +63,11 @@ a {
   visibility: hidden; }
 
 body {
+  height: 100%;
   background: url("../images/flannel.png") repeat; }
+
+#container {
+  height: 100%; }
 
 #content {
   margin: 70px auto;
@@ -114,6 +121,10 @@ body {
   background: #203157;
   box-shadow: 0 5px 0 #101a30, 0px 5px 6px black; }
 
+.tertiary {
+  background: #6b130b;
+  box-shadow: 0 5px 0 #460a05, 0px 5px 6px black; }
+
 #navbar {
   font-size: 2em;
   display: inline-block;
@@ -135,24 +146,24 @@ body {
   margin-top: 17px;
   text-align: right; }
 
-#username {
+#navusername {
   font-size: 0.5em;
   position: relative;
-  top: -14px;
-  left: 10px; }
+  top: -1em;
+  left: 1em; }
 
-.navatar {
+#navatar {
   width: 40px;
   height: 40px;
   margin-top: 5px; }
 
-#avatar {
+#navinfo {
   position: absolute;
   left: 3%;
   display: inline-block;
   width: 27%; }
 
-#teamstitle {
+#title {
   position: absolute;
   margin-top: 10px;
   display: inline-block;
@@ -174,32 +185,56 @@ body {
 
 .left {
   float: left;
-  width: 43%;
-  position: relative;
-  transition: all 0.1s;
-  cursor: pointer; }
+  width: 43%; }
   .left h1 {
     font-size: 1.5em; }
-  .left:active {
-    top: 4px;
-    box-shadow: 0 1px 0 #101a30, 0 1px 3px black; }
 
 .right {
   float: right;
-  width: 43%;
+  width: 43%; }
+  .right h1 {
+    font-size: 1.5em; }
+
+.leftclick {
   position: relative;
   transition: all 0.1s;
   cursor: pointer; }
-  .right h1 {
-    font-size: 1.5em; }
-  .right:active {
+  .leftclick:active {
+    top: 4px;
+    box-shadow: 0 1px 0 #101a30, 0 1px 3px black; }
+
+.rightclick {
+  position: relative;
+  transition: all 0.1s;
+  cursor: pointer; }
+  .rightclick:active {
     top: 4px;
     box-shadow: 0 1px 0 #99331f, 0 1px 3px black; }
 
 .vertcard {
-  min-height: 400px;
-  height: 40%; }
+  height: 60%;
+  overflow: scroll; }
+
+#chat {
+  font-size: 1.8em;
+  line-height: 1.2em; }
 
 #card {
+  line-height: 1.5em;
   text-align: center;
   font-size: 2.5em; }
+
+.avatar {
+  width: 50px;
+  height: 50px; }
+
+.username {
+  position: relative;
+  top: -1em;
+  left: 1em;
+  font-size: 1.2em; }
+
+#ready {
+  clear: both;
+  position: relative;
+  top: 0.5em; }

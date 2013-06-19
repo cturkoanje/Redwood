@@ -8,10 +8,16 @@
 
 .left {
 	@include column(left);
-	@include clickable($sec-dark);
 }
 
 .right {
 	@include column(right);
+}
+
+.leftclick {
+	@include clickable($sec-dark);
+}
+
+.rightclick {
 	@include clickable($pri-dark);
 }

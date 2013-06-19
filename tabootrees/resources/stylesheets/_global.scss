@@ -8,6 +8,10 @@
 	}
 }
 
+html {
+	height: 100%;
+}
+
 a {
 	color: white;
 	text-decoration: none;
@@ -19,7 +23,12 @@ a {
 }
 
 body {
+	height: 100%;
 	background: url("../images/flannel.png") repeat;
+}
+
+#container {
+	height: 100%;
 }
 
 #content {
@@ -76,6 +85,11 @@ body {
 	box-shadow: 0 5px 0 $sec-dark, 0px 5px 6px black;
 }
 
+.tertiary {
+	background: $ter-color;
+	box-shadow: 0 5px 0 $ter-dark, 0px 5px 6px black;
+}
+
 #navbar {
 	font-size: 2em;
 	display: inline-block;
@@ -99,27 +113,27 @@ body {
 	text-align: right;
 }
 
-#username {
+#navusername {
 	font-size: 0.5em;
 	position: relative;
-	top: -14px;
-	left: 10px;
+	top: -1em;
+	left: 1em;
 }
 
-.navatar {
+#navatar {
 	width: 40px;
 	height: 40px;
 	margin-top: 5px;
 }
 
-#avatar {
+#navinfo {
 	position: absolute;
 	left: 3%;
 	display: inline-block;
 	width: 27%;
 }
 
-#teamstitle {
+#title {
 	position: absolute;
 	margin-top: 10px;
 	display: inline-block;
