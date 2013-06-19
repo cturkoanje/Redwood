@@ -1,100 +1,37 @@
+
 <html>
-<head>
-  <style type="text/css"><
+  <head>
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="javascripts/polymer-all/polymer/polymer.min.js"></script>
+    <script src="javascripts/gplus.js"></script>
+    <script src="javascripts/timer.js"></script>
 
-@font-face {
-    font-family: 'Carrosserie-Light';
-    src: url('fonts/Carrosserie-Light.eot?#iefix') format('embedded-opentype'),
-         url('fonts/Carrosserie-Light.woff') format('woff'),
-         url('fonts/Carrosserie-Light.ttf')  format('truetype'),
-         url('fonts/Carrosserie-Light.svg#webfont') format('svg');
-}
+    <link rel="import" href="templates/elements/lumber-btn.html">
+  </head>
 
-div
-{
-font-family:Carrosserie-Light;
-}
-
-</style>
-
-<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-<script type="text/javascript">
-      (function() {
-       var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-       po.src = 'https://apis.google.com/js/client:plusone.js';
-       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-     })();
-
-
-     function signinCallback(authResult) {
-  if (authResult['access_token']) {
-    // Successfully authorized
-    // Hide the sign-in button now that the user is authorized, for example:
-    document.getElementById('signinButton').setAttribute('style', 'display: none');
-    $('#YO').text('You are already logged in!');
-
-  } else if (authResult['error']) {
-    // There was an error.
-    // Possible error codes:
-    //   "access_denied" - User denied access to your app
-    //   "immediate_failed" - Could not automatically log in the user
-    // console.log('There was an error: ' + authResult['error']);
-  }
-}
-    </script>
-
-</head>
-
-<body>
-<div id="container">
-
-  <span id="YO"></span>
-  <span id="signinButton">
-  <span
-  class="g-signin"
-  data-callback="signinCallback"
-
-  data-clientid="394867862713.apps.googleusercontent.com"
-  data-cookiepolicy="single_host_origin"
-  data-requestvisibleactions="http://schemas.google.com/AddActivity"
-  data-scope="https://www.googleapis.com/auth/plus.login">
-  </span>
-  </span>
-  <h3 id="counter"></h3>
-  <span id="timerDone"></span>
-  <script>
-    function countdown(minutes) {
-      var seconds = 30;
-      var mins = minutes
-      function tick() {
-          //This script expects an element with an ID = "counter". You can change that to what ever you want. 
-          var counter = document.getElementById('counter');
-          var current_minutes = mins-1
-          seconds--;
-          counter.innerHTML = /*current_minutes.toString() + ":" + (seconds < 10 ? "0" : "") + */String(seconds);
-          if( seconds > 0 ) {
-              setTimeout(tick, 1000);
-          } else {
-              
-              if(mins > 1){
-                  
-                  countdown(mins-1);           
-                      
-              }
-              else{
-                $('#counter').text('Time is up!');
-              }
-          }
-      }
-      tick();
-      
-    }
-    //You can use this script with a call to onclick, onblur or any other attribute you would like to use. 
-    countdown(1);//where n is the number of minutes required. 
-  </script>
-
-
-</div>
-<footer>
-</footer>
-
+  <body>
+    <div id="container">
+      <a href="/">lumbergrammers!</a>
+      <span id="YO"></span>
+      <span id="signinButton">
+        <span
+          class="g-signin"
+          data-callback="signinCallback"
+          data-clientid="394867862713.apps.googleusercontent.com"
+          data-cookiepolicy="single_host_origin"
+          data-requestvisibleactions="http://schemas.google.com/AddActivity"
+          data-scope="https://www.googleapis.com/auth/plus.login">
+        </span>
+      </span>
+      <h3 id="counter"></h3>
+      <span id="timerDone"></span>
+      <script>
+        //You can use this script with a call to onclick, onblur or any other attribute you would like to use. 
+        countdown(1);//where n is the number of minutes required. 
+      </script>
+    </div>
+    <footer>
+    </footer>
+  </body>
+</html>
