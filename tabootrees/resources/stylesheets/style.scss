@@ -1,58 +1,6 @@
 @import 'reset';
+@import 'variables';
+@import 'typography';
+@import 'global';
 
-@font-face {
-  font-family: 'Carrosserie-Light';
-  src: url('../fonts/Carrosserie-Light.eot?#iefix') format('embedded-opentype'),
-       url('../fonts/Carrosserie-Light.woff') format('woff'),
-       url('../fonts/Carrosserie-Light.ttf')  format('truetype'),
-       url('../fonts/Carrosserie-Light.svg#webfont') format('svg');
-}
-
-div {
-	font-family: "Carrosserie-Light";
-}
-
-body {
-	background: url("../images/flannel.png") repeat;
-}
-
-#container {
-	margin: 5% auto;
-	width: 80%;
-}
-
-#colorify {
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	position: fixed;
-	background: hsla(200, 80, 80, 0.3);
-}
-
-#logo {
-	width: 240px;
-	margin: 0 auto;
-}
-
-a {
-	position: relative;
-	display: block;
-	background: #CC4429;
-	font-size: 2em;
-	padding: .3em 0;
-	width: 80%;
-	max-width: 500px;
-	text-align: center;
-	text-decoration: none;
-	color: white;
-	border-radius: 3em;
-	margin: 1em auto;
-	box-shadow: 0 5px 0 #99331F, 0px 5px 6px black;
-	transition: all 0.1s;
-}
-
-a:active {
-	top: 4px;
-	box-shadow: 0 1px 0 #99331F, 0 1px 3px black;
-}
+@import 'home';
