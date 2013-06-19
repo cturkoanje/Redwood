@@ -50,6 +50,9 @@ body {
   font-size: 16px;
   color: white;
   text-shadow: .18em .18em 0 #333333; }
+  @media only screen and (max-width: 480px) {
+    body {
+      font-size: 12px; } }
 
 a {
   color: white;
@@ -137,12 +140,19 @@ body {
   font-size: 0.5em;
   margin-top: 17px;
   text-align: right; }
+  @media only screen and (max-width: 640px) {
+    #back {
+      right: 7%;
+      width: 23%; } }
 
 #navusername {
   font-size: 0.5em;
   position: relative;
   top: -1em;
   left: 1em; }
+  @media only screen and (max-width: 640px) {
+    #navusername {
+      display: none; } }
 
 #navatar {
   width: 40px;
@@ -154,10 +164,14 @@ body {
   left: 3%;
   display: inline-block;
   width: 27%; }
+  @media only screen and (max-width: 640px) {
+    #navinfo {
+      left: 7%;
+      width: 23%; } }
 
 #title {
   position: absolute;
-  margin-top: 10px;
+  margin-top: 0.3em;
   display: inline-block;
   width: 40%;
   text-align: center;
@@ -180,12 +194,18 @@ body {
   width: 43%; }
   .left h1 {
     font-size: 1.5em; }
+  @media only screen and (max-width: 720px) {
+    .left {
+      width: 40%; } }
 
 .right {
   float: right;
   width: 43%; }
   .right h1 {
     font-size: 1.5em; }
+  @media only screen and (max-width: 720px) {
+    .right {
+      width: 40%; } }
 
 .leftclick {
   position: relative;
@@ -206,12 +226,23 @@ body {
 .avatar {
   width: 50px;
   height: 50px; }
+  @media only screen and (max-width: 720px) {
+    .avatar {
+      display: block;
+      margin: 0 auto; } }
 
 .username {
   position: relative;
   top: -1em;
   left: 1em;
   font-size: 1.2em; }
+  @media only screen and (max-width: 720px) {
+    .username {
+      position: static;
+      font-size: 1em;
+      display: block;
+      margin-top: 0.5em;
+      text-align: center; } }
 
 #ready {
   clear: both;
