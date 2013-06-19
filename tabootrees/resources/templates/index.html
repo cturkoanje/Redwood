@@ -21,7 +21,7 @@
 
 <html>
 <head>
-  <title>{{ APPLICATION_NAME }}</title>
+  <title>App Name</title>
   <script type="text/javascript">
   (function() {
     var po = document.createElement('script');
@@ -159,7 +159,8 @@ var helper = (function() {
       console.log(this.authResult.code);
       $.ajax({
         type: 'POST',
-        url: window.location.href + 'connect?state=123',
+        // state!!!
+        url: window.location.href + '/connect?state={{ STATE }}',
         contentType: 'application/octet-stream; charset=utf-8',
         success: function(result) {
           console.log(result);
@@ -175,7 +176,7 @@ var helper = (function() {
     people: function() {
       $.ajax({
         type: 'GET',
-        url: window.location.href + 'people',
+        url: window.location.href + '/people',
         contentType: 'application/octet-stream; charset=utf-8',
         success: function(result) {
           helper.appendCircled(result);
