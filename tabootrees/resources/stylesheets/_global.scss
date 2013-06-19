@@ -1,10 +1,26 @@
+@mixin clickable($color) {
+	position: relative;
+	transition: all 0.1s;
+	cursor: pointer;
+	&:active {
+		top: 4px;
+		box-shadow: 0 1px 0 $color, 0 1px 3px black;
+	}
+}
+
+.hidden {
+	display: none;
+	visibility: hidden;
+}
+
 body {
 	background: url("../images/flannel.png") repeat;
 }
 
 #content {
-	margin: 5% auto;
+	margin: 70px auto;
 	width: 80%;
+	max-width: 960px;
 }
 
 #colorify {
@@ -18,9 +34,9 @@ body {
 }
 
 .btn {
-	position: relative;
+	@include clickable($pri-color);
 	display: block;
-	background: $btncolor;
+	background: $pri-color;
 	font-size: 2em;
 	padding: .3em 0;
 	width: 80%;
@@ -30,16 +46,77 @@ body {
 	color: white;
 	border-radius: 3em;
 	margin: 1em auto;
-	box-shadow: 0 5px 0 $btnshadow, 0px 5px 6px black;
-	transition: all 0.1s;
-	cursor: pointer;
+	box-shadow: 0 5px 0 $pri-dark, 0px 5px 6px black;
 }
 
 .btn:active {
 	top: 4px;
-	box-shadow: 0 1px 0 $btnshadow, 0 1px 3px black;
+	box-shadow: 0 1px 0 $pri-dark, 0 1px 3px black;
 }
 
 #load {
 	display: none;
+}
+
+.basic {
+	background: $pri-color;
+	box-shadow: 0 5px 0 $pri-dark, 0px 5px 6px black;
+	padding: 1em;
+	margin: 1em 0;
+}
+
+.secondary {
+	background: $sec-color;
+	box-shadow: 0 5px 0 $sec-dark, 0px 5px 6px black;
+}
+
+#navbar {
+	font-size: 2em;
+	display: inline-block;
+	top: 0;
+	width: 100%;
+	position: fixed;
+	height: 50px;
+	background-color: $ter-color;
+	box-shadow: 0px 2px 10px black;
+}
+
+#back {
+	position: absolute;
+	right: 3%;
+	text-decoration: none;
+	color: white;
+	width: 27%;
+	font-size: 0.5em;
+	margin-top: 17px;
+	text-align: right;
+}
+
+#username {
+	font-size: 0.5em;
+	position: relative;
+	top: -14px;
+	left: 10px;
+}
+
+.navatar {
+	width: 40px;
+	height: 40px;
+	margin-top: 5px;
+}
+
+#avatar {
+	position: absolute;
+	left: 3%;
+	display: inline-block;
+	width: 27%;
+}
+
+#teamstitle {
+	position: absolute;
+	margin-top: 10px;
+	display: inline-block;
+	width: 40%;
+	text-align: center;
+	left: 30%;
 }
