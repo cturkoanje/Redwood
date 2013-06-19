@@ -51,6 +51,10 @@ body {
   color: white;
   text-shadow: .18em .18em 0 #333333; }
 
+a {
+  color: white;
+  text-decoration: none; }
+
 .hidden {
   display: none;
   visibility: hidden; }
