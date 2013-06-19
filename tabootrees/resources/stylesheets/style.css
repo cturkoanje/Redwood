@@ -53,6 +53,7 @@ body {
 
 #container {
   margin: 5% auto;
+  text-align: center;
   width: 80%; }
 
 #colorify {
