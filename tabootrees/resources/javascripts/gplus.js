@@ -11,7 +11,6 @@ function signinCallback(authResult) {
   // Hide the sign-in button now that the user is authorized, for example:
     document.getElementById('signinButton').setAttribute('style', 'display: none');
     $('#YO').text('You are already logged in!');
-
   } else if (authResult['error']) {
     // There was an error.
     // Possible error codes:
@@ -20,3 +19,9 @@ function signinCallback(authResult) {
     // console.log('There was an error: ' + authResult['error']);
   }
 }
+
+$(document).ready(function() {
+
+  $(".g-signin").click();
+
+});

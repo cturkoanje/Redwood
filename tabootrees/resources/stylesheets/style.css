@@ -47,3 +47,24 @@ table {
 
 div {
   font-family: "Carrosserie-Light"; }
+
+body {
+  background: url("../images/flannel.png") repeat; }
+
+#container {
+  margin: 10% auto;
+  width: 80%;
+  border: 1px blue solid; }
+
+a {
+  display: block;
+  background: black;
+  font-size: 2em;
+  width: 80%;
+  max-width: 500px;
+  text-align: center;
+  text-decoration: none;
+  color: white;
+  border-radius: 3em;
+  margin: 0 auto;
+  border: 0.5em rgba(0, 0, 0, 0.7); }

@@ -24,6 +24,9 @@ handlers:
 - url: /stylesheets/elements
   static_dir: resources/stylesheets/elements
 
+- url: /images
+  static_dir: resources/images
+
 - url: .*
   script: main.app
 
