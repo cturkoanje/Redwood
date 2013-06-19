@@ -1,14 +1,18 @@
 <div id="container">
-      <section>
-        <h1>Make A Team</h1>
-        <a>Back</a>
-      </section>
+
+    <div id="navbar">
+      <img id="avatar" src="images/avatar.jpg"></img>
+      <h1 id="teamstitle">Make A Team</h1>
+      <span id="back">Back</span>
+    </div>
+
+    <div id="content">
       <form method="post">
-        <section>
+        <section class="basic">
           <h2>Name</h2>
           <input type="text" id="name" name="name" value="" placeholder="Jack Lumber" required autofocus />
         </section>
-        <section>
+        <section class="basic">
           <h2>Invite fellow lumberjacks</h2>
           <div id="friends-container">
             <article>
@@ -27,8 +31,9 @@
             </article>
           </div>
         </section>
-        <section>
+        <section class="basic">
           <input type="submit" value="chop" id="submit-button" />
         </section>
       </form>
+    </div>
 </div>
