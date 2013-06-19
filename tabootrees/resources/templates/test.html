@@ -12,22 +12,46 @@
   </head>
 
   <body>
+
     <!--<div id="colorify"></div>-->
-    <div id="container">
-      <section id="logo">
-        <img src="images/logo.png" />
+    <div id="container" class="hidden">
+      <section id="navbar">
+        <img id="avatar" src="images/avatar.jpg"></img>
+        <h1 id="teamstitle">Lumberteams</h1> 
+        <span id="back">Back</span>
+        <!-- If already in a team -->
+        <section id="myteam" class="team">
+        </section>
       </section>
-      <section id="tagline">
-        <h1>Forbidden Wood</h1>
+      <div id="content">
+        <section id="logo">
+          <img src="images/logo.png" />
+        </section>
+        <section id="tagline">
+          <h1>Forbidden Wood</h1>
+        </section>
+        <section id="login">
+          <span id="signin" class="btn">Log In!</span>
+        </section>
+        <h3 id="counter"></h3>
+        <script>
+          //You can use this script with a call to onclick, onblur or any other attribute you would like to use. 
+          countdown(1);//where n is the number of minutes required. 
+        </script>
+      </div>
+      
+    </div>
+    <div id="container-teams">
+      
+      
+      <section id="teamlist">
+        <section class="team">
+          <img class="avatar">Captain Picture</img>
+          <h2 class="teamname">The Lumberbros</h2>
+          <span class="join" class="btn">Join</span>
+          <span class="challenge" class="btn">Challenge</span>
+        </section>
       </section>
-      <section id="login">
-        <span id="signin" class="btn">Log In!</span>
-      </section>
-      <h3 id="counter"></h3>
-      <script>
-        //You can use this script with a call to onclick, onblur or any other attribute you would like to use. 
-        countdown(1);//where n is the number of minutes required. 
-      </script>
     </div>
     <footer>
     </footer>

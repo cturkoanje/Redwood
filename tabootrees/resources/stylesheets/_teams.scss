@@ -1,0 +1,76 @@
+.hidden {
+	display: none;
+}
+
+#container-teams{
+	margin: 0 auto;
+}
+
+#navbar {
+	padding-top: 10px;
+	font-size: 2em;
+	display: inline-block;
+	top: 0;
+	width: 100%;
+	position: fixed;
+	min-height: 60px;
+	height: 15%;
+	text-align: center;
+	background-color: $btncolor;
+}
+
+#teamlist {
+	position: absolute;
+	top: 20%;
+	width: 80%;
+}
+
+.team {
+	position: inline-block;
+	background-color: $btncolor;
+	box-shadow: 0 5px 0 $btnshadow, 0px 5px 6px black;
+	margin: 15 0;
+	text-align: center;
+	min-height: 40px;
+	height: 15%;
+}
+
+#back {
+	position: absolute;
+	right: 5%;
+}
+
+.avatar {
+	width: 20%;
+	left: 5%;
+	position: absolute;
+}
+
+.teamname {
+
+	display: inline-block;
+	width: 50%;
+}
+
+.join {
+	width: 30%;
+}
+
+#teamstitle {
+	display: inline-block;
+
+}
+
+#myteam {
+	min-height: 20px;
+	background-color: #203157;
+}
+
+#avatar {
+	position: absolute;
+	left: 5%;
+	display: inline-block;
+	width: 45px;
+	height: 45px;
+	background-color: gray;
+}
