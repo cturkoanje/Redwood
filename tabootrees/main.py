@@ -37,6 +37,7 @@ from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 
 from google.appengine.api import users
+from google.appengine.ext import db
 from google.appengine.ext.webapp import template
 from google.appengine.api import memcache
 from google.appengine.ext import db, webapp
@@ -145,8 +146,7 @@ class MainHandler(webapp2.RequestHandler):
         output = {
                 'url': users.create_login_url("/login_response"),
                 'quarterlist': quarterlist
-        }            
-        path = os.path.join(os.path.dirname(__file__), 'resources/templates/index.html')
+        path = os.path.join(os.path.dirname(__file__), 'resources/templates/test.html')
         self.response.write(template.render(path, output))
         # self.response.write(str(self.session_store))
 
