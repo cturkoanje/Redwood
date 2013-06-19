@@ -39,6 +39,7 @@ $(document).ready(function() {
       $('#load').fadeIn('normal');
       function loadContent() {
           $('#container').load(toLoad, function() {
+            card();
             gplus();
             handlers();
             showNewContent();
@@ -52,6 +53,12 @@ $(document).ready(function() {
       }
     });
   }
+
+  function card() {
+    $(".vertcard").css({ height: ($(window).height() - 200) + "px" });
+  }
+
+  $(window).resize(function() { card(); });
 
   gplus();
   handlers();
