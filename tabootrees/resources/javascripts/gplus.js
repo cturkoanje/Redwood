@@ -39,7 +39,7 @@ $(document).ready(function() {
       $('#load').fadeIn('normal');
       function loadContent() {
           $('#container').load(toLoad, function() {
-            if($("#counter")[0])
+            if($(".counter")[0])
               countdown(60);
             card();
             gplus();
@@ -60,12 +60,17 @@ $(document).ready(function() {
     function tick() {
         //This script expects an element with an ID = "counter". You can change that to what ever you want.
         seconds--;
-        $("#counter").text(String(seconds));
+        $(".counter").text(String(seconds));
         if( seconds > 0 ) {
             setTimeout(tick, 1000);
         }
         else{
-          $("#counter").text('Time is up!');
+          if($("#timeup")[0]) {
+            timeup();
+          }
+          else {
+            timeup({"name": "Marvin", "avatar":"images/avatar.jpg", "team":"lumberjacks"}, 10);
+          }
         }
     }
     tick();
@@ -94,16 +99,36 @@ $(document).ready(function() {
     toAdd.animate({ height: height + "px" }, 500);
   }
 
+  function removeUser(user) {
+    var name = user.name;
+    var toRemove = $('article:contains("' + name + '")');
+    toRemove.animate({ height: 0 }, { duration: 500, complete: function() {toRemove.remove()} });
+  }
+
   function ready(user) {
     var name = user.name;
     var article = $('article:contains("' + name + '")');
-    var img = $('<img src="images/ready.png" />');
-    img.css({
-      height: "50px",
-      width: "50px",
-      position: "absolute"
-    });
+    var img = $('<img class="readyimg" src="images/ready.png" />');
     img.prependTo(article);
+  }
+
+  function timeup(user, score) {
+    if(user) {
+      $('<section id="overlay"></section>').appendTo("body");
+      var popup = $('<section id="timeup" class="basic tertiary"></section>');
+      var team = user.team == "lumberjacks" ? "Treehuggers saved " : "Lumberjacks chopped ";
+      var name = user.name;
+      var avatar = user.avatar;
+      var content = $('<p>Time is up!</p><p class="roundreport">' + team + '<span>' + score + '</span> forbidden woods.</p><p>Next up...</p><span class="nextuser basic"><img class="avatar" src="' + avatar + '" /><span class="username">' + name + '</span></span><section class="counter"></section>');
+      content.appendTo(popup);
+      popup.appendTo("body");
+      countdown(10);
+    }
+    else {
+      $("#overlay").remove();
+      $("#timeup").remove();
+      countdown(60);
+    }
   }
 
 });
