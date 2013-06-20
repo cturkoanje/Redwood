@@ -167,15 +167,15 @@ $(document).ready(function() {
   //   }
   // }
 
-  // function gplus() {
-  //   gapi.signin.render("signin", {
-  //     'callback': signinCallback,
-  //     'clientid': '394867862713.apps.googleusercontent.com',
-  //     'cookiepolicy': 'single_host_origin',
-  //     'requestvisibleactions': 'http://schemas.google.com/AddActivity',
-  //     'scope': 'https://www.googleapis.com/auth/plus.login'
-  //   });
-  // }
+  function gplus() {
+    gapi.signin.render("signin", {
+      'callback': onSignInCallback,
+      'clientid': '394867862713.apps.googleusercontent.com',
+      'cookiepolicy': 'single_host_origin',
+      'requestvisibleactions': 'http://schemas.google.com/AddActivity',
+      'scope': 'https://www.googleapis.com/auth/plus.login'
+    });
+  }
 $(document).ready(function() {
   $('#disconnect').click(helper.disconnectServer);
   if ($('[data-clientid="YOUR_CLIENT_ID"]').length > 0) {
@@ -201,7 +201,7 @@ $(document).ready(function() {
             if($(".counter")[0])
               countdown(60);
             card();
-            //gplus();
+            gplus();
             handlers();
             showNewContent();
           });
@@ -236,7 +236,7 @@ $(document).ready(function() {
             function loadContent() {
                 $('#container').load(toLoad, function() {
                   card();
-                  //gplus();
+                  gplus();
                   handlers();
                   showNewContent();
                 });
@@ -265,7 +265,7 @@ $(document).ready(function() {
 
   $(window).resize(function() { card(); });
 
-  //gplus();
+  gplus();
   handlers();
 
   function addUser(user) {
@@ -309,13 +309,15 @@ $(document).ready(function() {
       for(var i in taboos) {
         $('<li>' + taboos[i] + '</li>').appendTo(newCard);
       }
-      newCard.css({ top: "-" + $('.card').outerHeight() + "px", left: $('#card').outerWidth() + "px" });
+      newCard.css({ top: "-" + $('.card').outerHeight() + "px", zIndex: 0 });
       newCard.appendTo("#card");
-      $('.card:eq(0)').animate({ left: "-" + $('#card').outerWidth() + "px" }, 500);
-      $('.card:eq(1)').animate({ left: 0 }, { duration: 500, complete: function() {
-        $('.card').css({ top: 0 });
-        $('.card:eq(0)').remove();
-        changing = false;
+      $('.card:eq(0)').animate({ left: $('#card').outerWidth() + "px" }, { duration: 500, complete: function() {
+          $('.card:eq(1)').css({ "box-shadow": "0 5px 16px black", zIndex: 100 });
+          $('.card:eq(0)').delay(300).animate({left: 0}, 500, function() {
+            $('.card:eq(0)').remove();
+            $('.card:eq(0)').css({ top: 0, "box-shadow": "0 2px 10px black"});
+            changing = false;
+          });
       } });
     }
   }
@@ -356,9 +358,6 @@ $(document).ready(function() {
 
 });
 
-
-
 function onSignInCallback(authResult) {
-  alert("HI");
   helper.onSignInCallback(authResult);
 }

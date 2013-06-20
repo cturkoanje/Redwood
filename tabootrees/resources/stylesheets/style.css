@@ -250,7 +250,7 @@ body {
   overflow: scroll; }
 
 #card {
-  overflow: hidden; }
+  overflow: visible; }
   #card .card {
     overflow: scroll;
     background-color: white;
@@ -262,7 +262,9 @@ body {
     font-size: 2em;
     padding: 1em;
     height: 80%;
-    position: relative; }
+    position: relative;
+    z-index: 100;
+    transition: box-shadow 0.3s; }
   @media only screen and (max-height: 610px) {
     #card {
       font-size: 0.8em; } }
