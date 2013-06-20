@@ -8,7 +8,54 @@
     <script src="https://apis.google.com/js/client:plusone.js"></script>
     <script src="javascripts/gplus.js"></script>
     <script src="javascripts/game.js"></script>
-    <script src="javascripts/gd/Global.min.js"></script>
+    <script src="javascripts/gd/Card.js"></script>
+    <script src="javascripts/gd/CardData.js"></script>
+    <script src="javascripts/gd/Game.js"></script>
+    <script src="javascripts/gd/Player.js"></script>
+    <script src="javascripts/gd/PlayState.js"></script>
+    <script src="javascripts/gd/Team.js"></script>
+    <script src="javascripts/speech.js"></script>
+
+    <script>
+var currentPlay = null;
+var gameData = null;
+
+clickedButton();
+
+function clickedButton()
+{
+  console.log("Clicked");
+  gameData = new TabooGame(10, "lowCardCallback", "endGame");
+  var cardData = [new Card("apple", ["pie", "new york", "fruit"]), new Card("google", ["internet", "california", "search"]), new Card("google22", ["222", "cali222fornia", "se222arch"]) ];
+  var Team1 = new Team("team_1", [new Player(1, "F", "L", "", "team_1"), new Player(2, "F2", "L2", "", "team_1")]);
+  var Team2 = new Team("team_2", [new Player(3, "F3", "L3", "", "team_2"), new Player(4, "F24", "L24", "", "team_2")]);
+  var teamArray = [Team1, Team2];
+  gameData.setTeams(teamArray);
+  gameData.setCards(cardData);
+
+  //currentPlay = gameData.start();
+  //console.log(currentPlay.getCard().toJSON());
+}
+
+function guessed()
+{
+  currentPlay = gameData.gotClue();
+  console.log(currentPlay.getCard().toJSON());
+
+}
+
+function endGame()
+{
+  alert("Game ended");
+}
+function lowCardCallback()
+{
+  console.log('Low on cards');
+}
+
+</script>
+
+
   </head>
 
   <body>

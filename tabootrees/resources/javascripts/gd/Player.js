@@ -20,6 +20,7 @@ function Player(id, firstName, lastName, image, teamName) {
 	this.image = image;
 }
 
+/*
 function Player(jsonString) {
 	var jsonObj = JSON.parse(jsonString);
 	this.firstName = jsonObj['firstName'];
@@ -28,7 +29,7 @@ function Player(jsonString) {
 	this.teamName = jsonObj['teamName'];
 	this.image = jsonObj['image'];
 }
-
+*/
 
 /**
 	Get first name
