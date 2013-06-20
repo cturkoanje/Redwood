@@ -53,6 +53,12 @@ body {
   @media only screen and (max-width: 480px) {
     body {
       font-size: 12px; } }
+  @media only screen and (max-width: 360px) {
+    body {
+      font-size: 8px; } }
+  @media only screen and (max-height: 360px) {
+    body {
+      font-size: 8px; } }
 
 a {
   color: white;
@@ -181,8 +187,15 @@ body {
       margin-top: 0.5em; } }
 
 #logo {
+  display: block;
   width: 240px;
   margin: 1em auto; }
+  @media only screen and (max-height: 500px) {
+    #logo {
+      width: 180px; } }
+  @media only screen and (max-height: 420px) {
+    #logo {
+      width: 120px; } }
 
 #tagline {
   text-align: center;
@@ -191,6 +204,9 @@ body {
 #maketeam, #jointeam, #help {
   display: none;
   opacity: 0; }
+
+.homescreen {
+  margin: 0 auto !important; }
 
 .left {
   float: left;
@@ -239,7 +255,10 @@ body {
 #chat {
   font-size: 1em;
   line-height: 1.2em;
-  font-color: #ffffff; }
+  font-color: white;
+  display: -webkit-flex;
+  -webkit-flex-flow: column;
+  -webkit-justify-content: flex-end; }
   #chat ul {
     margin: 10px 20px; }
     #chat ul li {

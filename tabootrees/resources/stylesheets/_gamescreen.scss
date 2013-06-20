@@ -7,7 +7,10 @@
 #chat {
 	font-size: 1em;
 	line-height: 1.2em;
-	font-color: #ffffff;
+	font-color: white;
+	display: -webkit-flex;
+	-webkit-flex-flow: column;
+	-webkit-justify-content: flex-end;
 	ul{
 		margin: 10px 20px;
 		li{
@@ -50,6 +53,10 @@
 	@media only screen and (max-height: 360px) {
 		font-size: 0.3em;
 	}
+}
+
+.bubbles {
+
 }
 
 .bubbleitem {
