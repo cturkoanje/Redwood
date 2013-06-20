@@ -1,7 +1,7 @@
 
 var helper = (function() {
   var authResult = undefined;
-  
+
   return {
     /**
      * Hides the sign-in button and connects the server-side app after
@@ -199,7 +199,7 @@ $(document).ready(function() {
       function loadContent() {
           $('#container').load(toLoad, function() {
             if($(".counter")[0])
-              countdown(60);
+              countdown(1000);
             card();
             //gplus();
             handlers();
@@ -215,6 +215,7 @@ $(document).ready(function() {
     });
   }
 
+  var roundsLeft = 0;
   function countdown(seconds) {
     function tick() {
         //This script expects an element with an ID = "counter". You can change that to what ever you want.
@@ -224,7 +225,30 @@ $(document).ready(function() {
             setTimeout(tick, 1000);
         }
         else{
-          if($("#timeup")[0]) {
+          if($('#timeup:contains("Game is over!")')[0]) {
+            $("#overlay").remove();
+            $("#timeup").remove();
+            var toLoad = '/ #container';
+            $('#container').hide('fast',loadContent);
+            $('#load').remove();
+            $('body').append('<span id="load">LOADING...</span>');
+            $('#load').fadeIn('normal');
+            function loadContent() {
+                $('#container').load(toLoad, function() {
+                  card();
+                  //gplus();
+                  handlers();
+                  showNewContent();
+                });
+            }
+            function showNewContent() {
+                $('#container').show('normal', hideLoader());
+            }
+            function hideLoader() {
+                $('#load').fadeOut('normal');
+            }
+          }
+          else if(roundsLeft == 0 || $("#timeup")[0]) {
             timeup();
           }
           else {
@@ -256,10 +280,6 @@ $(document).ready(function() {
     var height = toAdd.height();
     toAdd.css({ height: 0 });
     toAdd.animate({ height: height + "px" }, 500);
-
-    
-
-
   }
 
   function removeUser(user) {
@@ -275,6 +295,26 @@ $(document).ready(function() {
     img.prependTo(article);
   }
 
+  function changeCard(card) {
+    // var newCard = $('<ul><li>' + card.getWord() + '</li><hr></ul>');
+    // for(var taboo in card.getTaboo()) {
+    //   $('<li>' + taboo + '</li>').appendTo(newCard);
+    // }
+    var word = "hi";
+    var taboos = ["no", "blah", "fuck", "shit", "gay"];
+    var newCard = $('<ul class="card"><li>' + "hi" + '</li><hr></ul>');
+    for(var i in taboos) {
+      $('<li>' + taboos[i] + '</li>').appendTo(newCard);
+    }
+    newCard.css({ top: "-" + $('.card').outerHeight() + "px", left: $('#card').outerWidth() + "px" });
+    newCard.appendTo("#card");
+    $('.card:eq(0)').animate({ left: "-" + $('#card').outerWidth() + "px" }, 500);
+    $('.card:eq(1)').animate({ left: 0 }, { duration: 500, complete: function() {
+      $('.card').css({ top: 0 });
+      $('.card:eq(0)').remove();
+    } });
+  }
+
   function timeup(user, score) {
     if(user) {
       $('<section id="overlay"></section>').appendTo("body");
@@ -283,6 +323,16 @@ $(document).ready(function() {
       var name = user.name;
       var avatar = user.avatar;
       var content = $('<p>Time is up!</p><p class="roundreport">' + team + '<span>' + score + '</span> forbidden woods.</p><p>Next up...</p><span class="nextuser basic"><img class="avatar" src="' + avatar + '" /><span class="username">' + name + '</span></span><section class="counter"></section>');
+      content.appendTo(popup);
+      popup.appendTo("body");
+      countdown(10);
+    }
+    else if(roundsLeft == 0) {
+      $('<section id="overlay"></section>').appendTo("body");
+      var popup = $('<section id="timeup" class="basic tertiary"></section>');
+      var team = parseInt($("#lumberscore .score").text()) > parseInt($("#treescore .score").text()) ? "Lumberjacks won by chopping " : "Treehuggers won by saving ";
+      var score = parseInt($("#lumberscore .score").text()) > parseInt($("#treescore .score").text()) ? parseInt($("#lumberscore .score").text()) : parseInt($("#treescore .score").text());
+      var content = $('<p>Game is over!</p><p class="roundreport">' + team + '<span>' + score + '</span> forbidden woods.</p><p>Returning to home...</p><section class="counter"></section>');
       content.appendTo(popup);
       popup.appendTo("body");
       countdown(10);
