@@ -4,8 +4,11 @@ function addBubble(user, text) {
   var toAdd = $('<li class="bubbleitem"><img class="avatar" src="' + avatar + '" /><span class="bubble">' + text + '</span></li>');
   toAdd.appendTo(".bubbles");
   var height = toAdd.height();
+  var speech = document.getElementById("chat");
   toAdd.css({ height: 0 });
-  toAdd.animate({ height: height + "px" }, 500);
+  toAdd.animate({ height: height + "px" }, { duration: 500, progress: function() {
+    speech.scrollTop = speech.scrollHeight;
+  } });
 }
 
 function clearBubbles(){
