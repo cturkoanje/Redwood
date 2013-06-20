@@ -258,16 +258,12 @@ body {
       font-size: 1.4em;
       margin-top: 0.5em; } }
 
-@media only screen and (max-width: 300px) {
-  li {
-    height: 100px; } }
-
 .bubbleitem {
   vertical-align: middle;
   height: 50px; }
-  @media only screen and (max-width: 300px) {
-    .bubbleitem {
-      height: 100px; } }
+  @media only screen and (max-width: 250px) {
+    .bubbleitem .bubble {
+      width: 60%; } }
 
 .bubble {
   top: -18px;
