@@ -237,13 +237,17 @@ body {
   margin: 10px 0; }
 
 #chat {
-  font-size: 1.8em;
+  font-size: 1em;
   line-height: 1.2em;
   font-color: #ffffff; }
   #chat ul {
-    margin: 0 20px; }
+    margin: 10px 20px; }
     #chat ul li {
       margin: 10px 0; }
+
+#speech {
+  text-shadow: none;
+  overflow: scroll; }
 
 #card {
   line-height: 1.5em;
@@ -254,19 +258,26 @@ body {
       font-size: 1.4em;
       margin-top: 0.5em; } }
 
+@media only screen and (max-width: 300px) {
+  li {
+    height: 100px; } }
+
 .bubbleitem {
   vertical-align: middle;
   height: 50px; }
+  @media only screen and (max-width: 300px) {
+    .bubbleitem {
+      height: 100px; } }
 
 .bubble {
-  top: -15px;
+  top: -25px;
   left: 15px;
   position: relative;
   color: #333333;
   text-shadow: none;
   display: inline-block;
   height: 35px;
-  width: 80%;
+  width: 70%;
   background-color: #ffffff;
   border-radius: 15px;
   padding: 5px;
