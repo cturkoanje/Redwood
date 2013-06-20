@@ -199,7 +199,7 @@ $(document).ready(function() {
       function loadContent() {
           $('#container').load(toLoad, function() {
             if($(".counter")[0])
-              countdown(1000);
+              countdown(60);
             card();
             //gplus();
             handlers();
@@ -295,25 +295,35 @@ $(document).ready(function() {
     img.prependTo(article);
   }
 
+  var changing = false;
   function changeCard(card) {
     // var newCard = $('<ul><li>' + card.getWord() + '</li><hr></ul>');
     // for(var taboo in card.getTaboo()) {
     //   $('<li>' + taboo + '</li>').appendTo(newCard);
     // }
-    var word = "hi";
-    var taboos = ["no", "blah", "fuck", "shit", "gay"];
-    var newCard = $('<ul class="card"><li>' + "hi" + '</li><hr></ul>');
-    for(var i in taboos) {
-      $('<li>' + taboos[i] + '</li>').appendTo(newCard);
+    if(!changing) {
+      changing = true;
+      var word = "hi";
+      var taboos = ["no", "blah", "fuck", "shit", "gay"];
+      var newCard = $('<ul class="card"><li>' + "hi" + '</li><hr></ul>');
+      for(var i in taboos) {
+        $('<li>' + taboos[i] + '</li>').appendTo(newCard);
+      }
+      newCard.css({ top: "-" + $('.card').outerHeight() + "px", left: $('#card').outerWidth() + "px" });
+      newCard.appendTo("#card");
+      $('.card:eq(0)').animate({ left: "-" + $('#card').outerWidth() + "px" }, 500);
+      $('.card:eq(1)').animate({ left: 0 }, { duration: 500, complete: function() {
+        $('.card').css({ top: 0 });
+        $('.card:eq(0)').remove();
+        changing = false;
+      } });
     }
-    newCard.css({ top: "-" + $('.card').outerHeight() + "px", left: $('#card').outerWidth() + "px" });
-    newCard.appendTo("#card");
-    $('.card:eq(0)').animate({ left: "-" + $('#card').outerWidth() + "px" }, 500);
-    $('.card:eq(1)').animate({ left: 0 }, { duration: 500, complete: function() {
-      $('.card').css({ top: 0 });
-      $('.card:eq(0)').remove();
-    } });
   }
+
+  $("body").keyup(function(e) {
+    if((e.keyCode || e.which) == 32 && $('.card')[0])
+      changeCard("filler");
+  });
 
   function timeup(user, score) {
     if(user) {
