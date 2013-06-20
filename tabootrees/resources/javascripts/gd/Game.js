@@ -28,6 +28,7 @@ TabooGame.prototype.getCardIndex = function(teams) {
 */
 TabooGame.prototype.setTeams = function(teams) {
 	this.teams = teams;
+	console.log("game teams" + JSON.stringify(teams));
 	this.numberOfRounds = this.numberOfRounds*teams.length;
 }
 
@@ -113,7 +114,7 @@ TabooGame.prototype.start = function() {
 	gamePlayState.setGuesser(this.teams[0].getPlayers()[0]);
 	this.teams[0].setLastGuesser(0);
 	this.play = gamePlayState;
-
+	console.log("Starting game: " + this.cards[0]);
 	return gamePlayState;
 }
 
@@ -160,7 +161,7 @@ TabooGame.prototype.skipCard = function() {
 	
 	this.play.setCard(this.cards[this.currentCardIndex]);
 
-	for(x=0; x<teams.length;x++)
+	for(x=0; x<this.teams.length;x++)
 	{
 		if(this.currentTeamIndex != x)
 		{

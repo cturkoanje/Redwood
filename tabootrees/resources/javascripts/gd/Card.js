@@ -14,12 +14,13 @@ function Card(word, tabooWords) {
 	this.tabooWords = tabooWords;
 }
 
+/*
 function Card(jsonObject) {
 	var newObject = JSON.parse(jsonObject);
 	this.word = newObject['word'];
 	this.tabooWords = newObject['taboo'];
 }
-
+*/
 /**
 	Set card word
 	Should pass a string with card word 

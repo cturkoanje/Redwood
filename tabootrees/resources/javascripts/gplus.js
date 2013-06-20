@@ -1,3 +1,7 @@
+var mainSpeech = null;
+var oldText = "";
+
+
 
 var helper = (function() {
   var authResult = undefined;
@@ -204,6 +208,49 @@ $(document).ready(function() {
           $('#container').load(toLoad, function() {
             if($(".counter")[0])
               countdown(60);
+
+            if(toLoad == "partials/gamescreen.html #container")
+            {
+              mainSpeech = new Speaker();
+              mainSpeech.startListeningForProhibited(["orange"], "saidIncorrect", "replaceSpeechTextForBubble", "");
+              currentPlay = gameData.start();
+
+              var currentCard = currentPlay.getCard();
+              console.log("Cureent card: " + currentPlay.getCard().toJSON());
+              $("#guess").html(currentCard.getWord());
+              var tabooWords = currentCard.getTabooWord();
+              for(x=0; x<tabooWords.length; x++)
+              {
+                var newWord = $('<li>' + tabooWords[x] + '</li>');
+                $('#tabooWords').append(newWord);
+              }
+
+            }
+            if(toLoad == "partials/lobby.html #container")
+            {
+              var gameTeams = gameData.getTeams();
+
+              console.log("Game teams: " + JSON.stringify(gameTeams));
+
+              var team1User = gameTeams[0].getPlayers();
+
+              console.log("Team 1 users: "+JSON.stringify(team1User));
+
+              var team2User = gameTeams[1].getPlayers();
+              for(x=0;x<team1User.length;x++)
+              {
+                var playerName = team1User[x].getFullName();
+                var newElement = $('<article class="basic tertiary"><img class="avatar" src="images/avatar.jpg" /><span class="username">' + team1User[x].getFullName() + '</span></article>');
+                $("#team1").append(newElement);
+              }
+              for(x=0;x<team2User.length;x++)
+              {
+                var playerName = team2User[x].getFullName();
+                var newElement = $('<article class="basic tertiary"><img class="avatar" src="images/avatar.jpg" /><span class="username">' + team2User[x].getFullName() + '</span></article>');
+                $("#team2").append(newElement);
+              }
+            }
+
             card();
             gplus();
             handlers();
@@ -307,8 +354,8 @@ $(document).ready(function() {
     // }
     if(!changing) {
       changing = true;
-      var word = "hi";
-      var taboos = ["no", "blah", "fuck", "shit", "gay"];
+      var word = card.getWord();
+      var taboos = card.getTabooWord();
       var newCard = $('<ul class="card"><li>' + "hi" + '</li><hr></ul>');
       for(var i in taboos) {
         $('<li>' + taboos[i] + '</li>').appendTo(newCard);
@@ -328,7 +375,10 @@ $(document).ready(function() {
 
   $("body").keyup(function(e) {
     if((e.keyCode || e.which) == 32 && $('.card')[0])
-      changeCard("filler");
+    {
+      var newPlay = gameData.skipCard();
+      changeCard(newPlay.getCard());
+    }
   });
 
   function timeup(user, score) {
@@ -364,4 +414,21 @@ $(document).ready(function() {
 
 function onSignInCallback(authResult) {
   helper.onSignInCallback(authResult);
+}
+
+function replaceSpeechTextForBubble(event)
+{
+  var user = {avatar:"/images/avatar.jpg", team:""};
+  var text = event['results'][0][0]['transcript'];
+
+  console.log("Old text: " +oldText);
+  console.log("New Text: " +text);
+  console.log("Replaced: " + text.replace(oldText, ""));
+  var replaced = text.replace(oldText, "");
+
+  //text = replaced;
+  if(replaced != "")
+    addBubble(user, replaced);
+  oldText = replaced;
+  //replaceSpeechText(event);
 }
