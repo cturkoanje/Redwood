@@ -1,78 +1,32 @@
-.hidden {
-	display: none;
-	visibility: hidden;
+@mixin column($side) {
+	h1 {
+		font-size: 1.5em;
+	}
+	float: $side;
+	width: 43%;
+	@media only screen and (max-width: 720px) {
+		width: 40%;
+	}
 }
 
-#container-teams{
-	margin: 0 auto;
+.left {
+	@include column(left);
 }
 
-#navbar {
-	padding-top: 10px;
-	font-size: 2em;
-	display: inline-block;
-	top: 0;
-	width: 100%;
-	position: fixed;
-	height: 40px;
-	text-align: center;
-	background-color: $btncolor;
+.right {
+	@include column(right);
 }
 
-#teamlist {
-	position: absolute;
-	top: 20%;
-	width: 80%;
+.leftclick {
+	@include clickable($sec-dark);
 }
 
-.team {
-	position: inline-block;
-	background-color: $btncolor;
-	box-shadow: 0 5px 0 $btnshadow, 0px 5px 6px black;
-	margin: 15 0;
-	text-align: center;
-	min-height: 40px;
-	height: 15%;
+.rightclick {
+	@include clickable($pri-dark);
 }
 
-#back {
-	position: absolute;
-	right: 5%;
-}
-
-.avatar {
-	width: 20%;
-	left: 5%;
-	position: absolute;
-}
-
-.teamname {
-
-	display: inline-block;
-	width: 50%;
-}
-
-.join {
-	width: 30%;
-}
-
-#teamstitle {
-	display: inline-block;
-
-}
-
-#myteam {
-	min-height: 20px;
-	background-color: #203157;
-	box-shadow: 0 5px 0 #101A30, 0px 5px 6px black;
-	
-}
-
-#avatar {
-	position: absolute;
-	left: 5%;
-	display: inline-block;
-	width: 30px;
-	height: 30px;
-	background-color: gray;
+.mascot {
+	display: block;
+	margin: 1em auto 0;
+	width: 90%;
 }
