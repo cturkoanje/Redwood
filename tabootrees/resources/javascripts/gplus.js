@@ -278,9 +278,9 @@ $(document).ready(function() {
     var team = user.team;
     var toAdd = $('<article class="basic tertiary"><img class="avatar" src="' + avatar + '" /><span class="username">' + name + '</span></article>');
     if(team == "lumberjacks")
-      toAdd.appendTo(".left");
+      toAdd.prependTo(".leftAdd");
     else
-      toAdd.appendTo(".right");
+      toAdd.prependTo(".rightAdd");
     var height = toAdd.height();
     toAdd.css({ height: 0 });
     toAdd.animate({ height: height + "px" }, 500);
@@ -297,6 +297,16 @@ $(document).ready(function() {
     var article = $('article:contains("' + name + '")');
     var img = $('<img class="readyimg" src="images/ready.png" />');
     img.prependTo(article);
+    allReady();
+  }
+
+  function allReady() {
+    if($('article').length == $('.readyimg').length) {
+      alert("hi");
+      $("#ready .btn").click();
+    }
+    else
+      alert("fuck");
   }
 
   var changing = false;
