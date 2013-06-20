@@ -66,19 +66,18 @@ li{
 }
 
 .bubble {
-  top: -25px;
+  top: -18px;
   left: 15px;
   position: relative;
-  color: $text-shadow;
+  color: #333333;
   text-shadow: none;
-
   display: inline-block;
-  height: 35px;
-  width: 70%;
+  height: 25px;
+  width: 80%;
   background-color: #ffffff;
-  border-radius: 15px; 
+  border-radius: 15px;
   padding: 5px;
-  box-shadow: 0 2px 0 #333333, 0px 3px 6px black;
+  box-shadow: 0 2px 0 #333333, 0px 3px 6px black; 
 }
 
 #scoreboard {

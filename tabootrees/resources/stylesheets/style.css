@@ -154,7 +154,7 @@ body {
     #navusername {
       display: none; } }
 
-#navatar {
+.navatar {
   width: 40px;
   height: 40px;
   margin-top: 5px; }
@@ -290,14 +290,14 @@ body {
       height: 100px; } }
 
 .bubble {
-  top: -25px;
+  top: -18px;
   left: 15px;
   position: relative;
   color: #333333;
   text-shadow: none;
   display: inline-block;
-  height: 35px;
-  width: 70%;
+  height: 25px;
+  width: 80%;
   background-color: #ffffff;
   border-radius: 15px;
   padding: 5px;

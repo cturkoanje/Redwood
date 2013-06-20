@@ -59,15 +59,19 @@ var helper = (function() {
                 $('<p><img src=\"' + profile.cover.coverPhoto.url + '\"></p>'));
           }
 
-           // $.ajax({
-           //    type: 'POST',
-           //    // state!!!
-           //    contentType: 'application/octet-stream; charset=utf-8',
-           //    success: function(result) {
-           //    },
-           //    processData: false,
-           //    data: {data2};
-           //  });
+
+          // var data2 = {name: profile.displayName, avatar: profile.image.url, team:""};
+          // console.log(data2);
+          // $.ajax({
+          //     type: 'POST',
+          //     // state!!!
+          //     url: window.location.href + 'adduser',
+          //     contentType: 'application/octet-stream; charset=utf-8',
+          //     success: function(result) {
+          //     },
+          //     processData: false,
+          //     data: { data2}
+          //   });
 
                     // console.log(data2);
                     
