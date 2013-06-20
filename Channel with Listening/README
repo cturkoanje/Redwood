@@ -1,0 +1,6 @@
+Redwood
+=======
+You don't need to be here, go away.
+
+
+Uses the channel API of GAE to send speech reesults to all connected users.

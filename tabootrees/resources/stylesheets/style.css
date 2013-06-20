@@ -154,7 +154,7 @@ body {
     #navusername {
       display: none; } }
 
-#navatar {
+.navatar {
   width: 40px;
   height: 40px;
   margin-top: 5px; }
@@ -181,8 +181,15 @@ body {
       margin-top: 0.5em; } }
 
 #logo {
+  display: block;
   width: 240px;
   margin: 1em auto; }
+  @media only screen and (max-height: 500px) {
+    #logo {
+      width: 180px; } }
+  @media only screen and (max-height: 420px) {
+    #logo {
+      width: 120px; } }
 
 #tagline {
   text-align: center;
@@ -191,6 +198,9 @@ body {
 #maketeam, #jointeam, #help {
   display: none;
   opacity: 0; }
+
+.homescreen {
+  margin: 0 auto !important; }
 
 .left {
   float: left;
@@ -239,7 +249,10 @@ body {
 #chat {
   font-size: 1em;
   line-height: 1.2em;
-  font-color: #ffffff; }
+  font-color: white;
+  display: -webkit-flex;
+  -webkit-flex-flow: column;
+  -webkit-justify-content: flex-end; }
   #chat ul {
     margin: 10px 20px; }
     #chat ul li {
@@ -250,38 +263,69 @@ body {
   overflow: scroll; }
 
 #card {
-  line-height: 1.5em;
-  text-align: center;
-  font-size: 2.2em; }
+  overflow: visible; }
+  #card .card {
+    overflow: scroll;
+    background-color: white;
+    color: #333333;
+    text-shadow: none;
+    box-shadow: 0 2px 10px black;
+    line-height: 1.5em;
+    text-align: center;
+    font-size: 2em;
+    padding: 1em;
+    height: 80%;
+    position: relative;
+    z-index: 100;
+    transition: box-shadow 0.3s; }
+  @media only screen and (max-height: 610px) {
+    #card {
+      font-size: 0.8em; } }
   @media only screen and (max-height: 520px) {
     #card {
-      font-size: 1.4em;
-      margin-top: 0.5em; } }
-
-@media only screen and (max-width: 300px) {
-  li {
-    height: 100px; } }
+      font-size: 0.6em; } }
+  @media only screen and (max-height: 440px) {
+    #card {
+      font-size: 0.4em; } }
+  @media only screen and (max-height: 360px) {
+    #card {
+      font-size: 0.3em; } }
 
 .bubbleitem {
-  vertical-align: middle;
-  height: 50px; }
-  @media only screen and (max-width: 300px) {
-    .bubbleitem {
-      height: 100px; } }
+  vertical-align: middle; }
+  .bubbleitem .navatar {
+    height: 40px;
+    width: 40px;
+    margin-top: 0; }
+    @media only screen and (max-width: 900px) {
+      .bubbleitem .navatar {
+        height: 30px;
+        width: 30px; } }
+    @media only screen and (max-width: 700px) {
+      .bubbleitem .navatar {
+        height: 20px;
+        width: 20px; } }
 
 .bubble {
-  top: -25px;
-  left: 15px;
+  left: 1em;
+  top: -1em;
   position: relative;
   color: #333333;
   text-shadow: none;
   display: inline-block;
-  height: 35px;
-  width: 70%;
+  width: 75%;
   background-color: #ffffff;
-  border-radius: 15px;
-  padding: 5px;
+  border-radius: 1em;
+  padding: 0.5em;
   box-shadow: 0 2px 0 #333333, 0px 3px 6px black; }
+  @media only screen and (max-width: 900px) {
+    .bubble {
+      width: 70%;
+      font-size: 0.8em; } }
+  @media only screen and (max-width: 700px) {
+    .bubble {
+      width: 65%;
+      font-size: 0.6em; } }
 
 #scoreboard {
   width: 100%;
@@ -353,9 +397,11 @@ body {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.7);
   top: 0;
-  left: 0; }
+  left: 0;
+  z-index: 1000; }
 
 #timeup {
+  z-index: 1001;
   width: 50%;
   position: fixed;
   top: 50%;
@@ -386,6 +432,15 @@ body {
     width: 1em;
     text-align: center;
     margin: 0 auto; }
+  @media only screen and (max-height: 600px) {
+    #timeup {
+      font-size: 0.8em; } }
+  @media only screen and (max-height: 500px) {
+    #timeup {
+      font-size: 0.6em; } }
+  @media only screen and (max-height: 400px) {
+    #timeup {
+      font-size: 0.4em; } }
 
 .avatar {
   width: 50px;
@@ -420,7 +475,5 @@ body {
       margin-top: 0.5em;
       text-align: center; } }
 
-#ready {
-  clear: both;
-  position: relative;
-  top: 0.5em; }
+#ready .btn {
+  margin: 0 auto; }

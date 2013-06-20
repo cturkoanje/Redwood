@@ -35,7 +35,7 @@
 }
 
 #ready {
-	clear: both;
-	position: relative;
-	top: 0.5em;
+	.btn {
+		margin: 0 auto;
+	}
 }
