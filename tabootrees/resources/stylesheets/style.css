@@ -154,7 +154,7 @@ body {
     #navusername {
       display: none; } }
 
-#navatar {
+.navatar {
   width: 40px;
   height: 40px;
   margin-top: 5px; }

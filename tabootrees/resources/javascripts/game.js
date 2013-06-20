@@ -17,3 +17,10 @@ function addSpeechText(text){
   var speech = document.getElementById("speech");
   speech.scrollTop = speech.scrollHeight;
 }
+
+
+function replaceSpeechText(text){
+  $(".speechtext").html(text);
+  var speech = document.getElementById("speech");
+  speech.scrollTop = speech.scrollHeight;
+}
