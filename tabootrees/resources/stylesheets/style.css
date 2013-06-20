@@ -54,9 +54,6 @@ body {
     body {
       font-size: 12px; } }
 
-html {
-  height: 100%; }
-
 a {
   color: white;
   text-decoration: none; }
@@ -66,16 +63,11 @@ a {
   visibility: hidden; }
 
 body {
-  height: 100%;
   background: url("../images/flannel.png") repeat; }
-
-#container {
-  height: 100%; }
 
 #content {
   margin: 70px auto;
   width: 80%;
-  height: 90%;
   max-width: 960px; }
 
 #colorify {
@@ -184,6 +176,9 @@ body {
   width: 40%;
   text-align: center;
   left: 30%; }
+  @media only screen and (max-width: 480px) {
+    #title {
+      margin-top: 0.5em; } }
 
 #logo {
   width: 240px;
@@ -231,8 +226,12 @@ body {
     top: 4px;
     box-shadow: 0 1px 0 #99331f, 0 1px 3px black; }
 
+.mascot {
+  display: block;
+  margin: 1em auto 0;
+  width: 90%; }
+
 .vertcard {
-  height: 60%;
   overflow: scroll;
   padding: 10px;
   margin: 10px 0; }
@@ -272,6 +271,70 @@ body {
   border-radius: 15px;
   padding: 5px;
   box-shadow: 0 2px 0 #333333, 0px 3px 6px black; }
+
+#scoreboard {
+  width: 100%;
+  position: fixed;
+  height: 50px;
+  bottom: 0;
+  background-color: #6b130b;
+  box-shadow: 0px 1px 10px black;
+  z-index: 1000;
+  font-size: 1.5em; }
+  @media only screen and (max-width: 640px) {
+    #scoreboard {
+      font-size: 1.2em; } }
+  #scoreboard #counter {
+    top: 0.2em;
+    position: absolute;
+    width: 20%;
+    left: 40%;
+    text-align: center;
+    padding: 0.3em;
+    border-radius: 0.5em;
+    background: #460a05; }
+    @media only screen and (max-width: 640px) {
+      #scoreboard #counter {
+        top: 0.5em; } }
+    @media only screen and (max-width: 480px) {
+      #scoreboard #counter {
+        top: 0.8em; } }
+  #scoreboard #treescore {
+    top: 0.5em;
+    position: absolute;
+    right: 3%;
+    width: 37%;
+    text-align: right; }
+    @media only screen and (max-width: 640px) {
+      #scoreboard #treescore {
+        right: 7%;
+        width: 33%;
+        top: 0.8em; } }
+    @media only screen and (max-width: 480px) {
+      #scoreboard #treescore {
+        top: 1.2em; } }
+  #scoreboard #lumberscore {
+    top: 0.5em;
+    position: absolute;
+    left: 3%;
+    width: 37%;
+    text-align: left; }
+    @media only screen and (max-width: 640px) {
+      #scoreboard #lumberscore {
+        left: 7%;
+        width: 33%;
+        top: 0.8em; } }
+    @media only screen and (max-width: 480px) {
+      #scoreboard #lumberscore {
+        top: 1.2em; } }
+  #scoreboard .score {
+    padding: 0.3em;
+    border-radius: 0.5em;
+    background: #460a05; }
+  #scoreboard .teamlumber {
+    margin-left: 0.5em; }
+  #scoreboard .teamtree {
+    margin-right: 0.5em; }
 
 .avatar {
   width: 50px;

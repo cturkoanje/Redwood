@@ -8,10 +8,6 @@
 	}
 }
 
-html {
-	height: 100%;
-}
-
 a {
 	color: white;
 	text-decoration: none;
@@ -23,18 +19,12 @@ a {
 }
 
 body {
-	height: 100%;
 	background: url("../images/flannel.png") repeat;
-}
-
-#container {
-	height: 100%;
 }
 
 #content {
 	margin: 70px auto;
 	width: 80%;
-	height: 90%;
 	max-width: 960px;
 }
 
@@ -151,4 +141,7 @@ body {
 	width: 40%;
 	text-align: center;
 	left: 30%;
+	@media only screen and (max-width: 480px) {
+		margin-top: 0.5em;
+	}
 }
