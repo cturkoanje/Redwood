@@ -1,3 +1,7 @@
+var profID = undefined;
+var currentTeam = "NoTEAM";
+var currentRole = "NoRole"; 
+var currentName = "NoName";
 
 var helper = (function() {
   var authResult = undefined;
@@ -49,6 +53,8 @@ var helper = (function() {
             $('#profile').append(profile.error);
             return;
           }
+          // alert(profile.image.url);
+          profID = profile.image.url;
           $('#profile').append(
               $('<p><img src=\"' + profile.image.url + '\"></p>'));
           $('#profile').append(
@@ -82,7 +88,10 @@ var helper = (function() {
                   //   // helper.people();
                   // },
                   processData: false,
-                  data: JSON.stringify({ "name": profile.displayName, "avatar": profile.image.url })
+                  data: JSON.stringify({ "name": profile.displayName,
+                   "avatar": profile.image.url,
+                   "team": "",
+                    "role": ""})
                 });
         });
       $('#authOps').show('slow');
@@ -296,9 +305,63 @@ $(document).ready(function() {
 
 });
 
+var prof= "https://lh3.googleusercontent.com/-Y-O9OQEoryo/AAAAAAAAAAI/AAAAAAAACLQ/FQfxcfxi-6U/photo.jpg?sz=50";
+
+
+// update("https://lh3.googleusercontent.com/-Y-O9OQEoryo/AAAAAAAAAAI/AAAAAAAACLQ/FQfxcfxi-6U/photo.jpg?sz=50",
+//   "CATPowA","MC");
+
+
+function update(){
+  $.ajax({
+        type: 'POST',
+        // state!!!
+        url: window.location.href + 'update',
+        contentType: 'application/octet-stream; charset=utf-8',
+   
+        processData: false,
+        data: JSON.stringify({
+         // "avatar": profile.image.url,
+         "avatar": profID,
+         "team": currentTeam,
+        "role": currentRole})
+      });
+}
+
+//just call GetPlayers. It returns which player (0 through n...) - 
+//just ignore that number, order is pretty arbitrary
+//returns: player name, player prof img, role, team
+//
+// 1 , Joe Rowley,https://lh3.googleusercontent.com/-Y-O9OQEoryo/AAAAAAAAAAI/AAAAAAAACLQ/FQfxcfxi-6U/photo.jpg?sz=50,NoRole,NoTEAM
+
+function GetPlayers(){
+  $.getJSON('/getplayers', function(data) {
+  var items = [];
+  $.each(data, function(key, val) {
+   alert(key + ' , ' + val);
+  });
+ });
+}
+
+//sets the current role, current team and current name js vars
+//uses the profID var to make the call. 
+
+function GetSelf(){
+
+$.getJSON("/getself", { avatar: profID})
+.done(function(data) {
+  alert("Data Loaded: " + data);
+  currentRole=data[0];
+  currentTeam=data[1];
+  currentName=data[2];
+  
+});
+}
+
+
 
 
 function onSignInCallback(authResult) {
-  alert("HI");
+  // alert("HI");
   helper.onSignInCallback(authResult);
 }
