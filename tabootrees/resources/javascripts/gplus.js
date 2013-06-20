@@ -39,6 +39,8 @@ $(document).ready(function() {
       $('#load').fadeIn('normal');
       function loadContent() {
           $('#container').load(toLoad, function() {
+            if($("#counter")[0])
+              countdown(60);
             card();
             gplus();
             handlers();
@@ -52,6 +54,21 @@ $(document).ready(function() {
           $('#load').fadeOut('normal');
       }
     });
+  }
+
+  function countdown(seconds) {
+    function tick() {
+        //This script expects an element with an ID = "counter". You can change that to what ever you want.
+        seconds--;
+        $("#counter").text(String(seconds));
+        if( seconds > 0 ) {
+            setTimeout(tick, 1000);
+        }
+        else{
+          $("#counter").text('Time is up!');
+        }
+    }
+    tick();
   }
 
   function card() {
