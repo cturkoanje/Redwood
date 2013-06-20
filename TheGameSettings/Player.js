@@ -7,7 +7,7 @@ Player object for Taboo
 function Player() {
 	this.firstName = "";
 	this.lastName = "";
-	this.id = "";
+	this.idNum = "";
 	this.teamName = "";
 	this.image = "";
 }
@@ -15,10 +15,20 @@ function Player() {
 function Player(id, firstName, lastName, image, teamName) {
 	this.firstName = firstName;
 	this.lastName = lastName;
-	this.id = id;
+	this.idNum = id;
 	this.teamName = teamName;
 	this.image = image;
 }
+
+function Player(jsonString) {
+	var jsonObj = JSON.parse(jsonString);
+	this.firstName = jsonObj['firstName'];
+	this.lastName = jsonObj['lastName'];
+	this.idNum = jsonObj['id'];
+	this.teamName = jsonObj['teamName'];
+	this.image = jsonObj['image'];
+}
+
 
 /**
 	Get first name
@@ -65,7 +75,7 @@ Player.prototype.setLastName = function(name) {
 	Should return the users id 
 */
 Player.prototype.getId = function() {
-	return this.id;
+	return this.idNum;
 }
 
 /**
@@ -90,4 +100,18 @@ Player.prototype.getTeam = function() {
 */
 Player.prototype.srtTeam = function(team) {
 	this.teamName = team;
+}
+
+/**
+	Return json string representing data 
+*/
+Player.prototype.toJSON = function() {
+	var object = {
+		"id": this.idNum,
+		"firstName": this.firstName,
+		"lastName" : this.lastName,
+		"teamName" : this.teamName,
+		"image"    : this.image
+	};
+	return JSON.stringify(object);
 }
