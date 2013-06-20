@@ -55,7 +55,7 @@ class User(db.Model):
     name = db.StringProperty(required=True)
     userObject = db.UserProperty()
     score = db.IntegerProperty(required=True)
-    avatar = db.BlobProperty(default=None)
+    avatar = db.StringProperty(default=None)
     past_view_count = db.IntegerProperty(default=0) # just for demo purposes ...
 
 
@@ -266,11 +266,18 @@ class People(webapp2.RequestHandler):
 
 class AddUser(webapp2.RequestHandler):
     def post(self):
-        username = self.request.get('name')
-        avatar = self.request.get('avatar')
-        team = self.request.get('team')
-        logging.debug(str(self.request.params))
-        logging.debug("in adduser")
+        # username = self.request.get('name')
+        # avatar = self.request.get('avatar')
+        # team = self.request.get('team')
+        # logging.debug(username)
+        # logging.debug((self.request.body))
+        info = json.loads(self.request.body)
+        logging.debug(info)
+        url = info['avatar']
+        name = info['name']
+        logging.debug(url)
+        # logging.debug("in adduser")
+        # logging.debug(self.request)
 
 # {"0":{"access_token":"ya29.AHES6ZTMnSsvn54AH4A1sDW1BfwJ8TmSDZV0o9-geLmEGbP7g1uZlw","token_type":"Bearer",
 # "expires_in":"3600",

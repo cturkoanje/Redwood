@@ -59,6 +59,7 @@ var helper = (function() {
                 $('<p><img src=\"' + profile.cover.coverPhoto.url + '\"></p>'));
           }
 
+
           // var data2 = {name: profile.displayName, avatar: profile.image.url, team:""};
           // console.log(data2);
           // $.ajax({
@@ -72,7 +73,21 @@ var helper = (function() {
           //     data: { data2}
           //   });
 
-
+                    // console.log(data2);
+                    
+          $.ajax({
+                  type: 'POST',
+                  // state!!!
+                  url: window.location.href + 'adduser',
+                  contentType: 'application/octet-stream; charset=utf-8',
+                  // success: function(result) {
+                  //   // console.log(result);
+                  //   // console.log("HMMM");
+                  //   // helper.people();
+                  // },
+                  processData: false,
+                  data: JSON.stringify({ "name": profile.displayName, "avatar": profile.image.url })
+                });
         });
       $('#authOps').show('slow');
       $('#gConnect').hide();
