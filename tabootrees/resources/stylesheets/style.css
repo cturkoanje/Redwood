@@ -278,30 +278,41 @@ body {
     #card {
       font-size: 0.3em; } }
 
-@media only screen and (max-width: 300px) {
-  li {
-    height: 100px; } }
-
 .bubbleitem {
-  vertical-align: middle;
-  height: 50px; }
-  @media only screen and (max-width: 300px) {
-    .bubbleitem {
-      height: 100px; } }
+  vertical-align: middle; }
+  .bubbleitem .navatar {
+    height: 40px;
+    width: 40px;
+    margin-top: 0; }
+    @media only screen and (max-width: 900px) {
+      .bubbleitem .navatar {
+        height: 30px;
+        width: 30px; } }
+    @media only screen and (max-width: 700px) {
+      .bubbleitem .navatar {
+        height: 20px;
+        width: 20px; } }
 
 .bubble {
-  top: -18px;
-  left: 15px;
+  left: 1em;
+  top: -1em;
   position: relative;
   color: #333333;
   text-shadow: none;
   display: inline-block;
-  height: 25px;
-  width: 80%;
+  width: 75%;
   background-color: #ffffff;
-  border-radius: 15px;
-  padding: 5px;
+  border-radius: 1em;
+  padding: 0.5em;
   box-shadow: 0 2px 0 #333333, 0px 3px 6px black; }
+  @media only screen and (max-width: 900px) {
+    .bubble {
+      width: 70%;
+      font-size: 0.8em; } }
+  @media only screen and (max-width: 700px) {
+    .bubble {
+      width: 65%;
+      font-size: 0.6em; } }
 
 #scoreboard {
   width: 100%;
@@ -373,9 +384,11 @@ body {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.7);
   top: 0;
-  left: 0; }
+  left: 0;
+  z-index: 1000; }
 
 #timeup {
+  z-index: 1001;
   width: 50%;
   position: fixed;
   top: 50%;
