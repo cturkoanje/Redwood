@@ -27,44 +27,23 @@
 	}
 }
 
-.bubble 
-{
-	position: relative;
-	width: 270px;
-	height: 45px;
-	padding: 0px;
-	background: #FFFFFF;
-	border: #00364A solid 3px;
-	-webkit-border-radius: 15px;
-	-moz-border-radius: 15px;
-	border-radius: 15px;
+.bubbleitem {
+	vertical-align: middle;
+	height: 50px;
 }
 
-.bubble:after 
-{
-	content: "";
-	position: absolute;
-	top: 17px;
-	left: -9px;
-	border-style: solid;
-	border-width: 5px 9px 5px 0;
-	border-color: transparent #FFFFFF;
-	display: block;
-	width: 0;
-	z-index: 1;
-}
+.bubble {
+  top: -15px;
+  left: 15px;
+  position: relative;
+  color: $text-shadow;
+  text-shadow: none;
 
-.bubble:before 
-{
-	content: "";
-	position: absolute;
-	top: 15px;
-	left: -14px;
-	border-style: solid;
-	border-width: 7px 11px 7px 0;
-	border-color: transparent #00364A;
-	display: block;
-	width: 0;
-	z-index: 0;
+  display: inline-block;
+  height: 35px;
+  width: 80%;
+  background-color: #ffffff;
+  border-radius: 15px; 
+  padding: 5px;
+  box-shadow: 0 2px 0 #333333, 0px 3px 6px black;
 }
-
