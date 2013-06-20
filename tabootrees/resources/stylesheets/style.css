@@ -284,7 +284,7 @@ body {
   @media only screen and (max-width: 640px) {
     #scoreboard {
       font-size: 1.2em; } }
-  #scoreboard #counter {
+  #scoreboard .counter {
     top: 0.2em;
     position: absolute;
     width: 20%;
@@ -294,10 +294,10 @@ body {
     border-radius: 0.5em;
     background: #460a05; }
     @media only screen and (max-width: 640px) {
-      #scoreboard #counter {
+      #scoreboard .counter {
         top: 0.5em; } }
     @media only screen and (max-width: 480px) {
-      #scoreboard #counter {
+      #scoreboard .counter {
         top: 0.8em; } }
   #scoreboard #treescore {
     top: 0.5em;
@@ -336,6 +336,46 @@ body {
   #scoreboard .teamtree {
     margin-right: 0.5em; }
 
+#overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  top: 0;
+  left: 0; }
+
+#timeup {
+  width: 50%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%); }
+  #timeup p {
+    text-align: center;
+    font-size: 1.5em;
+    margin: 0.3em 0; }
+  #timeup .roundreport {
+    padding: 0.3em;
+    margin: 0.8em 0;
+    border-radius: 0.5em;
+    background: #460a05; }
+    #timeup .roundreport span {
+      display: block;
+      font-size: 1.5em;
+      margin: 0.3em 0; }
+  #timeup .nextuser {
+    display: block;
+    margin: 1em auto; }
+  #timeup .counter {
+    padding: 0.3em;
+    border-radius: 0.5em;
+    background: #460a05;
+    font-size: 1.2em;
+    width: 1em;
+    text-align: center;
+    margin: 0 auto; }
+
 .avatar {
   width: 50px;
   height: 50px; }
@@ -343,6 +383,18 @@ body {
     .avatar {
       display: block;
       margin: 0 auto; } }
+
+.readyimg {
+  height: 50px;
+  width: 50px;
+  position: absolute; }
+  @media only screen and (max-width: 720px) {
+    .readyimg {
+      display: block;
+      margin: 0 auto;
+      position: relative;
+      top: 50px;
+      margin-top: -50px; } }
 
 .username {
   position: relative;
