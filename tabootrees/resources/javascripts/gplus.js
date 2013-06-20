@@ -80,4 +80,30 @@ $(document).ready(function() {
   gplus();
   handlers();
 
+  function addUser(user) {
+    var name = user.name;
+    var avatar = user.avatar;
+    var team = user.team;
+    var toAdd = $('<article class="basic tertiary"><img class="avatar" src="' + avatar + '" /><span class="username">' + name + '</span></article>');
+    if(team == "lumberjacks")
+      toAdd.appendTo(".left");
+    else
+      toAdd.appendTo(".right");
+    var height = toAdd.height();
+    toAdd.css({ height: 0 });
+    toAdd.animate({ height: height + "px" }, 500);
+  }
+
+  function ready(user) {
+    var name = user.name;
+    var article = $('article:contains("' + name + '")');
+    var img = $('<img src="images/ready.png" />');
+    img.css({
+      height: "50px",
+      width: "50px",
+      position: "absolute"
+    });
+    img.prependTo(article);
+  }
+
 });
