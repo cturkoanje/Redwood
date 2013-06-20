@@ -1,422 +1,81 @@
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font-size: 100%;
-  font: inherit;
-  vertical-align: baseline; }
+/*
+Syntax error: Invalid CSS after "	}": expected "}", was "<<<<<<< HEAD"
+        on line 47 of _gamescreen.scss
+        from line 8 of style.scss
 
-/* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure,
-footer, header, hgroup, menu, nav, section {
-  display: block; }
+42: 		font-size: 0.8em;
+43: 	}
+44: 	@media only screen and (max-height: 520px) {
+45: 		font-size: 0.6em;
+46: 	}
+47: <<<<<<< HEAD
+48: =======
+49: 	@media only screen and (max-height: 440px) {
+50: 		font-size: 0.4em;
+51: 	}
+52: 	@media only screen and (max-height: 360px) {
 
-body {
-  line-height: 1; }
-
-ol, ul {
-  list-style: none; }
-
-blockquote, q {
-  quotes: none; }
-
-blockquote:before, blockquote:after,
-q:before, q:after {
-  content: '';
-  content: none; }
-
-table {
-  border-collapse: collapse;
-  border-spacing: 0; }
-
-@font-face {
-  font-family: 'Carrosserie-Light';
-  src: url("../fonts/Carrosserie-Light.eot?#iefix") format("embedded-opentype"), url("../fonts/Carrosserie-Light.woff") format("woff"), url("../fonts/Carrosserie-Light.ttf") format("truetype"), url("../fonts/Carrosserie-Light.svg#webfont") format("svg"); }
-
-body {
-  font-family: "Carrosserie-Light";
-  font-size: 16px;
-  color: white;
-  text-shadow: 0.18em 0.18em 0 #333333; }
-  @media only screen and (max-width: 480px) {
-    body {
-      font-size: 12px; } }
-
-a {
-  color: white;
-  text-decoration: none; }
-
-.hidden {
-  display: none;
-  visibility: hidden; }
-
-body {
-  background: url("../images/flannel.png") repeat; }
-
-#content {
-  margin: 70px auto;
-  width: 80%;
-  max-width: 960px; }
-
-#colorify {
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  background: rgba(163, 218, 245, 0.7);
-  z-index: 0; }
-
-.btn {
-  position: relative;
-  transition: all 0.1s;
-  cursor: pointer;
-  display: block;
-  background: #cc4429;
-  font-size: 2em;
-  padding: .3em 0;
-  width: 80%;
-  max-width: 500px;
-  text-align: center;
-  text-decoration: none;
-  color: white;
-  border-radius: 3em;
-  margin: 1em auto;
-  box-shadow: 0 5px 0 #99331f, 0px 5px 6px black; }
-  .btn:active {
-    top: 4px;
-    box-shadow: 0 1px 0 #cc4429, 0 1px 3px black; }
-
-.btn:active {
-  top: 4px;
-  box-shadow: 0 1px 0 #99331f, 0 1px 3px black; }
-
-#load {
-  display: none; }
-
-.basic {
-  background: #cc4429;
-  box-shadow: 0 5px 0 #99331f, 0px 5px 6px black;
-  padding: 1em;
-  margin: 1em 0; }
-
-.secondary {
-  background: #203157;
-  box-shadow: 0 5px 0 #101a30, 0px 5px 6px black; }
-
-.tertiary {
-  background: #6b130b;
-  box-shadow: 0 5px 0 #460a05, 0px 5px 6px black; }
-
-#navbar {
-  font-size: 2em;
-  display: inline-block;
-  top: 0;
-  width: 100%;
-  position: fixed;
-  height: 50px;
-  background-color: #6b130b;
-  box-shadow: 0px 2px 10px black;
-  z-index: 1000; }
-
-#back {
-  position: absolute;
-  right: 3%;
-  text-decoration: none;
-  color: white;
-  width: 27%;
-  font-size: 0.5em;
-  margin-top: 17px;
-  text-align: right; }
-  @media only screen and (max-width: 640px) {
-    #back {
-      right: 7%;
-      width: 23%; } }
-
-#navusername {
-  font-size: 0.5em;
-  position: relative;
-  top: -1em;
-  left: 1em; }
-  @media only screen and (max-width: 640px) {
-    #navusername {
-      display: none; } }
-
-.navatar {
-  width: 40px;
-  height: 40px;
-  margin-top: 5px; }
-
-#navinfo {
-  position: absolute;
-  left: 3%;
-  display: inline-block;
-  width: 27%; }
-  @media only screen and (max-width: 640px) {
-    #navinfo {
-      left: 7%;
-      width: 23%; } }
-
-#title {
-  position: absolute;
-  margin-top: 0.3em;
-  display: inline-block;
-  width: 40%;
-  text-align: center;
-  left: 30%; }
-  @media only screen and (max-width: 480px) {
-    #title {
-      margin-top: 0.5em; } }
-
-#logo {
-  width: 240px;
-  margin: 1em auto; }
-
-#tagline {
-  text-align: center;
-  font-size: 2em; }
-
-#maketeam, #jointeam, #help {
-  display: none;
-  opacity: 0; }
-
-.left {
-  float: left;
-  width: 43%; }
-  .left h1 {
-    font-size: 1.5em; }
-  @media only screen and (max-width: 720px) {
-    .left {
-      width: 40%; } }
-
-.right {
-  float: right;
-  width: 43%; }
-  .right h1 {
-    font-size: 1.5em; }
-  @media only screen and (max-width: 720px) {
-    .right {
-      width: 40%; } }
-
-.leftclick {
-  position: relative;
-  transition: all 0.1s;
-  cursor: pointer; }
-  .leftclick:active {
-    top: 4px;
-    box-shadow: 0 1px 0 #101a30, 0 1px 3px black; }
-
-.rightclick {
-  position: relative;
-  transition: all 0.1s;
-  cursor: pointer; }
-  .rightclick:active {
-    top: 4px;
-    box-shadow: 0 1px 0 #99331f, 0 1px 3px black; }
-
-.mascot {
-  display: block;
-  margin: 1em auto 0;
-  width: 90%; }
-
-.vertcard {
-  overflow: scroll;
-  padding: 10px;
-  margin: 10px 0; }
-
-#chat {
-  font-size: 1em;
-  line-height: 1.2em;
-  font-color: #ffffff; }
-  #chat ul {
-    margin: 10px 20px; }
-    #chat ul li {
-      margin: 10px 0; }
-
-#speech {
-  text-shadow: none;
-  overflow: scroll; }
-
-#card {
-  line-height: 1.5em;
-  text-align: center;
-  font-size: 2.2em; }
-  @media only screen and (max-height: 520px) {
-    #card {
-      font-size: 1.4em;
-      margin-top: 0.5em; } }
-
-.bubbleitem {
-  vertical-align: middle;
-  height: 50px; }
-  @media only screen and (max-width: 250px) {
-    .bubbleitem .bubble {
-      width: 60%; } }
-
-.bubble {
-  top: -18px;
-  left: 15px;
-  position: relative;
-  color: #333333;
-  text-shadow: none;
-  display: inline-block;
-  height: 25px;
-  width: 80%;
-  background-color: #ffffff;
-  border-radius: 15px;
-  padding: 5px;
-  box-shadow: 0 2px 0 #333333, 0px 3px 6px black; }
-
-#scoreboard {
-  width: 100%;
-  position: fixed;
-  height: 50px;
-  bottom: 0;
-  background-color: #6b130b;
-  box-shadow: 0px 1px 10px black;
-  z-index: 1000;
-  font-size: 1.5em; }
-  @media only screen and (max-width: 640px) {
-    #scoreboard {
-      font-size: 1.2em; } }
-  #scoreboard .counter {
-    top: 0.2em;
-    position: absolute;
-    width: 20%;
-    left: 40%;
-    text-align: center;
-    padding: 0.3em;
-    border-radius: 0.5em;
-    background: #460a05; }
-    @media only screen and (max-width: 640px) {
-      #scoreboard .counter {
-        top: 0.5em; } }
-    @media only screen and (max-width: 480px) {
-      #scoreboard .counter {
-        top: 0.8em; } }
-  #scoreboard #treescore {
-    top: 0.5em;
-    position: absolute;
-    right: 3%;
-    width: 37%;
-    text-align: right; }
-    @media only screen and (max-width: 640px) {
-      #scoreboard #treescore {
-        right: 7%;
-        width: 33%;
-        top: 0.8em; } }
-    @media only screen and (max-width: 480px) {
-      #scoreboard #treescore {
-        top: 1.2em; } }
-  #scoreboard #lumberscore {
-    top: 0.5em;
-    position: absolute;
-    left: 3%;
-    width: 37%;
-    text-align: left; }
-    @media only screen and (max-width: 640px) {
-      #scoreboard #lumberscore {
-        left: 7%;
-        width: 33%;
-        top: 0.8em; } }
-    @media only screen and (max-width: 480px) {
-      #scoreboard #lumberscore {
-        top: 1.2em; } }
-  #scoreboard .score {
-    padding: 0.3em;
-    border-radius: 0.5em;
-    background: #460a05; }
-  #scoreboard .teamlumber {
-    margin-left: 0.5em; }
-  #scoreboard .teamtree {
-    margin-right: 0.5em; }
-
-#overlay {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
-  top: 0;
-  left: 0; }
-
-#timeup {
-  width: 50%;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%); }
-  #timeup p {
-    text-align: center;
-    font-size: 1.5em;
-    margin: 0.3em 0; }
-  #timeup .roundreport {
-    padding: 0.3em;
-    margin: 0.8em 0;
-    border-radius: 0.5em;
-    background: #460a05; }
-    #timeup .roundreport span {
-      display: block;
-      font-size: 1.5em;
-      margin: 0.3em 0; }
-  #timeup .nextuser {
-    display: block;
-    margin: 1em auto; }
-  #timeup .counter {
-    padding: 0.3em;
-    border-radius: 0.5em;
-    background: #460a05;
-    font-size: 1.2em;
-    width: 1em;
-    text-align: center;
-    margin: 0 auto; }
-
-.avatar {
-  width: 50px;
-  height: 50px; }
-  @media only screen and (max-width: 720px) {
-    .avatar {
-      display: block;
-      margin: 0 auto; } }
-
-.readyimg {
-  height: 50px;
-  width: 50px;
-  position: absolute; }
-  @media only screen and (max-width: 720px) {
-    .readyimg {
-      display: block;
-      margin: 0 auto;
-      position: relative;
-      top: 50px;
-      margin-top: -50px; } }
-
-.username {
-  position: relative;
-  top: -1em;
-  left: 1em;
-  font-size: 1.2em; }
-  @media only screen and (max-width: 720px) {
-    .username {
-      position: static;
-      font-size: 1em;
-      display: block;
-      margin-top: 0.5em;
-      text-align: center; } }
-
-#ready {
-  clear: both;
-  position: relative;
-  top: 0.5em; }
+Backtrace:
+_gamescreen.scss:47
+style.scss:8
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/scss/parser.rb:1148:in `expected'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/scss/parser.rb:1084:in `expected'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/scss/parser.rb:1079:in `tok!'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/scss/parser.rb:536:in `block'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/scss/parser.rb:529:in `ruleset'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/scss/parser.rb:553:in `block_child'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/scss/parser.rb:546:in `block_contents'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/scss/parser.rb:82:in `stylesheet'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/scss/parser.rb:27:in `parse'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/engine.rb:342:in `_to_tree'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/engine.rb:274:in `to_tree'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/tree/visitors/perform.rb:225:in `visit_import'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/tree/visitors/base.rb:37:in `send'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/tree/visitors/base.rb:37:in `visit'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/tree/visitors/perform.rb:100:in `visit'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/tree/visitors/base.rb:53:in `visit_children'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/tree/visitors/base.rb:53:in `map'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/tree/visitors/base.rb:53:in `visit_children'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/tree/visitors/perform.rb:109:in `visit_children'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/tree/visitors/perform.rb:121:in `with_environment'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/tree/visitors/perform.rb:108:in `visit_children'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/tree/visitors/base.rb:37:in `visit'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/tree/visitors/perform.rb:128:in `visit_root'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/tree/visitors/base.rb:37:in `send'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/tree/visitors/base.rb:37:in `visit'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/tree/visitors/perform.rb:100:in `visit'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/tree/visitors/perform.rb:7:in `send'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/tree/visitors/perform.rb:7:in `visit'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/tree/root_node.rb:20:in `render'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/engine.rb:315:in `_render'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/engine.rb:262:in `render'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/plugin/compiler.rb:362:in `update_stylesheet'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/plugin/compiler.rb:203:in `update_stylesheets'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/plugin/compiler.rb:201:in `each'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/plugin/compiler.rb:201:in `update_stylesheets'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/plugin/compiler.rb:283:in `watch'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/vendor/listen/lib/listen/multi_listener.rb:108:in `call'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/vendor/listen/lib/listen/multi_listener.rb:108:in `on_change'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/vendor/listen/lib/listen/multi_listener.rb:117:in `initialize_adapter'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/vendor/listen/lib/listen/adapters/polling.rb:56:in `call'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/vendor/listen/lib/listen/adapters/polling.rb:56:in `poll'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/vendor/listen/lib/listen/adapters/polling.rb:32:in `start'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/vendor/listen/lib/listen/adapters/polling.rb:32:in `initialize'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/vendor/listen/lib/listen/adapters/polling.rb:32:in `new'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/vendor/listen/lib/listen/adapters/polling.rb:32:in `start'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/vendor/listen/lib/listen/multi_listener.rb:44:in `start'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/plugin/compiler.rb:291:in `watch'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/plugin.rb:107:in `send'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/plugin.rb:107:in `method_missing'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/exec.rb:452:in `watch_or_update'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/exec.rb:315:in `process_result'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/exec.rb:41:in `parse'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/../lib/sass/../sass/exec.rb:21:in `parse!'
+/Library/Ruby/Gems/1.8/gems/sass-3.2.9/bin/sass:9
+/usr/bin/sass:19:in `load'
+/usr/bin/sass:19
+*/
+body:before {
+  white-space: pre;
+  font-family: monospace;
+  content: "Syntax error: Invalid CSS after \"	}\": expected \"}\", was \"<<<<<<< HEAD\"\A         on line 47 of _gamescreen.scss\A         from line 8 of style.scss\A \A 42: 		font-size: 0.8em;\A 43: 	}\A 44: 	@media only screen and (max-height: 520px) {\A 45: 		font-size: 0.6em;\A 46: 	}\A 47: <<<<<<< HEAD\A 48: =======\A 49: 	@media only screen and (max-height: 440px) {\A 50: 		font-size: 0.4em;\A 51: 	}\A 52: 	@media only screen and (max-height: 360px) {"; }
