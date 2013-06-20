@@ -1,7 +1,7 @@
 function addBubble(user, text) {
   var avatar = user.avatar;
   var team = user.team;
-  var toAdd = $('<li class="bubbleitem"><img class="avatar" src="' + avatar + '" /><span class="bubble">' + text + '</span></li>');
+  var toAdd = $('<li class="bubbleitem"><img class="navatar" src="' + avatar + '" /><span class="bubble">' + text + '</span></li>');
   toAdd.appendTo(".bubbles");
   var height = toAdd.height();
   var speech = document.getElementById("chat");
