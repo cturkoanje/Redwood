@@ -72,7 +72,7 @@
 <script type="text/javascript">
 var helper = (function() {
   var authResult = undefined;
-
+  
   return {
     /**
      * Hides the sign-in button and connects the server-side app after
@@ -101,6 +101,7 @@ var helper = (function() {
         $('#gConnect').show();
       }
       console.log('authResult', authResult);
+
     },
     /**
      * Retrieves and renders the authenticated user's Google+ profile.
@@ -133,7 +134,7 @@ var helper = (function() {
       // Revoke the server tokens
       $.ajax({
         type: 'POST',
-        url: window.location.href + '/disconnect',
+        url: window.location.href + 'disconnect',
         async: false,
         success: function(result) {
           console.log('revoke response: ' + result);
@@ -156,27 +157,31 @@ var helper = (function() {
      *   https://developers.google.com/+/web/signin/server-side-flow
      */
     connectServer: function() {
-      console.log(this.authResult.code);
+      console.log("authresult " + this.authResult.code);
+      
       $.ajax({
         type: 'POST',
         // state!!!
-        url: window.location.href + '/connect?state={{ STATE }}',
+        url: window.location.href + 'connect?state={{ STATE }}',
         contentType: 'application/octet-stream; charset=utf-8',
         success: function(result) {
           console.log(result);
+          console.log("HMMM");
           helper.people();
         },
         processData: false,
         data: this.authResult.code
       });
+      
     },
     /**
      * Calls the server endpoint to get the list of people visible to this app.
      */
     people: function() {
+      console.log("calling people");
       $.ajax({
         type: 'GET',
-        url: window.location.href + '/people',
+        url: window.location.href + 'people',
         contentType: 'application/octet-stream; charset=utf-8',
         success: function(result) {
           helper.appendCircled(result);
