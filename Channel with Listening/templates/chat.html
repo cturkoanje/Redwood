@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	<div id="channel_api_params" style="display:none;" chat_token="{{chat_token}}" channel_id="{{channel_id}}"></div>
+	<div id="top">
+			<p>A Simple Chat using the Channel API</p>
+		<span>
+			<a href="http://www.netgamix.com">Netgamix</a>
+		</span>
+	</div>
+	
+	<div id="center">
+		{% include 'messages.html' %}
+	</div>
+	
+	<div id="bottom">
+		<!--
+		<span id="nick" value="{{nick}}">
+			nick:{{nick}} chat_token:{{chat_token}} channel_id:{{channel_id}}
+		</span>
+		<input id="text" name="text" type="text" value=""></input>
+		<button id="send">SEND</button>
+
+	-->
+
+			<button id="startButton">Start Button</button>
+
+	</div>
+	<script type="text/javascript" src="/_ah/channel/jsapi"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+	<script type="text/javascript" src="/static/simplechat.js"></script>
+
+	<script>
+	var mainSpeech = null;
+
+		$(document).ready(function()
+		{
+			$("#center").html("");
+			$("#startButton").click(function() {
+
+				mainSpeech = new Speaker();
+				mainSpeech.startListeningForMatch("orange", "gotResult", "gotNewData");
+
+			})
+		});
+
+		function gotResult(event)
+		{
+			var text = $('#text').val();
+			var nick = $('#nick').attr('value');
+			var channel_id = $('#channel_api_params').attr('channel_id');
+			var newData = ["anObject", "another", "and another"];
+			//gotNewData(event);
+			
+			$.ajax({
+			url: '/newMessage/',
+			type: 'POST',
+			data:{
+				text:event['results'][0][0]['transcript'],
+				nick:nick,
+				type:"correctWord",
+				channel_id:channel_id,
+				data:JSON.stringify(newData),
+			},
+			success: function(data){
+				//alert("You said it!");
+			},
+			complete:function(){ 
+	        }			
+		});
+			
+		}
+
+		function gotNewData2(event){}
+
+		function gotNewData(event)
+		{
+			console.log(event['results'][0][0]['transcript']);
+			var text = $('#text').val();
+			var nick = $('#nick').attr('value');
+			var channel_id = $('#channel_api_params').attr('channel_id');
+			var newData = ["anObject", "another", "and another"];
+
+			console.log("Sending data over channel\n" + event['results'][0][0]['transcript']);
+			$.ajax({
+			url: '/newMessage/',
+			type: 'POST',
+			data:{
+				text:event['results'][0][0]['transcript'],
+				nick:nick,
+				type:"textUpdate",
+				channel_id:channel_id,
+				data:JSON.stringify(newData),
+			},
+			success: function(data){
+			},
+			complete:function(){ 
+	        }			
+		});
+
+
+		}
+	</script>
+{% endblock %}

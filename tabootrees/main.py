@@ -55,7 +55,7 @@ class User(db.Model):
     name = db.StringProperty(required=True)
     userObject = db.UserProperty()
     score = db.IntegerProperty(required=True)
-    avatar = db.BlobProperty(default=None)
+    avatar = db.StringProperty(default=None)
     past_view_count = db.IntegerProperty(default=0) # just for demo purposes ...
 
 
@@ -134,9 +134,11 @@ class MainHandler(webapp2.RequestHandler):
         self.session['state'] = state
 
         output = {
-                'STATE': state 
+                'STATE': 'SJAOE3GGWDPOLNW9SWCXCXYJWAIJZT0D'
                 }
-        path = os.path.join(os.path.dirname(__file__), 'resources/templates/index.html')
+        path = os.path.join(os.path.dirname(__file__), 'resources/templates/test.html')
+
+        # path2 = os.path.join(os.path.dirname(__file__), 'resources/templates/test.html')
         self.response.write(template.render(path, output))
         # self.response.write(str(self.session_store))
 
@@ -261,6 +263,22 @@ class People(webapp2.RequestHandler):
             self.response.status = 500
             self.response.out.write(json.dumps('Failed to refresh access token.'))
 
+
+class AddUser(webapp2.RequestHandler):
+    def post(self):
+        # username = self.request.get('name')
+        # avatar = self.request.get('avatar')
+        # team = self.request.get('team')
+        # logging.debug(username)
+        # logging.debug((self.request.body))
+        info = json.loads(self.request.body)
+        logging.debug(info)
+        url = info['avatar']
+        name = info['name']
+        logging.debug(url)
+        # logging.debug("in adduser")
+        # logging.debug(self.request)
+
 # {"0":{"access_token":"ya29.AHES6ZTMnSsvn54AH4A1sDW1BfwJ8TmSDZV0o9-geLmEGbP7g1uZlw","token_type":"Bearer",
 # "expires_in":"3600",
 # "id_token":"eyJhbGciOiJSUzI1NiIsImtpZCI6ImVkNjM0ZWM3OTc2ZGFlMTRmZTMwY2M5M2RlNmY3ZGNhZDIwN2ZhOWQifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwic3ViIjoiMTE0MTQzNjg5ODE3NjcyOTUwNzY5IiwiYXpwIjoiMzk0ODY3ODYyNzEzLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiY19oYXNoIjoiRzd6ZjZGMnl0VHUwZWpFYkVRT2pvdyIsImF1ZCI6IjM5NDg2Nzg2MjcxMy5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsImF0X2hhc2giOiJ5dWpfSDYzOVRBUTk2SzQ4NkJZcWVRIiwiaWF0IjoxMzcxNjg1NDQyLCJleHAiOjEzNzE2ODkzNDJ9.MqQ9jSHfAlx-iPeAQw-z1Zg56XHiLx94VSknpvVyMHoQwCexG6aYH-TtyoTAxwqqosAfEbyBtbhxhb9us-zyk5Ttaqb8l7Rb76ODYMI_DzjQd7IMHhBU_UnA9ZtaTgBrrUKK7NqbWKSupTtrUOw8MIRyBzDYZ-ANQ5RBvP2hZDc",
@@ -277,7 +295,10 @@ config['webapp2_extras.sessions'] = {
 }
 
 app = webapp2.WSGIApplication([
-    ('/', MainHandler),('/connect', Connect),('/people', People)
+    ('/', MainHandler),
+    ('/connect', Connect),
+    ('/adduser', AddUser),
+    ('/people', People)
 ], debug=True, config=config)
 
 
