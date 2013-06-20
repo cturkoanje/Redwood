@@ -339,7 +339,7 @@ class _MultiStore(object):
     raw_key = cred_entry['key']
     key = util.dict_to_tuple_key(raw_key)
     credential = None
-    credential = Credentials.new_from_json(simplejson.dumps(cred_entry['credential']))
+    credential = Credentials.new_from_json(simplejson.encode(cred_entry['credential']))
     return (key, credential)
 
   def _write(self):

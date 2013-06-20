@@ -5,15 +5,20 @@
 }
 
 #chat {
-	font-size: 1.8em;
+	font-size: 1em;
 	line-height: 1.2em;
 	font-color: #ffffff;
 	ul{
-		margin: 0 20px;
+		margin: 10px 20px;
 		li{
 			margin: 10px 0;
 		}
 	}
+}
+
+#speech {
+	text-shadow: none;
+	overflow: scroll;
 }
 
 #card {
@@ -26,13 +31,22 @@
 	}
 }
 
+li{
+	@media only screen and (max-width: 300px){
+		height: 100px;
+	}
+}
 .bubbleitem {
+	
 	vertical-align: middle;
 	height: 50px;
+	@media only screen and (max-width: 300px){
+		height: 100px;
+	}
 }
 
 .bubble {
-  top: -15px;
+  top: -25px;
   left: 15px;
   position: relative;
   color: $text-shadow;
@@ -40,7 +54,7 @@
 
   display: inline-block;
   height: 35px;
-  width: 80%;
+  width: 70%;
   background-color: #ffffff;
   border-radius: 15px; 
   padding: 5px;

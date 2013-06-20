@@ -8,13 +8,13 @@
 
   <div id="content">
     <section id="chat" class="basic secondary left vertcard">
-      <ul>
+      <ul class="bubbles">
         <li class="bubbleitem"> <img class="avatar" src="images/avatar.jpg" /><span class="bubble">bubble</span></li>
         <li class="bubbleitem"> <img class="avatar" src="images/avatar.jpg" /><span class="bubble">bubble</span></li>
       </ul>
     </section>
 
-    <section id="card" class="basic right vertcard">
+    <section id="card" class="basic right vertcard hidden">
       <ul>
         <li>word</li>
         <hr>
@@ -28,8 +28,11 @@
 
     <!-- Display what the person explaining says - 
     we might not need a separate section -->
-    <section id="speech" class="basic secondary right hidden">
-
+    <section id="speech" class="basic right vertcard">
+      <article class="basic tertiary">
+        <img class="avatar" src="images/avatar.jpg" /><span class="username">Jack Lumberson</span>
+      </article>
+      <p class="speechtext"><p>
     </section>
   </div>
 
