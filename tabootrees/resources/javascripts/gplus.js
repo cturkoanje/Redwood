@@ -1,38 +1,18 @@
-var profID = undefined;
-var currentTeam = "NoTEAM";
-var currentRole = "NoRole"; 
-var currentName = "NoName";
+var currentUser = {"avatar": "", "name": "", "team": "", "role": ""};
+var players = [];
 
 var mainSpeech = null;
 var oldText = "";
-
-
 
 var helper = (function() {
   var authResult = undefined;
 
   return {
-    /**
-     * Hides the sign-in button and connects the server-side app after
-     * the user successfully signs in.
-     *
-     * @param {Object} authResult An Object which contains the access token and
-     *   other authentication information.
-     */
     onSignInCallback: function(authResult) {
-      $('#authResult').html('Auth Result:<br/>');
-      for (var field in authResult) {
-        $('#authResult').append(' ' + field + ': ' + authResult[field] + '<br/>');
-      }
       if (authResult['access_token']) {
         // The user is signed in
         this.authResult = authResult;
         $("#login").css({ display: "none" });
-        $("#jointeam").css({ display: "block" });
-        $("#help").css({ display: "block" });
-        $("body").css({ transition: "none", "-webkit-transition": "none"});
-        $("#jointeam").animate({ opacity: 1 }, 200);
-        $("#help").animate({ opacity: 1 }, 200);
         helper.connectServer();
         // After we load the Google+ API, render the profile data from Google+.
         gapi.client.load('plus','v1',this.renderProfile);
@@ -40,9 +20,6 @@ var helper = (function() {
         // There was an error, which means the user is not signed in.
         // As an example, you can troubleshoot by writing to the console:
         console.log('There was an error: ' + authResult['error']);
-        $('#authResult').append('Logged out');
-        $('#authOps').hide('slow');
-        $('#gConnect').show();
       }
       console.log('authResult', authResult);
 
@@ -53,67 +30,29 @@ var helper = (function() {
     renderProfile: function() {
       var request = gapi.client.plus.people.get( {'userId' : 'me'} );
       request.execute( function(profile) {
-          $('#profile').empty();
-          if (profile.error) {
-            $('#profile').append(profile.error);
-            return;
-          }
-          // alert(profile.image.url);
-          profID = profile.image.url;
-          $('#profile').append(
-              $('<p><img src=\"' + profile.image.url + '\"></p>'));
-          $('#profile').append(
-              $('<p>Hello ' + profile.displayName + '!<br />Tagline: ' +
-              profile.tagline + '<br />About: ' + profile.aboutMe + '</p>'));
-          if (profile.cover && profile.coverPhoto) {
-            $('#profile').append(
-                $('<p><img src=\"' + profile.cover.coverPhoto.url + '\"></p>'));
-          }
-
-
-          // var data2 = {name: profile.displayName, avatar: profile.image.url, team:""};
-          // console.log(data2);
-          // $.ajax({
-          //     type: 'POST',
-          //     // state!!!
-          //     url: window.location.href + 'adduser',
-          //     contentType: 'application/octet-stream; charset=utf-8',
-          //     success: function(result) {
-          //     },
-          //     processData: false,
-          //     data: { data2}
-          //   });
-
-                    // console.log(data2);
-                    
-          $.ajax({
-                  type: 'POST',
-                  // state!!!
-                  url: window.location.href + 'adduser',
-                  contentType: 'application/octet-stream; charset=utf-8',
-                  // success: function(result) {
-                  //   // console.log(result);
-                  //   // console.log("HMMM");
-                  //   // helper.people();
-                  // },
-                  processData: false,
-                  data: JSON.stringify({ "name": profile.displayName,
-                   "avatar": profile.image.url,
-                   "team": "",
-                    "role": ""})
-                });
+        currentUser["avatar"] = profile.image.url;
+        getSelf(function() {
+          $("#jointeam").css({ display: "block" });
+          $("#help").css({ display: "block" });
+          $("body").css({ transition: "none", "-webkit-transition": "none"});
+          $("#jointeam").animate({ opacity: 1 }, 200);
+          $("#help").animate({ opacity: 1 }, 200);
         });
-      $('#authOps').show('slow');
-      $('#gConnect').hide();
-
-
-
-
+        $.ajax({
+          type: 'POST',
+          // state!!!
+          url: window.location.href + 'adduser',
+          contentType: 'application/octet-stream; charset=utf-8',
+          processData: false,
+          data: JSON.stringify({ "name": profile.displayName,
+           "avatar": profile.image.url,
+           "team": "",
+            "role": ""})
+        });
+      });
     },
-    
     connectServer: function() {
       console.log("authresult " + this.authResult.code);
-      
       $.ajax({
         type: 'POST',
         // state!!!
@@ -121,13 +60,11 @@ var helper = (function() {
         contentType: 'application/octet-stream; charset=utf-8',
         success: function(result) {
           console.log(result);
-          console.log("HMMM");
           helper.people();
         },
         processData: false,
         data: this.authResult.code
       });
-      
     },
     /**
      * Calls the server endpoint to get the list of people visible to this app.
@@ -162,38 +99,64 @@ var helper = (function() {
   };
 })();
 
+function onSignInCallback(authResult) {
+  helper.onSignInCallback(authResult);
+}
 
-$(document).ready(function() {
+function update(){
+  $.ajax({
+    type: 'POST',
+    // state!!!
+    url: window.location.href + 'update',
+    contentType: 'application/octet-stream; charset=utf-8',
+    processData: false,
+    data: JSON.stringify({
+     // "avatar": profile.image.url,
+     "avatar": currentUser.avatar,
+     "team": currentUser.team,
+    "role": currentUser.role })
+  });
+}
 
-
-  // function signInCallback(authResult) {
-  //   if (authResult['access_token']) {
-  //   // Successfully authorized
-  //   // Hide the sign-in button now that the user is authorized, for example:
-  //     $("#login").css({ display: "none" });
-  //     $("#jointeam").css({ display: "block" });
-  //     $("#help").css({ display: "block" });
-  //     $("body").css({ transition: "none", "-webkit-transition": "none"});
-  //     $("#jointeam").animate({ opacity: 1 }, 200);
-  //     $("#help").animate({ opacity: 1 }, 200);
-  //   } else if (authResult['error']) {
-  //     // There was an error.
-  //     // Possible error codes:
-  //     //   "access_denied" - User denied access to your app
-  //     //   "immediate_failed" - Could not automatically log in the user
-  //     // console.log('There was an error: ' + authResult['error']);
-  //   }
-  // }
-
-  function gplus() {
-    gapi.signin.render("signin", {
-      'callback': onSignInCallback,
-      'clientid': '394867862713.apps.googleusercontent.com',
-      'cookiepolicy': 'single_host_origin',
-      'requestvisibleactions': 'http://schemas.google.com/AddActivity',
-      'scope': 'https://www.googleapis.com/auth/plus.login'
+function getPlayers(callback){
+  $.getJSON('/getplayers', function(data) {
+    $.each(data, function(key, val) {
+      var toPush = {"name": val[0], "avatar": val[1], "role": val[2], "team": val[3]};
+      if(toPush.team && toPush.name != currentUser.name)
+        players.push(toPush);
     });
-  }
+    callback();
+  });
+}
+
+function getSelf(callback){
+  $.getJSON("/getself", { avatar: currentUser.avatar })
+    .done(function(data) {
+      currentUser["role"]=data[0];
+      currentUser["team"]=data[1];
+      currentUser["name"]=data[2];
+      callback();
+    });
+}
+
+function replaceSpeechTextForBubble(event)
+{
+  var user = {avatar:"/images/avatar.jpg", team:""};
+  var text = event['results'][0][0]['transcript'];
+
+  console.log("Old text: " +oldText);
+  console.log("New Text: " +text);
+  console.log("Replaced: " + text.replace(oldText, ""));
+  var replaced = text.replace(oldText, "");
+
+  //text = replaced;
+  if(replaced != "")
+    addBubble(user, replaced);
+  oldText = replaced;
+  //replaceSpeechText(event);
+}
+
+
 $(document).ready(function() {
   $('#disconnect').click(helper.disconnectServer);
   if ($('[data-clientid="YOUR_CLIENT_ID"]').length > 0) {
@@ -204,76 +167,135 @@ $(document).ready(function() {
         'YOUR_CLIENT_SECRET with your client secret in the project sources.'
     );
   }
-});
+
+  function gplus() {
+    gapi.signin.render("signin", {
+      'callback': onSignInCallback,
+      'clientid': '394867862713.apps.googleusercontent.com',
+      'cookiepolicy': 'single_host_origin',
+      'requestvisibleactions': 'http://schemas.google.com/AddActivity',
+      'scope': 'https://www.googleapis.com/auth/plus.login'
+    });
+  }
+
+  function changePage(page) {
+    var toLoad = page +' #container';
+    $('#container').hide('fast',loadContent);
+    $('#load').remove();
+    $('body').append('<span id="load">LOADING...</span>');
+    $('#load').fadeIn('normal');
+    function loadContent() {
+        $('#container').load(toLoad, function() {
+          if($(".counter")[0])
+            countdown(60);
+
+          if(toLoad == "/ #container") {
+            gplus();
+          }
+          if(toLoad != "/ #container") {
+            populateUser();
+          }
+          if(toLoad == "partials/gamescreen.html #container")
+          {
+            card();
+            renderRoles();
+            mainSpeech = new Speaker();
+            mainSpeech.startListeningForProhibited(["orange"], "saidIncorrect", "replaceSpeechTextForBubble", "");
+            currentPlay = gameData.start();
+
+            var currentCard = currentPlay.getCard();
+            console.log("Cureent card: " + currentPlay.getCard().toJSON());
+            $("#guess").html(currentCard.getWord());
+            var tabooWords = currentCard.getTabooWord();
+            for(x=0; x<tabooWords.length; x++)
+            {
+              var newWord = $('<li>' + tabooWords[x] + '</li>');
+              $('#tabooWords').append(newWord);
+            }
+
+          }
+          if(toLoad == "partials/lobby.html #container")
+          {
+            loadPlayers();
+            var gameTeams = gameData.getTeams();
+
+            console.log("Game teams: " + JSON.stringify(gameTeams));
+
+            var team1User = gameTeams[0].getPlayers();
+
+            console.log("Team 1 users: "+JSON.stringify(team1User));
+
+            var team2User = gameTeams[1].getPlayers();
+            for(x=0;x<team1User.length;x++)
+            {
+              var playerName = team1User[x].getFullName();
+              var newElement = $('<article class="basic tertiary"><img class="avatar" src="images/avatar.jpg" /><span class="username">' + team1User[x].getFullName() + '</span></article>');
+              $("#team1").append(newElement);
+            }
+            for(x=0;x<team2User.length;x++)
+            {
+              var playerName = team2User[x].getFullName();
+              var newElement = $('<article class="basic tertiary"><img class="avatar" src="images/avatar.jpg" /><span class="username">' + team2User[x].getFullName() + '</span></article>');
+              $("#team2").append(newElement);
+            }
+          }
+          handlers();
+          showNewContent();
+        });
+    }
+    function showNewContent() {
+        $('#container').show('normal', hideLoader());
+    }
+    function hideLoader() {
+        $('#load').fadeOut('normal');
+    }
+  }
 
   function handlers() {
     $('a').click(function(e){
       e.preventDefault();
-      var toLoad = $(this).attr('href')+' #container';
-      $('#container').hide('fast',loadContent);
-      $('#load').remove();
-      $('body').append('<span id="load">LOADING...</span>');
-      $('#load').fadeIn('normal');
-      function loadContent() {
-          $('#container').load(toLoad, function() {
-            if($(".counter")[0])
-              countdown(60);
-
-            if(toLoad == "partials/gamescreen.html #container")
-            {
-              mainSpeech = new Speaker();
-              mainSpeech.startListeningForProhibited(["orange"], "saidIncorrect", "replaceSpeechTextForBubble", "");
-              currentPlay = gameData.start();
-
-              var currentCard = currentPlay.getCard();
-              console.log("Cureent card: " + currentPlay.getCard().toJSON());
-              $("#guess").html(currentCard.getWord());
-              var tabooWords = currentCard.getTabooWord();
-              for(x=0; x<tabooWords.length; x++)
-              {
-                var newWord = $('<li>' + tabooWords[x] + '</li>');
-                $('#tabooWords').append(newWord);
-              }
-
-            }
-            if(toLoad == "partials/lobby.html #container")
-            {
-              var gameTeams = gameData.getTeams();
-
-              console.log("Game teams: " + JSON.stringify(gameTeams));
-
-              var team1User = gameTeams[0].getPlayers();
-
-              console.log("Team 1 users: "+JSON.stringify(team1User));
-
-              var team2User = gameTeams[1].getPlayers();
-              for(x=0;x<team1User.length;x++)
-              {
-                var playerName = team1User[x].getFullName();
-                var newElement = $('<article class="basic tertiary"><img class="avatar" src="images/avatar.jpg" /><span class="username">' + team1User[x].getFullName() + '</span></article>');
-                $("#team1").append(newElement);
-              }
-              for(x=0;x<team2User.length;x++)
-              {
-                var playerName = team2User[x].getFullName();
-                var newElement = $('<article class="basic tertiary"><img class="avatar" src="images/avatar.jpg" /><span class="username">' + team2User[x].getFullName() + '</span></article>');
-                $("#team2").append(newElement);
-              }
-            }
-
-            card();
-            gplus();
-            handlers();
-            showNewContent();
-          });
+      if($(this).hasClass("teamBtn")) {
+        currentUser["team"] = $(this).data("team");
+        update();
       }
-      function showNewContent() {
-          $('#container').show('normal', hideLoader());
+      if($(this).hasClass("backBtn")) {
+        players = [];
+        currentUser["team"] = "";
+        update();
       }
-      function hideLoader() {
-          $('#load').fadeOut('normal');
+      if($(this).hasClass("readyBtn")) {
+        if($(this).text() == "Ready") {
+          ready(currentUser);
+          $(this).text("Nevermind");
+        }
+        else {
+          unready(currentUser);
+          $(this).text("Ready");
+        }
+      }
+      else {
+        changePage($(this).attr("href"));
       }
     });
+  }
+
+  function populateUser() {
+    $('.navatar').attr("src", currentUser.avatar);
+    $('#navusername').text(currentUser.name);
+  }
+
+  function loadPlayers() {
+    getPlayers(function() {
+      $.each(players, function(key, val) {
+        addUser(val);
+      });
+      addUser(currentUser);
+    });
+  }
+
+  function renderRoles() {
+    alert("hi");
+    //if(currentUser)
   }
 
   var roundsLeft = 0;
@@ -289,25 +311,7 @@ $(document).ready(function() {
           if($('#timeup:contains("Game is over!")')[0]) {
             $("#overlay").remove();
             $("#timeup").remove();
-            var toLoad = '/ #container';
-            $('#container').hide('fast',loadContent);
-            $('#load').remove();
-            $('body').append('<span id="load">LOADING...</span>');
-            $('#load').fadeIn('normal');
-            function loadContent() {
-                $('#container').load(toLoad, function() {
-                  card();
-                  gplus();
-                  handlers();
-                  showNewContent();
-                });
-            }
-            function showNewContent() {
-                $('#container').show('normal', hideLoader());
-            }
-            function hideLoader() {
-                $('#load').fadeOut('normal');
-            }
+            changePage("/");
           }
           else if(roundsLeft == 0 || $("#timeup")[0]) {
             timeup();
@@ -338,9 +342,11 @@ $(document).ready(function() {
       toAdd.prependTo(".leftAdd");
     else
       toAdd.prependTo(".rightAdd");
-    var height = toAdd.height();
-    toAdd.css({ height: 0 });
-    toAdd.animate({ height: height + "px" }, 500);
+    toAdd.load(function() {
+      var height = toAdd.height();
+      toAdd.css({ height: 0 });
+      toAdd.animate({ height: height + "px" }, 500);
+    });
   }
 
   function removeUser(user) {
@@ -357,21 +363,19 @@ $(document).ready(function() {
     allReady();
   }
 
+  function unready(user) {
+    var name = user.name;
+    $('article:contains("' + name + '") .readyimg').remove();
+  }
+
   function allReady() {
-    if($('article').length == $('.readyimg').length) {
-      alert("hi");
-      $("#ready .btn").click();
+    if($('article').length == $('.readyimg').length && $('.leftAdd article').length > 1 && $('.rightAdd article').length > 1) {
+      changePage("partials/gamescreen/html");
     }
-    else
-      alert("fuck");
   }
 
   var changing = false;
   function changeCard(card) {
-    // var newCard = $('<ul><li>' + card.getWord() + '</li><hr></ul>');
-    // for(var taboo in card.getTaboo()) {
-    //   $('<li>' + taboo + '</li>').appendTo(newCard);
-    // }
     if(!changing) {
       changing = true;
       var word = card.getWord();
@@ -430,81 +434,9 @@ $(document).ready(function() {
     }
   }
 
-});
-
-var prof= "https://lh3.googleusercontent.com/-Y-O9OQEoryo/AAAAAAAAAAI/AAAAAAAACLQ/FQfxcfxi-6U/photo.jpg?sz=50";
-
-
-// update("https://lh3.googleusercontent.com/-Y-O9OQEoryo/AAAAAAAAAAI/AAAAAAAACLQ/FQfxcfxi-6U/photo.jpg?sz=50",
-//   "CATPowA","MC");
-
-
-function update(){
-  $.ajax({
-        type: 'POST',
-        // state!!!
-        url: window.location.href + 'update',
-        contentType: 'application/octet-stream; charset=utf-8',
-   
-        processData: false,
-        data: JSON.stringify({
-         // "avatar": profile.image.url,
-         "avatar": profID,
-         "team": currentTeam,
-        "role": currentRole})
-      });
-}
-
-//just call GetPlayers. It returns which player (0 through n...) - 
-//just ignore that number, order is pretty arbitrary
-//returns: player name, player prof img, role, team
-//
-// 1 , Joe Rowley,https://lh3.googleusercontent.com/-Y-O9OQEoryo/AAAAAAAAAAI/AAAAAAAACLQ/FQfxcfxi-6U/photo.jpg?sz=50,NoRole,NoTEAM
-
-function GetPlayers(){
-  $.getJSON('/getplayers', function(data) {
-  var items = [];
-  $.each(data, function(key, val) {
-   alert(key + ' , ' + val);
+  $(window).unload(function() {
+    currentUser["team"] = "";
+    update();
   });
- });
-}
 
-//sets the current role, current team and current name js vars
-//uses the profID var to make the call. 
-
-function GetSelf(){
-
-$.getJSON("/getself", { avatar: profID})
-.done(function(data) {
-  alert("Data Loaded: " + data);
-  currentRole=data[0];
-  currentTeam=data[1];
-  currentName=data[2];
-  
 });
-}
-
-
-
-
-function onSignInCallback(authResult) {
-  helper.onSignInCallback(authResult);
-}
-
-function replaceSpeechTextForBubble(event)
-{
-  var user = {avatar:"/images/avatar.jpg", team:""};
-  var text = event['results'][0][0]['transcript'];
-
-  console.log("Old text: " +oldText);
-  console.log("New Text: " +text);
-  console.log("Replaced: " + text.replace(oldText, ""));
-  var replaced = text.replace(oldText, "");
-
-  //text = replaced;
-  if(replaced != "")
-    addBubble(user, replaced);
-  oldText = replaced;
-  //replaceSpeechText(event);
-}

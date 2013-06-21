@@ -192,8 +192,9 @@ body {
       width: 120px; } }
 
 #tagline {
-  text-align: center;
-  font-size: 2em; }
+  text-align: center; }
+  #tagline h1 {
+    font-size: 2em; }
 
 #maketeam, #jointeam, #help {
   display: none;
