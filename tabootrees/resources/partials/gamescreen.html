@@ -8,7 +8,7 @@
 
   <div id="content">
     <section id="chat" class="basic secondary left vertcard">
-      <ul class="bubbles">
+      <ul class="bubbles" id="bubbleItems">
         <li class="bubbleitem"> <img class="navatar" src="images/avatar.jpg" /><span class="bubble">bubble</span></li>
         <li class="bubbleitem"> <img class="navatar" src="images/avatar.jpg" /><span class="bubble">bubble</span></li>
       </ul>
@@ -35,12 +35,12 @@
 
   <section id="scoreboard">
     <span id="lumberscore">
-      <span class="score">2</span><span class="teamlumber">Lumberjacks</span>
+      <span class="score" id="lumberjacks">0</span><span class="teamlumber">Lumberjacks</span>
     </span>
     <span class="counter">
     </span>
     <span id="treescore">
-      <span class="teamtree">Treehuggers</span><span class="score">4</span>
+      <span class="teamtree">Treehuggers</span><span class="score" id="treehuggers">0</span>
     </span>
   </section>
 

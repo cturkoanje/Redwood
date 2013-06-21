@@ -64,7 +64,7 @@ Speaker.prototype.stopListening = function() {
 
     console.log("************************Stopped listening to user***********************");
 
-    this.recognition.stop();
+    this.recognition.abort();
 };
 
 Speaker.prototype.setupForMatch = function() {
@@ -125,15 +125,36 @@ Speaker.prototype.setupForProhibited = function() {
         
         //Standar speech functions with callbacks.
         this.recognition.onresult = function (event) {
-            console.log('got result of \n' + event['results'][0][0]['transcript']);
+            //console.log('got result of \n' + event['results'][0][0]['transcript']);
+            console.log("got result for prohiboted");
 
             var searchWords = currentObject.tabooWords;
             var searchPhrase = event['results'][0][0]['transcript'];
 
+            for(x=0; x< searchWords.length; x++)
+            {
+                if(searchPhrase.indexOf(searchWords[x]) > 1)
+                {
+
+                        console.log("YOU SAID A FUCKING WRONG WORDDDDDDDDDDDDDDDDD");
+                        currentObject.stopListening();
+                        window[currentObject.saidIncorrectCall](event);
+                        //console.log("The index is " + wordArray[x-1].indexOf(searchWords[y]));
+                    
+                }
+                else
+                {
+                    window[currentObject.activeCallback](event);
+                }
+            }
+
+
+/*
             var str=searchPhrase;
             var wordArray=str.split(" ");
             //console.log(wordArray);
             //console.log("Length for prohiboted :" + wordArray.length);
+
 
 
             for(x=wordArray.length;x>0;x--)
@@ -145,18 +166,19 @@ Speaker.prototype.setupForProhibited = function() {
                     //console.log("Searching for " + wordArray[x-1] + " in " + searchWords[y]);
                     if(wordArray[x-1].indexOf(searchWords[y]) > -1)
                     {
+                        console.log("YOU SAID A FUCKING WRONG WORDDDDDDDDDDDDDDDDD");
                         window[currentObject.saidIncorrectCall](event);
                         currentObject.stopListening();
+                        console.log("The index is " + wordArray[x-1].indexOf(searchWords[y]));
                     }
                     //console.warn("The index is " + wordArray[x-1].indexOf(searchWords[y]));
                 }
             
 
             }
-
+*/
             //console.log("Found data " + JSON.stringify(event));
-            console.log('callback ' + currentObject.activeCallback);
-            window[currentObject.activeCallback](event);
+            //console.log('callback ' + currentObject.activeCallback);
         };
 
         this.recognition.onerror = function (event) {

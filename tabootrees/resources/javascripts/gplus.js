@@ -4,6 +4,20 @@ var players = [];
 var mainSpeech = null;
 var oldText = "";
 
+function updateUI()
+{
+  var teams = gameData.getTeams();
+  for(x=0;x<teams.length; x++)
+  {
+    var teamname = teams[x].getName();
+    console.log("Changing scrore for team :" + teamname);
+    teamname = teamname.replace(" ","");
+
+    console.log("divid :" + teamname + " with score " + teams[x].getScore());
+    $("#" + teamname).html(teams[x].getScore());
+  }
+}
+
 var helper = (function() {
   var authResult = undefined;
 
@@ -139,14 +153,31 @@ function getSelf(callback){
     });
 }
 
+
+$(document).ready(function() {
+    gplus();
+    handlers();
+});
+
+
+
+function card() {
+  $(".vertcard").css({ height: ($(window).height() - 200) + "px" });
+}
+function saidIncorrect(e) {
+  //alert("You said an incorrect word!");
+  //handlers();ß
+  console.log("Said incorrect word");
+  var newPlay = gameData.skipCard();
+      changeCard(newPlay.getCard());
+      mainSpeech = new Speaker();
+      mainSpeech.startListeningForProhibited(newPlay.getCard().getTabooWord(), "saidIncorrect", "replaceSpeechTextForBubble", "");
+}
+
 function replaceSpeechTextForBubble(event)
 {
   var user = {avatar:"/images/avatar.jpg", team:""};
   var text = event['results'][0][0]['transcript'];
-
-  console.log("Old text: " +oldText);
-  console.log("New Text: " +text);
-  console.log("Replaced: " + text.replace(oldText, ""));
   var replaced = text.replace(oldText, "");
 
   //text = replaced;
@@ -155,18 +186,6 @@ function replaceSpeechTextForBubble(event)
   oldText = replaced;
   //replaceSpeechText(event);
 }
-
-
-$(document).ready(function() {
-  $('#disconnect').click(helper.disconnectServer);
-  if ($('[data-clientid="YOUR_CLIENT_ID"]').length > 0) {
-    alert('This sample requires your OAuth credentials (client ID) ' +
-        'from the Google APIs console:\n' +
-        '    https://code.google.com/apis/console/#:access\n\n' +
-        'Find and replace YOUR_CLIENT_ID with your client ID and ' +
-        'YOUR_CLIENT_SECRET with your client secret in the project sources.'
-    );
-  }
 
   function gplus() {
     gapi.signin.render("signin", {
@@ -214,30 +233,8 @@ $(document).ready(function() {
             }
 
           }
-          if(toLoad == "partials/lobby.html #container")
-          {
+          if(toLoad == "partials/lobby.html #container") {
             loadPlayers();
-            var gameTeams = gameData.getTeams();
-
-            console.log("Game teams: " + JSON.stringify(gameTeams));
-
-            var team1User = gameTeams[0].getPlayers();
-
-            console.log("Team 1 users: "+JSON.stringify(team1User));
-
-            var team2User = gameTeams[1].getPlayers();
-            for(x=0;x<team1User.length;x++)
-            {
-              var playerName = team1User[x].getFullName();
-              var newElement = $('<article class="basic tertiary"><img class="avatar" src="images/avatar.jpg" /><span class="username">' + team1User[x].getFullName() + '</span></article>');
-              $("#team1").append(newElement);
-            }
-            for(x=0;x<team2User.length;x++)
-            {
-              var playerName = team2User[x].getFullName();
-              var newElement = $('<article class="basic tertiary"><img class="avatar" src="images/avatar.jpg" /><span class="username">' + team2User[x].getFullName() + '</span></article>');
-              $("#team2").append(newElement);
-            }
           }
           handlers();
           showNewContent();
@@ -324,15 +321,6 @@ $(document).ready(function() {
     tick();
   }
 
-  function card() {
-    $(".vertcard").css({ height: ($(window).height() - 200) + "px" });
-  }
-
-  $(window).resize(function() { card(); });
-
-  gplus();
-  handlers();
-
   function addUser(user) {
     var name = user.name;
     var avatar = user.avatar;
@@ -360,7 +348,8 @@ $(document).ready(function() {
     var article = $('article:contains("' + name + '")');
     var img = $('<img class="readyimg" src="images/ready.png" />');
     img.prependTo(article);
-    allReady();
+    //allReady();
+    changePage("partials/gamescreen.html");
   }
 
   function unready(user) {
@@ -370,17 +359,18 @@ $(document).ready(function() {
 
   function allReady() {
     if($('article').length == $('.readyimg').length && $('.leftAdd article').length > 1 && $('.rightAdd article').length > 1) {
-      changePage("partials/gamescreen/html");
+      changePage("partials/gamescreen.html");
     }
   }
 
   var changing = false;
   function changeCard(card) {
     if(!changing) {
+      $("#bubbleItems").html(" ");
       changing = true;
       var word = card.getWord();
       var taboos = card.getTabooWord();
-      var newCard = $('<ul class="card"><li>' + "hi" + '</li><hr></ul>');
+      var newCard = $('<ul class="card"><li>' + word + '</li><hr></ul>');
       for(var i in taboos) {
         $('<li>' + taboos[i] + '</li>').appendTo(newCard);
       }
@@ -396,14 +386,6 @@ $(document).ready(function() {
       } });
     }
   }
-
-  $("body").keyup(function(e) {
-    if((e.keyCode || e.which) == 32 && $('.card')[0])
-    {
-      var newPlay = gameData.skipCard();
-      changeCard(newPlay.getCard());
-    }
-  });
 
   function timeup(user, score) {
     if(user) {
@@ -438,5 +420,3 @@ $(document).ready(function() {
     currentUser["team"] = "";
     update();
   });
-
-});
