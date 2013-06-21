@@ -53,12 +53,6 @@ body {
   @media only screen and (max-width: 480px) {
     body {
       font-size: 12px; } }
-  @media only screen and (max-width: 360px) {
-    body {
-      font-size: 10px; } }
-  @media only screen and (max-height: 360px) {
-    body {
-      font-size: 10px; } }
 
 a {
   color: white;
@@ -481,7 +475,5 @@ body {
       margin-top: 0.5em;
       text-align: center; } }
 
-#ready {
-  clear: both;
-  position: relative;
-  top: 0.5em; }
+#ready .btn {
+  margin: 0 auto; }

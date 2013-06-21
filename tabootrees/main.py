@@ -50,21 +50,27 @@ from webapp2_extras import sessions
     
 SERVICE = build('plus', 'v1')
 
-class User(db.Model):
+class Player(db.Model):
     user = db.UserProperty()
-    name = db.StringProperty(required=True)
+    name = db.StringProperty(required=False)
+    role = db.StringProperty(required=False)
     userObject = db.UserProperty()
-    score = db.IntegerProperty(required=True)
+    score = db.IntegerProperty(required=False, default=0)
     avatar = db.StringProperty(default=None)
-    past_view_count = db.IntegerProperty(default=0) # just for demo purposes ...
-
+    team = db.ReferenceProperty(default=None)
+    teamName = db.StringProperty()
+   
 
 class Team(db.Model):
-    name  = db.StringProperty(required=True) 
-    leader = db.ReferenceProperty(User, required=True)
-    score = db.IntegerProperty(required=True)
+    teamName  = db.StringProperty(required=False) 
+    leader = db.ReferenceProperty(Player, required=False)
+    score = db.IntegerProperty(required=False)
 
-
+def gql_json_parser(query_obj):
+        result = []
+        for entry in query_obj:
+            result.append(dict([(p, unicode(getattr(entry, p))) for p in entry.properties()]))
+        return result
 
 # CLIENT_SECRETS, name of a file containing the OAuth 2.0 information for this
 # application, including client_id and client_secret, which are found
@@ -72,42 +78,6 @@ class Team(db.Model):
 # Console <http://code.google.com/apis/console>
 CLIENT_SECRETS = os.path.join(os.path.dirname(__file__), 'client_secrets.json')
 
-# # Helpful message to display in the browser if the CLIENT_SECRETS file
-# # is missing.
-# MISSING_CLIENT_SECRETS_MESSAGE = """
-# <h1>Warning: Please configure OAuth 2.0</h1>
-# <p>
-# To make this sample run you will need to populate the client_secrets.json file
-# found at:
-# </p>
-# <p>
-# <code>%s</code>.
-# </p>
-# <p>with information found on the <a
-# href="https://code.google.com/apis/console">APIs Console</a>.
-# </p>
-# """ % CLIENT_SECRETS
-
-
-# http = httplib2.Http(memcache)
-# service = discovery.build("plus", "v1", http=http)
-# decorator = appengine.oauth2decorator_from_clientsecrets(
-#     CLIENT_SECRETS,
-#     scope='https://www.googleapis.com/auth/plus.me',
-#     message=MISSING_CLIENT_SECRETS_MESSAGE)
-
-
-# Create a state token to prevent request forgery.
-# Store it in the session for later validation.
-# state = 
-
-# Set the Client ID, Token State, and Application Name in the HTML while
-# # serving it.
-# response = make_response(
-#   render_template('index.html',
-#                   CLIENT_ID=CLIENT_ID,
-#                   STATE=state,
-#                   APPLICATION_NAME=APPLICATION_NAME))
 
 class MainHandler(webapp2.RequestHandler):
     def dispatch(self):
@@ -263,30 +233,114 @@ class People(webapp2.RequestHandler):
             self.response.status = 500
             self.response.out.write(json.dumps('Failed to refresh access token.'))
 
+class GetSelf(webapp2.RequestHandler):
+    def get(self):
+        ava = self.request.get('avatar')
+        # logging.error(ava)
+        # playa = db.GqlQuery("SELECT * FROM Player WHERE avatar = :1",ava).get()
+        playa = db.GqlQuery("SELECT * FROM Player WHERE avatar = :1",ava).get()
+        # logging.warning(playa.name)
+        # logging.warning("playa:::" + playa.role)
+        jata = []
+        if playa == None:
+            logging.error("DAFUCK? No User???")
+        else:
+            jata.append(playa.role)
+            jata.append(playa.teamName)
+            jata.append(playa.name)
+        # jata = ["HI"]
+        logging.error(str(jata))
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps(jata))
+
+
+class GetPlayers(webapp2.RequestHandler):
+    def get(self):
+        allplayers = Player.all().order('teamName')
+        jata = []
+        for playa in allplayers:
+            jata2 = []
+            jata2.append(playa.name)
+            jata2.append(playa.avatar) 
+            jata2.append(playa.role)            
+            jata2.append(playa.teamName)
+            jata.append(jata2)   
+
+            # logging.warning(playa.avatar)
+            # logging.error("   ")
+        # json_query_data = gql_json_parser(allplayers)
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps(jata))
+
+        # self.response.out.write(simplejson.dumps(some_datastore_entity.to_dict()))
+        
+        # output = {
+        #     'STATE': STATE
+        #     }
+        # path = os.path.join(os.path.dirname(__file__), 'resources/templates/test1.html')
+        # self.response.headers['Content-Type'] = 'application/json'   
+        # obj = {
+        #     'success': 'some var', 
+        #     'payload': 'some var',
+        #   } 
+        # jata = gql_json_parser(allplayers)
+        # self.response.out.write(json.dumps(jata))
+        # path2 = os.path.join(os.path.dirname(__file__), 'resources/templates/test.html')
+        # self.response.write(template.render(path, output))
+
+
+class Update(webapp2.RequestHandler):
+    def post(self):
+        #generic class for updating existing data
+        info = json.loads(self.request.body)
+        logging.debug(info)
+        role = info['role']
+        avatar = info['avatar']
+        team = info['team']
+        players = Player.gql("WHERE avatar= :1",avatar).get()
+        # players = db.GqlQuery("SELECT * FROM Player WHERE avatar = :1",avatar).get()
+        logging.error("yarrr")
+        logging.warning(players)
+        if players == None:
+            logging.error("DAFUCK? No User???")
+        else:
+            logging.error(players.avatar)
+            logging.error(players.role)
+            logging.error(players.team)
+            name = players.name
+            ava = players.avatar
+            logging.error(name)
+            # if (role != ''):
+            players.role = role
+            # if (team != ''):
+            players.teamName = team
+            logging.warning("updating team or role")
+            players.put()
 
 class AddUser(webapp2.RequestHandler):
     def post(self):
-        # username = self.request.get('name')
-        # avatar = self.request.get('avatar')
-        # team = self.request.get('team')
-        # logging.debug(username)
-        # logging.debug((self.request.body))
         info = json.loads(self.request.body)
         logging.debug(info)
         url = info['avatar']
         name = info['name']
-        logging.debug(url)
-        # logging.debug("in adduser")
-        # logging.debug(self.request)
+        role = info['role']
+        team = info['team']
+        avatar = info['avatar']
+        team = "The Stinky hippies"
 
-# {"0":{"access_token":"ya29.AHES6ZTMnSsvn54AH4A1sDW1BfwJ8TmSDZV0o9-geLmEGbP7g1uZlw","token_type":"Bearer",
-# "expires_in":"3600",
-# "id_token":"eyJhbGciOiJSUzI1NiIsImtpZCI6ImVkNjM0ZWM3OTc2ZGFlMTRmZTMwY2M5M2RlNmY3ZGNhZDIwN2ZhOWQifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwic3ViIjoiMTE0MTQzNjg5ODE3NjcyOTUwNzY5IiwiYXpwIjoiMzk0ODY3ODYyNzEzLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiY19oYXNoIjoiRzd6ZjZGMnl0VHUwZWpFYkVRT2pvdyIsImF1ZCI6IjM5NDg2Nzg2MjcxMy5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsImF0X2hhc2giOiJ5dWpfSDYzOVRBUTk2SzQ4NkJZcWVRIiwiaWF0IjoxMzcxNjg1NDQyLCJleHAiOjEzNzE2ODkzNDJ9.MqQ9jSHfAlx-iPeAQw-z1Zg56XHiLx94VSknpvVyMHoQwCexG6aYH-TtyoTAxwqqosAfEbyBtbhxhb9us-zyk5Ttaqb8l7Rb76ODYMI_DzjQd7IMHhBU_UnA9ZtaTgBrrUKK7NqbWKSupTtrUOw8MIRyBzDYZ-ANQ5RBvP2hZDc",
-# "session_state":"4e4c8ae754d46eb1a5b7a5e14809158e6706f66b..7353",
-# "client_id":"394867862713.apps.googleusercontent.com",
-# "scope":"https://www.googleapis.com/auth/plus.login",
-# "response_type":"code token id_token gsession",
-# "issued_at":"1371685743","expires_at":"1371689343","_aa":"0"}}
+        players = db.GqlQuery("SELECT * FROM Player WHERE avatar = :1",url).get()
+        logging.error("yarrr")
+        logging.warning(players)
+        if players == None:
+            playa = Player()
+            playa.name = name
+            playa.role = role
+            # playa.team = team
+            playa.avatar = avatar
+            playa.put()
+
+       
+
 
 
 config = {}
@@ -298,6 +352,9 @@ app = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/connect', Connect),
     ('/adduser', AddUser),
+    ('/update', Update),
+    ('/getplayers', GetPlayers),
+    ('/getself', GetSelf),
     ('/people', People)
 ], debug=True, config=config)
 
