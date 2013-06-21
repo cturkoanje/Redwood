@@ -1,0 +1,39 @@
+application: tabootrees
+version: 18282
+runtime: python27
+api_version: 1
+threadsafe: yes
+
+handlers:
+- url: /favicon\.ico
+  static_files: favicon.ico
+  upload: favicon\.ico
+
+- url: /fonts
+  static_dir: resources/fonts
+
+- url: /javascripts
+  static_dir: resources/javascripts
+
+- url: /stylesheets
+  static_dir: resources/stylesheets
+
+- url: /partials
+  static_dir: resources/partials
+
+- url: /templates/elements
+  static_dir: resources/templates/elements
+
+- url: /stylesheets/elements
+  static_dir: resources/stylesheets/elements
+
+- url: /images
+  static_dir: resources/images
+
+- url: .*
+  script: main.app
+  secure: always
+
+libraries:
+- name: webapp2
+  version: "2.5.2"

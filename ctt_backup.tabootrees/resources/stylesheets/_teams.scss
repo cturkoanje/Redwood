@@ -1,0 +1,32 @@
+@mixin column($side) {
+	h1 {
+		font-size: 1.5em;
+	}
+	float: $side;
+	width: 43%;
+	@media only screen and (max-width: 720px) {
+		width: 40%;
+	}
+}
+
+.left {
+	@include column(left);
+}
+
+.right {
+	@include column(right);
+}
+
+.leftclick {
+	@include clickable($sec-dark);
+}
+
+.rightclick {
+	@include clickable($pri-dark);
+}
+
+.mascot {
+	display: block;
+	margin: 1em auto 0;
+	width: 90%;
+}

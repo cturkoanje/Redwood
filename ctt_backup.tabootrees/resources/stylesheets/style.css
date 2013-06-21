@@ -1,0 +1,480 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline; }
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block; }
+
+body {
+  line-height: 1; }
+
+ol, ul {
+  list-style: none; }
+
+blockquote, q {
+  quotes: none; }
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none; }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+@font-face {
+  font-family: 'Carrosserie-Light';
+  src: url("../fonts/Carrosserie-Light.eot?#iefix") format("embedded-opentype"), url("../fonts/Carrosserie-Light.woff") format("woff"), url("../fonts/Carrosserie-Light.ttf") format("truetype"), url("../fonts/Carrosserie-Light.svg#webfont") format("svg"); }
+
+body {
+  font-family: "Carrosserie-Light";
+  font-size: 16px;
+  color: white;
+  text-shadow: 0.18em 0.18em 0 #333333; }
+  @media only screen and (max-width: 480px) {
+    body {
+      font-size: 12px; } }
+
+a {
+  color: white;
+  text-decoration: none; }
+
+.hidden {
+  display: none;
+  visibility: hidden; }
+
+body {
+  background: url("../images/flannel.png") repeat; }
+
+#content {
+  margin: 70px auto;
+  width: 80%;
+  max-width: 960px; }
+
+#colorify {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  background: rgba(163, 218, 245, 0.7);
+  z-index: 0; }
+
+.btn {
+  position: relative;
+  transition: all 0.1s;
+  cursor: pointer;
+  display: block;
+  background: #cc4429;
+  font-size: 2em;
+  padding: .3em 0;
+  width: 80%;
+  max-width: 500px;
+  text-align: center;
+  text-decoration: none;
+  color: white;
+  border-radius: 3em;
+  margin: 1em auto;
+  box-shadow: 0 5px 0 #99331f, 0px 5px 6px black; }
+  .btn:active {
+    top: 4px;
+    box-shadow: 0 1px 0 #cc4429, 0 1px 3px black; }
+
+.btn:active {
+  top: 4px;
+  box-shadow: 0 1px 0 #99331f, 0 1px 3px black; }
+
+#load {
+  display: none; }
+
+.basic {
+  background: #cc4429;
+  box-shadow: 0 5px 0 #99331f, 0px 5px 6px black;
+  padding: 1em;
+  margin: 1em 0; }
+
+.secondary {
+  background: #203157;
+  box-shadow: 0 5px 0 #101a30, 0px 5px 6px black; }
+
+.tertiary {
+  background: #6b130b;
+  box-shadow: 0 5px 0 #460a05, 0px 5px 6px black; }
+
+#navbar {
+  font-size: 2em;
+  display: inline-block;
+  top: 0;
+  width: 100%;
+  position: fixed;
+  height: 50px;
+  background-color: #6b130b;
+  box-shadow: 0px 2px 10px black;
+  z-index: 1000; }
+
+#back {
+  position: absolute;
+  right: 3%;
+  text-decoration: none;
+  color: white;
+  width: 27%;
+  font-size: 0.5em;
+  margin-top: 17px;
+  text-align: right; }
+  @media only screen and (max-width: 640px) {
+    #back {
+      right: 7%;
+      width: 23%; } }
+
+#navusername {
+  font-size: 0.5em;
+  position: relative;
+  top: -1em;
+  left: 1em; }
+  @media only screen and (max-width: 640px) {
+    #navusername {
+      display: none; } }
+
+.navatar {
+  width: 40px;
+  height: 40px;
+  margin-top: 5px; }
+
+#navinfo {
+  position: absolute;
+  left: 3%;
+  display: inline-block;
+  width: 27%; }
+  @media only screen and (max-width: 640px) {
+    #navinfo {
+      left: 7%;
+      width: 23%; } }
+
+#title {
+  position: absolute;
+  margin-top: 0.3em;
+  display: inline-block;
+  width: 40%;
+  text-align: center;
+  left: 30%; }
+  @media only screen and (max-width: 480px) {
+    #title {
+      margin-top: 0.5em; } }
+
+#logo {
+  display: block;
+  width: 240px;
+  margin: 1em auto; }
+  @media only screen and (max-height: 500px) {
+    #logo {
+      width: 180px; } }
+  @media only screen and (max-height: 420px) {
+    #logo {
+      width: 120px; } }
+
+#tagline {
+  text-align: center; }
+  #tagline h1 {
+    font-size: 2em; }
+
+#maketeam, #jointeam, #help {
+  display: none;
+  opacity: 0; }
+
+.homescreen {
+  margin: 0 auto !important; }
+
+.left {
+  float: left;
+  width: 43%; }
+  .left h1 {
+    font-size: 1.5em; }
+  @media only screen and (max-width: 720px) {
+    .left {
+      width: 40%; } }
+
+.right {
+  float: right;
+  width: 43%; }
+  .right h1 {
+    font-size: 1.5em; }
+  @media only screen and (max-width: 720px) {
+    .right {
+      width: 40%; } }
+
+.leftclick {
+  position: relative;
+  transition: all 0.1s;
+  cursor: pointer; }
+  .leftclick:active {
+    top: 4px;
+    box-shadow: 0 1px 0 #101a30, 0 1px 3px black; }
+
+.rightclick {
+  position: relative;
+  transition: all 0.1s;
+  cursor: pointer; }
+  .rightclick:active {
+    top: 4px;
+    box-shadow: 0 1px 0 #99331f, 0 1px 3px black; }
+
+.mascot {
+  display: block;
+  margin: 1em auto 0;
+  width: 90%; }
+
+.vertcard {
+  overflow: scroll;
+  padding: 10px;
+  margin: 10px 0; }
+
+#chat {
+  font-size: 1em;
+  line-height: 1.2em;
+  font-color: white;
+  display: -webkit-flex;
+  -webkit-flex-flow: column;
+  -webkit-justify-content: flex-end; }
+  #chat ul {
+    margin: 10px 20px; }
+    #chat ul li {
+      margin: 10px 0; }
+
+#speech {
+  text-shadow: none;
+  overflow: scroll; }
+
+#card {
+  overflow: visible; }
+  #card .card {
+    overflow: scroll;
+    background-color: white;
+    color: #333333;
+    text-shadow: none;
+    box-shadow: 0 2px 10px black;
+    line-height: 1.5em;
+    text-align: center;
+    font-size: 2em;
+    padding: 1em;
+    height: 80%;
+    position: relative;
+    z-index: 100;
+    transition: box-shadow 0.3s; }
+  @media only screen and (max-height: 610px) {
+    #card {
+      font-size: 0.8em; } }
+  @media only screen and (max-height: 520px) {
+    #card {
+      font-size: 0.6em; } }
+  @media only screen and (max-height: 440px) {
+    #card {
+      font-size: 0.4em; } }
+  @media only screen and (max-height: 360px) {
+    #card {
+      font-size: 0.3em; } }
+
+.bubbleitem {
+  vertical-align: middle; }
+  .bubbleitem .navatar {
+    height: 40px;
+    width: 40px;
+    margin-top: 0; }
+    @media only screen and (max-width: 900px) {
+      .bubbleitem .navatar {
+        height: 30px;
+        width: 30px; } }
+    @media only screen and (max-width: 700px) {
+      .bubbleitem .navatar {
+        height: 20px;
+        width: 20px; } }
+
+.bubble {
+  left: 1em;
+  top: -1em;
+  position: relative;
+  color: #333333;
+  text-shadow: none;
+  display: inline-block;
+  width: 75%;
+  background-color: #ffffff;
+  border-radius: 1em;
+  padding: 0.5em;
+  box-shadow: 0 2px 0 #333333, 0px 3px 6px black; }
+  @media only screen and (max-width: 900px) {
+    .bubble {
+      width: 70%;
+      font-size: 0.8em; } }
+  @media only screen and (max-width: 700px) {
+    .bubble {
+      width: 65%;
+      font-size: 0.6em; } }
+
+#scoreboard {
+  width: 100%;
+  position: fixed;
+  height: 50px;
+  bottom: 0;
+  background-color: #6b130b;
+  box-shadow: 0px 1px 10px black;
+  z-index: 1000;
+  font-size: 1.5em; }
+  @media only screen and (max-width: 640px) {
+    #scoreboard {
+      font-size: 1.2em; } }
+  #scoreboard .counter {
+    top: 0.2em;
+    position: absolute;
+    width: 20%;
+    left: 40%;
+    text-align: center;
+    padding: 0.3em;
+    border-radius: 0.5em;
+    background: #460a05; }
+    @media only screen and (max-width: 640px) {
+      #scoreboard .counter {
+        top: 0.5em; } }
+    @media only screen and (max-width: 480px) {
+      #scoreboard .counter {
+        top: 0.8em; } }
+  #scoreboard #treescore {
+    top: 0.5em;
+    position: absolute;
+    right: 3%;
+    width: 37%;
+    text-align: right; }
+    @media only screen and (max-width: 640px) {
+      #scoreboard #treescore {
+        right: 7%;
+        width: 33%;
+        top: 0.8em; } }
+    @media only screen and (max-width: 480px) {
+      #scoreboard #treescore {
+        top: 1.2em; } }
+  #scoreboard #lumberscore {
+    top: 0.5em;
+    position: absolute;
+    left: 3%;
+    width: 37%;
+    text-align: left; }
+    @media only screen and (max-width: 640px) {
+      #scoreboard #lumberscore {
+        left: 7%;
+        width: 33%;
+        top: 0.8em; } }
+    @media only screen and (max-width: 480px) {
+      #scoreboard #lumberscore {
+        top: 1.2em; } }
+  #scoreboard .score {
+    padding: 0.3em;
+    border-radius: 0.5em;
+    background: #460a05; }
+  #scoreboard .teamlumber {
+    margin-left: 0.5em; }
+  #scoreboard .teamtree {
+    margin-right: 0.5em; }
+
+#overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  top: 0;
+  left: 0;
+  z-index: 1000; }
+
+#timeup {
+  z-index: 1001;
+  width: 50%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%); }
+  #timeup p {
+    text-align: center;
+    font-size: 1.5em;
+    margin: 0.3em 0; }
+  #timeup .roundreport {
+    padding: 0.3em;
+    margin: 0.8em 0;
+    border-radius: 0.5em;
+    background: #460a05; }
+    #timeup .roundreport span {
+      display: block;
+      font-size: 1.5em;
+      margin: 0.3em 0; }
+  #timeup .nextuser {
+    display: block;
+    margin: 1em auto; }
+  #timeup .counter {
+    padding: 0.3em;
+    border-radius: 0.5em;
+    background: #460a05;
+    font-size: 1.2em;
+    width: 1em;
+    text-align: center;
+    margin: 0 auto; }
+  @media only screen and (max-height: 600px) {
+    #timeup {
+      font-size: 0.8em; } }
+  @media only screen and (max-height: 500px) {
+    #timeup {
+      font-size: 0.6em; } }
+  @media only screen and (max-height: 400px) {
+    #timeup {
+      font-size: 0.4em; } }
+
+.avatar {
+  width: 50px;
+  height: 50px; }
+  @media only screen and (max-width: 720px) {
+    .avatar {
+      display: block;
+      margin: 0 auto; } }
+
+.readyimg {
+  height: 50px;
+  width: 50px;
+  position: absolute; }
+  @media only screen and (max-width: 720px) {
+    .readyimg {
+      display: block;
+      margin: 0 auto;
+      position: relative;
+      top: 50px;
+      margin-top: -50px; } }
+
+.username {
+  position: relative;
+  top: -1em;
+  left: 1em;
+  font-size: 1.2em; }
+  @media only screen and (max-width: 720px) {
+    .username {
+      position: static;
+      font-size: 1em;
+      display: block;
+      margin-top: 0.5em;
+      text-align: center; } }
+
+#ready .btn {
+  margin: 0 auto; }
