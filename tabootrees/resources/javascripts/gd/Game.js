@@ -184,6 +184,7 @@ TabooGame.prototype.changeUp = function() {
 	var currentPlay = this.play;
 	var newPlay = new PlayState();
 	var newTeam = this.teams[this.currentTeamIndex];
+	var currentUIndex = newTeam.getLastGuesser();
 
 	if(this.currentCardIndex == (this.cards.length - 1))
 		this.currentCardIndex = 0;
@@ -195,16 +196,30 @@ TabooGame.prototype.changeUp = function() {
 	else
 		this.currentTeamIndex = this.currentTeamIndex + 1;
 
-	if(newTeam.getLastGuesser() == (newTeam.numberOfPlayers() - 1))
+
+	console.log("Current player index " + currentUIndex);
+	console.log("The num of players : " + newTeam.numberOfPlayers());
+
+	if(currentUIndex === (newTeam.numberOfPlayers() - 1))
 		newTeam.setLastGuesser(0);
+	else if(typeof currentUIndex === 'undefined')
+	{
+		newTeam.setLastGuesser(0);
+		console.log("Is undefined? = " + currentUIndex);
+	}
 	else
-		newTeam.setLastGuesser(newTeam.getLastGuesser()+1);
+	{
+		var newIn = currentUIndex + 1;
+		newTeam.setLastGuesser(newIn);
+		console.log("New index from  " + currentUIndex  + " to " + newIn);
+		//newTeam.setLastGuesser(0);
+	}
 
 	newPlay.setCard(this.cards[this.currentCardIndex]);
 	newPlay.setCurrentTeam(newTeam);
-	newPlay.setGuesser(this.teams[newTeam.getLastGuesser()]);
+	newPlay.setGuesser(newTeam.getLastGuesser());
 	this.numberOfRounds = this.numberOfRounds - 1;
-
+	this.play = newPlay;
 
 	return newPlay;
 }
