@@ -4,9 +4,9 @@ var players = [];
 // var currentUserPlayerObject = null;
 
 // var profID = undefined;
-// var currentTeam = "NoTEAM";
-// var currentRole = "NoRole"; 
-// var currentName = "NoName";
+ var currentTeam = "NoTEAM";
+ var currentRole = "NoRole"; 
+ var currentName = "NoName";
 
 // var testingVar = "nulsssssl";
 
