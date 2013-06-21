@@ -1,0 +1,8 @@
+/* Carrosserie-Thin webfont (new-bulletproof) */ 
+@font-face {
+    font-family: 'Carrosserie-Thin';
+    src: url('Carrosserie-Thin.eot?#iefix') format('embedded-opentype'),
+         url('Carrosserie-Thin.woff') format('woff'),
+         url('Carrosserie-Thin.ttf')  format('truetype'),
+         url('Carrosserie-Thin.svg#webfont') format('svg');
+}

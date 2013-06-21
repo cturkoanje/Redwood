@@ -1,0 +1,56 @@
+<div id="container">
+
+  <section id="navbar">
+     <span id="navinfo"><img class="navatar" src="images/avatar.jpg"></img><span id="navusername">Jack Lumberson</span></span>
+    <h1 id="title">Chopdown</h1>
+    <a href="partials/lobby.html"><span id="back">Back</span></a>
+  </section>
+
+  <div id="content">
+    <section id="chat" class="basic secondary left vertcard">
+      <ul class="bubbles" id="bubbleItems">
+        <li class="bubbleitem"> <img class="navatar" src="images/avatar.jpg" /><span class="bubble">bubble</span></li>
+        <li class="bubbleitem"> <img class="navatar" src="images/avatar.jpg" /><span class="bubble">bubble</span></li>
+      </ul>
+    </section>
+
+    <section id="card" class="basic right vertcard">
+      <ul class="card">
+        <li id="guess"></li>
+        <hr>
+        <div id="tabooWords">
+        </div>
+      </ul>
+    </section>
+
+    <!-- Display what the person explaining says -
+    we might not need a separate section -->
+    <section id="speech" class="basic right vertcard hidden">
+      <article class="basic tertiary">
+        <img class="navatar" src="images/avatar.jpg" /><span class="username">Jack Lumberson</span>
+      </article>
+      <p class="speechtext"><p>
+    </section>
+  </div>
+
+  <section id="scoreboard">
+    <span id="lumberscore">
+      <span class="score" id="lumberjacks">0</span><span class="teamlumber">Lumberjacks</span>
+    </span>
+    <span class="counter">
+    </span>
+    <span id="treescore">
+      <span class="teamtree">Treehuggers</span><span class="score" id="treehuggers">0</span>
+    </span>
+  </section>
+
+</div>
+
+<footer>
+  <h3> Guess! / Taboo words</h3>
+</footer>
+ <!--
+// Footer varies depending on team
+// Guessing team sees "Guess!"
+// Opposite team sees word and tabbo words
+-->

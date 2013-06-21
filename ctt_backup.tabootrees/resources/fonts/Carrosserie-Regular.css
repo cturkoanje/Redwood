@@ -1,0 +1,8 @@
+/* Carrosserie-Regular webfont (new-bulletproof) */ 
+@font-face {
+    font-family: 'Carrosserie-Regular';
+    src: url('Carrosserie-Regular.eot?#iefix') format('embedded-opentype'),
+         url('Carrosserie-Regular.woff') format('woff'),
+         url('Carrosserie-Regular.ttf')  format('truetype'),
+         url('Carrosserie-Regular.svg#webfont') format('svg');
+}
