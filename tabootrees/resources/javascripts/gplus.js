@@ -2,6 +2,10 @@ var currentUser = {"avatar": "", "name": "", "team": "", "role": ""};
 var players = [];
 var currentUserPlayerObject = null;
 
+var profID = undefined;
+var currentTeam = "NoTEAM";
+var currentRole = "NoRole"; 
+var currentName = "NoName";
 
 var testingVar = "nulsssssl";
 
@@ -49,7 +53,6 @@ var helper = (function() {
     renderProfile: function() {
       var request = gapi.client.plus.people.get( {'userId' : 'me'} );
       request.execute( function(profile) {
-<<<<<<< HEAD
           $('#profile').empty();
           if (profile.error) {
             $('#profile').append(profile.error);
@@ -101,7 +104,6 @@ var helper = (function() {
                     "client": currentClientID
                   })
                 });
-=======
         currentUser["avatar"] = profile.image.url;
         getSelf(function() {
           $("#jointeam").css({ display: "block" });
@@ -109,19 +111,8 @@ var helper = (function() {
           $("body").css({ transition: "none", "-webkit-transition": "none"});
           $("#jointeam").animate({ opacity: 1 }, 200);
           $("#help").animate({ opacity: 1 }, 200);
->>>>>>> d765bb42df56cdd73b268970b49cabcae49e4f7c
         });
-        $.ajax({
-          type: 'POST',
-          // state!!!
-          url: window.location.href + 'adduser',
-          contentType: 'application/octet-stream; charset=utf-8',
-          processData: false,
-          data: JSON.stringify({ "name": profile.displayName,
-           "avatar": profile.image.url,
-           "team": "",
-            "role": ""})
-        });
+
       });
     },
     connectServer: function() {
@@ -176,20 +167,45 @@ function onSignInCallback(authResult) {
   helper.onSignInCallback(authResult);
 }
 
+
 function update(){
   $.ajax({
-    type: 'POST',
-    // state!!!
-    url: window.location.href + 'update',
-    contentType: 'application/octet-stream; charset=utf-8',
-    processData: false,
-    data: JSON.stringify({
-     // "avatar": profile.image.url,
-     "avatar": currentUser.avatar,
-     "team": currentUser.team,
-    "role": currentUser.role })
-  });
+        type: 'POST',
+        // state!!!
+        url: window.location.href + 'update',
+        contentType: 'application/octet-stream; charset=utf-8',
+   
+        processData: false,
+        data: JSON.stringify({
+         // "avatar": profile.image.url,
+         "avatar": profID,
+         "team": currentTeam,
+        "role": currentRole,
+        "clientID": currentClientID
+        })
+      });
 }
+
+
+
+function massText(someshit){
+  $.ajax({
+        type: 'POST',
+        // state!!!
+        url: window.location.href + 'masstext',
+        contentType: 'application/octet-stream; charset=utf-8',
+   
+        processData: false,
+        data: JSON.stringify({
+         // "avatar": profile.image.url,
+         "avatar": 'ava',
+         "team": 'team',
+        "role": 'rollin',
+        "clientID": 'cID'
+        })
+      });
+}
+
 
 function getPlayers(callback){
   $.getJSON('/getplayers', function(data) {
@@ -242,18 +258,6 @@ function saidIncorrect(e) {
       mainSpeech.startListeningForProhibited(newPlay.getCard().getTabooWord(), "saidIncorrect", "replaceSpeechTextForBubble", "");
 }
 
-function replaceSpeechTextForBubble(event)
-{
-  var user = {avatar:"/images/avatar.jpg", team:""};
-  var text = event['results'][0][0]['transcript'];
-  var replaced = text.replace(oldText, "");
-
-  //text = replaced;
-  if(replaced != "")
-    addBubble(user, replaced);
-  oldText = replaced;
-  //replaceSpeechText(event);
-}
 
   function gplus() {
     gapi.signin.render("signin", {
@@ -358,10 +362,6 @@ function replaceSpeechTextForBubble(event)
     });
   }
 
-  function renderRoles() {
-    alert("hi");
-    //if(currentUser)
-  }
 
   var roundsLeft = 1;
   function countdown(seconds) {
@@ -493,11 +493,7 @@ function replaceSpeechTextForBubble(event)
     }
   }
 
-<<<<<<< HEAD
-});
-
-var prof= "https://lh3.googleusercontent.com/-Y-O9OQEoryo/AAAAAAAAAAI/AAAAAAAACLQ/FQfxcfxi-6U/photo.jpg?sz=50";
-
+//});
 
 // update("https://lh3.googleusercontent.com/-Y-O9OQEoryo/AAAAAAAAAAI/AAAAAAAACLQ/FQfxcfxi-6U/photo.jpg?sz=50",
 //   "CATPowA","MC");
@@ -547,29 +543,8 @@ function massText(someshit){
 //
 // 1 , Joe Rowley,https://lh3.googleusercontent.com/-Y-O9OQEoryo/AAAAAAAAAAI/AAAAAAAACLQ/FQfxcfxi-6U/photo.jpg?sz=50,NoRole,NoTEAM
 
-function GetPlayers(){
-  $.getJSON('/getplayers', function(data) {
-  var items = [];
-  $.each(data, function(key, val) {
-   alert(key + ' , ' + val);
-  });
- });
-}
-
 //sets the current role, current team and current name js vars
 //uses the profID var to make the call. 
-
-function GetSelf(){
-
-$.getJSON("/getself", { avatar: profID})
-.done(function(data) {
-  alert("Data Loaded: " + data);
-  currentRole=data[0];
-  currentTeam=data[1];
-  currentName=data[2];
-  
-});
-}
 
 
 
@@ -594,9 +569,7 @@ function replaceSpeechTextForBubble(event)
   oldText = replaced;
   //replaceSpeechText(event);
 }
-=======
   $(window).unload(function() {
     currentUser["team"] = "";
     update();
   });
->>>>>>> d765bb42df56cdd73b268970b49cabcae49e4f7c
