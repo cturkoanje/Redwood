@@ -9,6 +9,7 @@ JS Library for game that will use the speech API
 
 var currentObject = null;
 var prev = "";
+var full = "";
 
 function Speaker () {
     var recognition = new webkitSpeechRecognition();
@@ -73,32 +74,59 @@ Speaker.prototype.setupForMatch = function() {
         
         //Standar speech functions with callbacks.
         this.recognition.onresult = function (event) {
-            console.log('got result');
-
-            var searchWord = currentObject.word;
-            var searchPhrase = event['results'][0][0]['transcript'];
-            //console.log("Searching for \"" + searchWord +  "\" in \"" + searchPhrase + "\"");
-
-            var str=searchPhrase;
-            var wordArray=str.split(" ");
-            //console.log(wordArray);
-            //console.log("Length :" + wordArray.length);
-
-
-            for(x=wordArray.length;x>0;x--)
-            {
-                //console.log("Getting value of index " + x + " with value " + wordArray[x-1] + " in array " + wordArray);
-                if(wordArray[x-1].indexOf(searchWord) > -1)
-                {
-                    window[currentObject.resultCallback](event);
-                    currentObject.stopListening();
+            var final_transcript = "";
+            var interim_transcript = "";
+            for (var i = event.resultIndex; i < event.results.length; ++i) {
+                  if (event.results[i].isFinal) {
+                    final_transcript += event.results[i][0].transcript;
+                  } else {
+                    interim_transcript += event.results[i][0].transcript;
+                  }
                 }
-            
+            console.log("final: " + final_transcript);
+            console.log("interim: " + interim_transcript);
 
+            //console.log('got result of \n' + event['results'][0][0]['transcript']);
+
+            var killWords = prev.split(" ");
+            prev = interim_transcript;
+            var toFilter = interim_transcript.split(" ");
+            for(var i = 0; i < killWords.length; i++) {
+                for(var j = 0; j < toFilter.length; j++) {
+                    if(killWords[i] == toFilter[j]) {
+                        toFilter[j] = "";
+                    }
+                }
+            }
+            var toSend = [];
+            for(var i = 0; i < toFilter.length; i++) {
+                if(toFilter[i] != "")
+                    toSend.push(toFilter[i]);
             }
 
-            window[currentObject.activeCallback](event);
-            //console.log("Found data " + JSON.stringify(event));
+            var tempTaboo = currentObject.tabooWords;
+            var searchTaboo = [];
+            for(var i = 0; i < tempTaboo.length; i++) {
+                var temp = tempTaboo[i].split(" ");
+                temp = temp.join("-");
+                temp = temp.split("-");
+                for(var j = 0; j < temp.length; j++) {
+                    searchTaboo.push(temp[j]);
+                }
+            }
+            console.log(searchTaboo);
+
+            for(var x=0; x < searchTaboo.length; x++) {
+                for(var y = 0; y < toSend.length; y++) {
+                    if(searchTaboo[x].toLowerCase() == toSend[y].toLowerCase() ) {
+                        currentObject.stopListening();
+                        toSend = [];
+                        window[currentObject.saidIncorrectCall](event);
+                    }
+                }
+            }
+
+            window[currentObject.activeCallback](toSend.join(" "));
         };
 
         this.recognition.onerror = function (event) {
@@ -139,20 +167,8 @@ Speaker.prototype.setupForProhibited = function() {
             console.log("interim: " + interim_transcript);
             //console.log('got result of \n' + event['results'][0][0]['transcript']);
 
-            var killWords = prev.split(" ");
-            prev = interim_transcript;
-            var toFilter = interim_transcript.split(" ");
-            for(var i = 0; i < killWords.length; i++) {
-                for(var j = 0; j < toFilter.length; j++) {
-                    if(killWords[i] == toFilter[j]) {
-                        toFilter[j] = "";
-                    }
-                }
-            }
-            var toSend = [];
-            for(var i = 0; i < toFilter.length; i++) {
-                if(toFilter[i] != "")
-                    toSend.push(toFilter[i]);
+            if(final_transcript != "") {
+                full += final_transcript;
             }
 
             var tempTaboo = currentObject.tabooWords;
@@ -167,16 +183,20 @@ Speaker.prototype.setupForProhibited = function() {
             }
             console.log(searchTaboo);
 
+            toSend = full + interim_transcript;
+
+            var toSearch = toSend.split(" ");
             for(var x=0; x < searchTaboo.length; x++) {
-                for(var y = 0; y < toSend.length; y++) {
-                    if(searchTaboo[x].toLowerCase() == toSend[y].toLowerCase() ) {
+                for(var y = 0; y < toSearch.length; y++) {
+                    if(searchTaboo[x].toLowerCase() == toSearch[y].toLowerCase() ) {
                         currentObject.stopListening();
-                        toSend = [];
+                        toSend = "";
                         window[currentObject.saidIncorrectCall](event);
                     }
                 }
             }
-            window[currentObject.activeCallback](toSend.join(" "));
+
+            window[currentObject.activeCallback](toSend);
         };
 
         this.recognition.onerror = function (event) {

@@ -176,6 +176,11 @@ function saidIncorrect(e) {
   mainSpeech.startListeningForProhibited(tabooWords, "saidIncorrect", "replaceSpeechTextForBubble", "");
 }
 
+function setDescribe(transcript) {
+  if(transcript != "")
+    $('.speechtext').text(transcript);
+}
+
 function replaceSpeechTextForBubble(transcript)
 {
   var user = {avatar:"/images/avatar.jpg", team:""};
