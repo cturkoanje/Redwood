@@ -1,5 +1,10 @@
 var currentUser = {"avatar": "", "name": "", "team": "", "role": ""};
 var players = [];
+var currentUserPlayerObject = null;
+
+
+var testingVar = "nulsssssl";
+
 
 var mainSpeech = null;
 var oldText = "";
@@ -136,6 +141,14 @@ function getPlayers(callback){
   $.getJSON('/getplayers', function(data) {
     $.each(data, function(key, val) {
       var toPush = {"name": val[0], "avatar": val[1], "role": val[2], "team": val[3]};
+      var cttPlayer = new Player(val[1], val[0], val[1], val[1], val[3]);
+      for(x=0; x<gameData.getTeams().length; x++)
+      {
+        var teams = gameData.getTeams();
+        if(teams[x].getName() == val[3])
+            teams[x].addPlayer(cttPlayer);
+      }
+
       if(toPush.team && toPush.name != currentUser.name)
         players.push(toPush);
     });
@@ -149,6 +162,7 @@ function getSelf(callback){
       currentUser["role"]=data[0];
       currentUser["team"]=data[1];
       currentUser["name"]=data[2];
+      currentUserPlayerObject = new Player(currentUser.avatar, data[2],data[2], currentUser.avatar, data[1]);
       callback();
     });
 }
@@ -165,23 +179,26 @@ function card() {
   $(".vertcard").css({ height: ($(window).height() - 200) + "px" });
 }
 function saidIncorrect(e) {
+  //alert("You said an incorrect word!");
+  //handlers();ß
+  console.log("Said incorrect word");
   var newPlay = gameData.skipCard();
-  changeCard(newPlay.getCard());
-  updateUI();
-  console.log("New incorrect:   " + JSON.stringify(newPlay.getCard().getTabooWord()));
-  currentObject.stopListening();
-  var tabooWords = newPlay.getCard().getTabooWord();
-  tabooWords.push(newPlay.getCard().getWord());
-  mainSpeech = new Speaker();
-  mainSpeech.startListeningForProhibited(tabooWords, "saidIncorrect", "replaceSpeechTextForBubble", "");
+      changeCard(newPlay.getCard());
+      mainSpeech = new Speaker();
+      mainSpeech.startListeningForProhibited(newPlay.getCard().getTabooWord(), "saidIncorrect", "replaceSpeechTextForBubble", "");
 }
 
-function replaceSpeechTextForBubble(transcript)
+function replaceSpeechTextForBubble(event)
 {
   var user = {avatar:"/images/avatar.jpg", team:""};
-  var text = transcript;
-  if(text != "")
-    addBubble(user, text);
+  var text = event['results'][0][0]['transcript'];
+  var replaced = text.replace(oldText, "");
+
+  //text = replaced;
+  if(replaced != "")
+    addBubble(user, replaced);
+  oldText = replaced;
+  //replaceSpeechText(event);
 }
 
   function gplus() {
@@ -203,7 +220,7 @@ function replaceSpeechTextForBubble(transcript)
     function loadContent() {
         $('#container').load(toLoad, function() {
           if($(".counter")[0])
-            countdown(60);
+            countdown(5);
 
           if(toLoad == "/ #container") {
             gplus();
@@ -214,23 +231,13 @@ function replaceSpeechTextForBubble(transcript)
           if(toLoad == "partials/gamescreen.html #container")
           {
             card();
-            $("body").keyup(function(e) {
-              if((e.keyCode || e.which) == 32 && $('.card')[0])
-              {
-                var newPlay = gameData.skipCard();
-                  changeCard(newPlay.getCard());
-                  updateUI();
-                  console.log("New incorrect:   " + JSON.stringify(newPlay.getCard().getTabooWord()));
-                  currentObject.stopListening();
-                  var tabooWords = newPlay.getCard().getTabooWord();
-                  tabooWords.push(newPlay.getCard().getWord());
-                  mainSpeech = new Speaker();
-                  mainSpeech.startListeningForProhibited(tabooWords, "saidIncorrect", "replaceSpeechTextForBubble", "");
-              }
-            });
+            renderRoles();
+            mainSpeech = new Speaker();
+            mainSpeech.startListeningForProhibited(["orange"], "saidIncorrect", "replaceSpeechTextForBubble", "");
             currentPlay = gameData.start();
+
             var currentCard = currentPlay.getCard();
-            console.log("Current card: " + currentPlay.getCard().toJSON());
+            console.log("Cureent card: " + currentPlay.getCard().toJSON());
             $("#guess").html(currentCard.getWord());
             var tabooWords = currentCard.getTabooWord();
             for(x=0; x<tabooWords.length; x++)
@@ -238,9 +245,7 @@ function replaceSpeechTextForBubble(transcript)
               var newWord = $('<li>' + tabooWords[x] + '</li>');
               $('#tabooWords').append(newWord);
             }
-            tabooWords.push(currentCard.getWord());
-            mainSpeech = new Speaker();
-            mainSpeech.startListeningForProhibited(tabooWords, "saidIncorrect", "replaceSpeechTextForBubble", "");
+
           }
           if(toLoad == "partials/lobby.html #container") {
             loadPlayers();
@@ -299,7 +304,12 @@ function replaceSpeechTextForBubble(transcript)
     });
   }
 
-  var roundsLeft = 0;
+  function renderRoles() {
+    alert("hi");
+    //if(currentUser)
+  }
+
+  var roundsLeft = 1;
   function countdown(seconds) {
     function tick() {
         //This script expects an element with an ID = "counter". You can change that to what ever you want.
@@ -312,16 +322,22 @@ function replaceSpeechTextForBubble(transcript)
           if($('#timeup:contains("Game is over!")')[0]) {
             $("#overlay").remove();
             $("#timeup").remove();
-            players = [];
-            currentUser["team"] = "";
             changePage("/");
           }
           else if(roundsLeft == 0 || $("#timeup")[0]) {
-            currentObject.stopListening();
             timeup();
           }
           else {
-            timeup({"name": "Marvin", "avatar":"images/avatar.jpg", "team":"lumberjacks"}, 10);
+            var newPlay = gameData.changeUp();
+            testingVar=newPlay;
+            console.log("New play for new round "+newPlay );
+            console.log("New Plater Name: " + newPlay.getCurrentTeam().getPlayers()[newPlay.getGuesser()].getFirstName());
+            console.log("New Player Image: " + newPlay.getCurrentTeam().getPlayers()[newPlay.getGuesser()].getImage());
+            console.log("New Team Name: " + newPlay.getCurrentTeam().getName());
+
+
+
+            timeup({"name": newPlay.getCurrentTeam().getPlayers()[newPlay.getGuesser()].getFirstName(), "avatar":newPlay.getCurrentTeam().getPlayers()[newPlay.getGuesser()].getImage(), "team":newPlay.getCurrentTeam().getName()}, newPlay.getCurrentTeam().getScore());
           }
         }
     }
@@ -419,7 +435,7 @@ function replaceSpeechTextForBubble(transcript)
     else {
       $("#overlay").remove();
       $("#timeup").remove();
-      countdown(60);
+      countdown(5);
     }
   }
 
