@@ -6,11 +6,10 @@ PlayState object for Taboo
 
 function PlayState() {
 	this.guesser = null;
-	this.describer = null;
+	//this.describer = null;
 	this.currentTeam = null;
 	this.currentCard = null;
 }
-
 /**
 	Get the guesser Player() object
 	Should return Player() object of person guessing 

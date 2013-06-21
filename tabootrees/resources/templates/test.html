@@ -3,7 +3,7 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" href="stylesheets/style.css">
-    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="javascripts/jquery.js"></script>
     <script src="javascripts/polymer-all/polymer/polymer.min.js"></script>
     <script src="https://apis.google.com/js/client:plusone.js"></script>
     <script src="javascripts/gplus.js"></script>
@@ -26,9 +26,17 @@ function clickedButton()
 {
   console.log("Clicked");
   gameData = new TabooGame(10, "lowCardCallback", "endGame");
-  var cardData = [new Card("apple", ["pie", "new york", "fruit"]), new Card("google", ["internet", "california", "search"]), new Card("google22", ["222", "cali222fornia", "se222arch"]) ];
-  var Team1 = new Team("team_1", [new Player(1, "F", "L", "", "team_1"), new Player(2, "F2", "L2", "", "team_1")]);
-  var Team2 = new Team("team_2", [new Player(3, "F3", "L3", "", "team_2"), new Player(4, "F24", "L24", "", "team_2")]);
+  var cardData = [];//[new Card("apple", ["pie", "new york", "fruit"]), new Card("google", ["internet", "california", "search"]), new Card("google22", ["222", "cali222fornia", "se222arch"]) ];
+
+  for(x=0;x<100;x++)
+  {
+    var newCardObj = new Card(card_list[x]['word'], [card_list[x]['taboo']['1'],card_list[x]['taboo']['2'],card_list[x]['taboo']['3'],card_list[x]['taboo']['4'],card_list[x]['taboo']['5']]);
+    cardData.push(newCardObj);
+    console.log("Card for " +x + "\n" + JSON.stringify(card_list[x]));
+  }
+
+  var Team1 = new Team("lumberjacks", [new Player(1, "FirstName", "LastName", "", "lumberjacks"), new Player(2, "F2", "L2", "", "lumberjacks")]);
+  var Team2 = new Team("tree huggers", [new Player(3, "F3", "L3", "", "tree huggers"), new Player(4, "F24", "L24", "", "tree huggers")]);
   var teamArray = [Team1, Team2];
   gameData.setTeams(teamArray);
   gameData.setCards(cardData);

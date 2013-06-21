@@ -2,6 +2,20 @@ var mainSpeech = null;
 var oldText = "";
 
 
+function updateUI()
+{
+  var teams = gameData.getTeams();
+  for(x=0;x<teams.length; x++)
+  {
+    var teamname = teams[x].getName();
+    console.log("Changing scrore for team :" + teamname);
+    teamname = teamname.replace(" ","");
+
+    console.log("divid :" + teamname + " with score " + teams[x].getScore());
+    $("#" + teamname).html(teams[x].getScore());
+  }
+}
+
 
 var helper = (function() {
   var authResult = undefined;
@@ -156,24 +170,28 @@ var helper = (function() {
 $(document).ready(function() {
 
 
-  // function signInCallback(authResult) {
-  //   if (authResult['access_token']) {
-  //   // Successfully authorized
-  //   // Hide the sign-in button now that the user is authorized, for example:
-  //     $("#login").css({ display: "none" });
-  //     $("#jointeam").css({ display: "block" });
-  //     $("#help").css({ display: "block" });
-  //     $("body").css({ transition: "none", "-webkit-transition": "none"});
-  //     $("#jointeam").animate({ opacity: 1 }, 200);
-  //     $("#help").animate({ opacity: 1 }, 200);
-  //   } else if (authResult['error']) {
-  //     // There was an error.
-  //     // Possible error codes:
-  //     //   "access_denied" - User denied access to your app
-  //     //   "immediate_failed" - Could not automatically log in the user
-  //     // console.log('There was an error: ' + authResult['error']);
-  //   }
-  // }
+  $(window).resize(function() { card(); });
+
+  gplus();
+  handlers();
+
+  $("body").keyup(function(e) {
+    if((e.keyCode || e.which) == 32 && $('.card')[0])
+    {
+      var newPlay = gameData.skipCard();
+      changeCard(newPlay.getCard());
+      updateUI();
+      console.log("New incorrect:   " + JSON.stringify(newPlay.getCard().getTabooWord()));
+      currentObject.stopListening();
+      mainSpeech = new Speaker();
+      mainSpeech.startListeningForProhibited(newPlay.getCard().getTabooWord(), "saidIncorrect", "replaceSpeechTextForBubble", "");
+      //mainSpeech.startListeningForProhibited(newPlay.getCard().getTabooWord(), "saidIncorrect", "replaceSpeechTextForBubble", "");
+    }
+  });
+
+
+});
+
 
   function gplus() {
     gapi.signin.render("signin", {
@@ -184,19 +202,255 @@ $(document).ready(function() {
       'scope': 'https://www.googleapis.com/auth/plus.login'
     });
   }
-$(document).ready(function() {
-  $('#disconnect').click(helper.disconnectServer);
-  if ($('[data-clientid="YOUR_CLIENT_ID"]').length > 0) {
-    alert('This sample requires your OAuth credentials (client ID) ' +
-        'from the Google APIs console:\n' +
-        '    https://code.google.com/apis/console/#:access\n\n' +
-        'Find and replace YOUR_CLIENT_ID with your client ID and ' +
-        'YOUR_CLIENT_SECRET with your client secret in the project sources.'
-    );
+
+  var roundsLeft = 0;
+  function countdown(seconds) {
+    function tick() {
+        //This script expects an element with an ID = "counter". You can change that to what ever you want.
+        seconds--;
+        $(".counter").text(String(seconds));
+        if( seconds > 0 ) {
+            setTimeout(tick, 1000);
+        }
+        else{
+          if($('#timeup:contains("Game is over!")')[0]) {
+            $("#overlay").remove();
+            $("#timeup").remove();
+            var toLoad = '/ #container';
+            $('#container').hide('fast',loadContent);
+            $('#load').remove();
+            $('body').append('<span id="load">LOADING...</span>');
+            $('#load').fadeIn('normal');
+            function loadContent() {
+                $('#container').load(toLoad, function() {
+                  card();
+                  gplus();
+                  handlers();
+                  showNewContent();
+                });
+            }
+            function showNewContent() {
+                $('#container').show('normal', hideLoader());
+            }
+            function hideLoader() {
+                $('#load').fadeOut('normal');
+            }
+          }
+          else if(roundsLeft == 0 || $("#timeup")[0]) {
+            timeup();
+          }
+          else {
+            timeup({"name": "Marvin", "avatar":"images/avatar.jpg", "team":"lumberjacks"}, 10);
+          }
+        }
+    }
+    tick();
   }
-});
+
+  function card() {
+    $(".vertcard").css({ height: ($(window).height() - 200) + "px" });
+  }
+
+function saidIncorrect(e)
+{
+  //alert("You said an incorrect word!");
+  //handlers();
+  console.log("Said incorrect word");
+  var newPlay = gameData.skipCard();
+      changeCard(newPlay.getCard());
+      mainSpeech = new Speaker();
+      mainSpeech.startListeningForProhibited(newPlay.getCard().getTabooWord(), "saidIncorrect", "replaceSpeechTextForBubble", "");
+}
+
+function onSignInCallback(authResult) {
+  helper.onSignInCallback(authResult);
+}
+
+function replaceSpeechTextForBubble(event)
+{
+  var user = {avatar:"/images/avatar.jpg", team:""};
+  var text = event['results'][0][0]['transcript'];
+  var replaced = text.replace(oldText, "");
+
+  //text = replaced;
+  if(replaced != "")
+    addBubble(user, replaced);
+  oldText = replaced;
+  //replaceSpeechText(event);
+}
+
+
+
+
 
   function handlers() {
+    $('a').click(function(e){
+      e.preventDefault();
+      var toLoad = $(this).attr('href')+' #container';
+      $('#container').hide('fast',loadContent);
+      $('#load').remove();
+      $('body').append('<span id="load">LOADING...</span>');
+      $('#load').fadeIn('normal');
+      function loadContent() {
+          $('#container').load(toLoad, function() {
+            if($(".counter")[0])
+              countdown(60);
+
+            if(toLoad == "partials/gamescreen.html #container")
+            {
+              mainSpeech = new Speaker();
+              currentPlay = gameData.start();
+
+              var currentCard = currentPlay.getCard();
+              console.log("Cureent card: " + currentPlay.getCard().toJSON());
+              $("#guess").html(currentCard.getWord());
+              var tabooWords = currentCard.getTabooWord();
+
+              mainSpeech.startListeningForProhibited(tabooWords, "saidIncorrect", "replaceSpeechTextForBubble", "");
+              for(x=0; x<tabooWords.length; x++)
+              {
+                var newWord = $('<li>' + tabooWords[x] + '</li>');
+                $('#tabooWords').append(newWord);
+              }
+
+            }
+            if(toLoad == "partials/lobby.html #container")
+            {
+              var gameTeams = gameData.getTeams();
+
+              console.log("Game teams: " + JSON.stringify(gameTeams));
+
+              var team1User = gameTeams[0].getPlayers();
+
+              console.log("Team 1 users: "+JSON.stringify(team1User));
+
+              var team2User = gameTeams[1].getPlayers();
+              for(x=0;x<team1User.length;x++)
+              {
+                var playerName = team1User[x].getFullName();
+                var newElement = $('<article class="basic tertiary"><img class="avatar" src="images/avatar.jpg" /><span class="username">' + team1User[x].getFullName() + '</span></article>');
+                $("#team1").append(newElement);
+              }
+              for(x=0;x<team2User.length;x++)
+              {
+                var playerName = team2User[x].getFullName();
+                var newElement = $('<article class="basic tertiary"><img class="avatar" src="images/avatar.jpg" /><span class="username">' + team2User[x].getFullName() + '</span></article>');
+                $("#team2").append(newElement);
+              }
+            }
+
+            card();
+            gplus();
+            handlers();
+            showNewContent();
+          });
+      }
+      function showNewContent() {
+          $('#container').show('normal', hideLoader());
+      }
+      function hideLoader() {
+          $('#load').fadeOut('normal');
+      }
+    });
+  }
+
+
+
+
+  function addUser(user) {
+    var name = user.name;
+    var avatar = user.avatar;
+    var team = user.team;
+    var toAdd = $('<article class="basic tertiary"><img class="avatar" src="' + avatar + '" /><span class="username">' + name + '</span></article>');
+    if(team == "lumberjacks")
+      toAdd.appendTo(".left");
+    else
+      toAdd.appendTo(".right");
+    var height = toAdd.height();
+    toAdd.css({ height: 0 });
+    toAdd.animate({ height: height + "px" }, 500);
+  }
+
+  function removeUser(user) {
+    var name = user.name;
+    var toRemove = $('article:contains("' + name + '")');
+    toRemove.animate({ height: 0 }, { duration: 500, complete: function() {toRemove.remove()} });
+  }
+
+  function ready(user) {
+    var name = user.name;
+    var article = $('article:contains("' + name + '")');
+    var img = $('<img class="readyimg" src="images/ready.png" />');
+    img.prependTo(article);
+  }
+
+  var changing = false;
+  function changeCard(card) {
+    // var newCard = $('<ul><li>' + card.getWord() + '</li><hr></ul>');
+    // for(var taboo in card.getTaboo()) {
+    //   $('<li>' + taboo + '</li>').appendTo(newCard);
+    // }
+    if(!changing) {
+      $("#bubbleItems").html(" ");
+      changing = true;
+      var word = card.getWord();
+      var taboos = card.getTabooWord();
+      var newCard = $('<ul class="card"><li>' + word + '</li><hr></ul>');
+      for(var i in taboos) {
+        $('<li>' + taboos[i] + '</li>').appendTo(newCard);
+      }
+      newCard.css({ top: "-" + $('.card').outerHeight() + "px", zIndex: 0 });
+      newCard.appendTo("#card");
+      $('.card:eq(0)').animate({ left: $('#card').outerWidth() + "px" }, { duration: 500, complete: function() {
+          $('.card:eq(1)').css({ "box-shadow": "0 5px 16px black", zIndex: 100 });
+          $('.card:eq(0)').delay(300).animate({left: 0}, 500, function() {
+            $('.card:eq(0)').remove();
+            $('.card:eq(0)').css({ top: 0, "box-shadow": "0 2px 10px black"});
+            changing = false;
+          });
+      } });
+    }
+  }
+
+  function timeup(user, score) {
+    if(user) {
+      $('<section id="overlay"></section>').appendTo("body");
+      var popup = $('<section id="timeup" class="basic tertiary"></section>');
+      var team = user.team == "lumberjacks" ? "Treehuggers saved " : "Lumberjacks chopped ";
+      var name = user.name;
+      var avatar = user.avatar;
+      var content = $('<p>Time is up!</p><p class="roundreport">' + team + '<span>' + score + '</span> forbidden woods.</p><p>Next up...</p><span class="nextuser basic"><img class="avatar" src="' + avatar + '" /><span class="username">' + name + '</span></span><section class="counter"></section>');
+      content.appendTo(popup);
+      popup.appendTo("body");
+      countdown(10);
+    }
+    else if(roundsLeft == 0) {
+      $('<section id="overlay"></section>').appendTo("body");
+      var popup = $('<section id="timeup" class="basic tertiary"></section>');
+      var team = parseInt($("#lumberscore .score").text()) > parseInt($("#treescore .score").text()) ? "Lumberjacks won by chopping " : "Treehuggers won by saving ";
+      var score = parseInt($("#lumberscore .score").text()) > parseInt($("#treescore .score").text()) ? parseInt($("#lumberscore .score").text()) : parseInt($("#treescore .score").text());
+      var content = $('<p>Game is over!</p><p class="roundreport">' + team + '<span>' + score + '</span> forbidden woods.</p><p>Returning to home...</p><section class="counter"></section>');
+      content.appendTo(popup);
+      popup.appendTo("body");
+      countdown(10);
+    }
+    else {
+      $("#overlay").remove();
+      $("#timeup").remove();
+      countdown(60);
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+function handlersTwo() {
     $('a').click(function(e){
       e.preventDefault();
       var toLoad = $(this).attr('href')+' #container';
@@ -265,170 +519,3 @@ $(document).ready(function() {
       }
     });
   }
-
-  var roundsLeft = 0;
-  function countdown(seconds) {
-    function tick() {
-        //This script expects an element with an ID = "counter". You can change that to what ever you want.
-        seconds--;
-        $(".counter").text(String(seconds));
-        if( seconds > 0 ) {
-            setTimeout(tick, 1000);
-        }
-        else{
-          if($('#timeup:contains("Game is over!")')[0]) {
-            $("#overlay").remove();
-            $("#timeup").remove();
-            var toLoad = '/ #container';
-            $('#container').hide('fast',loadContent);
-            $('#load').remove();
-            $('body').append('<span id="load">LOADING...</span>');
-            $('#load').fadeIn('normal');
-            function loadContent() {
-                $('#container').load(toLoad, function() {
-                  card();
-                  gplus();
-                  handlers();
-                  showNewContent();
-                });
-            }
-            function showNewContent() {
-                $('#container').show('normal', hideLoader());
-            }
-            function hideLoader() {
-                $('#load').fadeOut('normal');
-            }
-          }
-          else if(roundsLeft == 0 || $("#timeup")[0]) {
-            timeup();
-          }
-          else {
-            timeup({"name": "Marvin", "avatar":"images/avatar.jpg", "team":"lumberjacks"}, 10);
-          }
-        }
-    }
-    tick();
-  }
-
-  function card() {
-    $(".vertcard").css({ height: ($(window).height() - 200) + "px" });
-  }
-
-  $(window).resize(function() { card(); });
-
-  gplus();
-  handlers();
-
-  function addUser(user) {
-    var name = user.name;
-    var avatar = user.avatar;
-    var team = user.team;
-    var toAdd = $('<article class="basic tertiary"><img class="avatar" src="' + avatar + '" /><span class="username">' + name + '</span></article>');
-    if(team == "lumberjacks")
-      toAdd.appendTo(".left");
-    else
-      toAdd.appendTo(".right");
-    var height = toAdd.height();
-    toAdd.css({ height: 0 });
-    toAdd.animate({ height: height + "px" }, 500);
-  }
-
-  function removeUser(user) {
-    var name = user.name;
-    var toRemove = $('article:contains("' + name + '")');
-    toRemove.animate({ height: 0 }, { duration: 500, complete: function() {toRemove.remove()} });
-  }
-
-  function ready(user) {
-    var name = user.name;
-    var article = $('article:contains("' + name + '")');
-    var img = $('<img class="readyimg" src="images/ready.png" />');
-    img.prependTo(article);
-  }
-
-  var changing = false;
-  function changeCard(card) {
-    // var newCard = $('<ul><li>' + card.getWord() + '</li><hr></ul>');
-    // for(var taboo in card.getTaboo()) {
-    //   $('<li>' + taboo + '</li>').appendTo(newCard);
-    // }
-    if(!changing) {
-      changing = true;
-      var word = card.getWord();
-      var taboos = card.getTabooWord();
-      var newCard = $('<ul class="card"><li>' + "hi" + '</li><hr></ul>');
-      for(var i in taboos) {
-        $('<li>' + taboos[i] + '</li>').appendTo(newCard);
-      }
-      newCard.css({ top: "-" + $('.card').outerHeight() + "px", zIndex: 0 });
-      newCard.appendTo("#card");
-      $('.card:eq(0)').animate({ left: $('#card').outerWidth() + "px" }, { duration: 500, complete: function() {
-          $('.card:eq(1)').css({ "box-shadow": "0 5px 16px black", zIndex: 100 });
-          $('.card:eq(0)').delay(300).animate({left: 0}, 500, function() {
-            $('.card:eq(0)').remove();
-            $('.card:eq(0)').css({ top: 0, "box-shadow": "0 2px 10px black"});
-            changing = false;
-          });
-      } });
-    }
-  }
-
-  $("body").keyup(function(e) {
-    if((e.keyCode || e.which) == 32 && $('.card')[0])
-    {
-      var newPlay = gameData.skipCard();
-      changeCard(newPlay.getCard());
-    }
-  });
-
-  function timeup(user, score) {
-    if(user) {
-      $('<section id="overlay"></section>').appendTo("body");
-      var popup = $('<section id="timeup" class="basic tertiary"></section>');
-      var team = user.team == "lumberjacks" ? "Treehuggers saved " : "Lumberjacks chopped ";
-      var name = user.name;
-      var avatar = user.avatar;
-      var content = $('<p>Time is up!</p><p class="roundreport">' + team + '<span>' + score + '</span> forbidden woods.</p><p>Next up...</p><span class="nextuser basic"><img class="avatar" src="' + avatar + '" /><span class="username">' + name + '</span></span><section class="counter"></section>');
-      content.appendTo(popup);
-      popup.appendTo("body");
-      countdown(10);
-    }
-    else if(roundsLeft == 0) {
-      $('<section id="overlay"></section>').appendTo("body");
-      var popup = $('<section id="timeup" class="basic tertiary"></section>');
-      var team = parseInt($("#lumberscore .score").text()) > parseInt($("#treescore .score").text()) ? "Lumberjacks won by chopping " : "Treehuggers won by saving ";
-      var score = parseInt($("#lumberscore .score").text()) > parseInt($("#treescore .score").text()) ? parseInt($("#lumberscore .score").text()) : parseInt($("#treescore .score").text());
-      var content = $('<p>Game is over!</p><p class="roundreport">' + team + '<span>' + score + '</span> forbidden woods.</p><p>Returning to home...</p><section class="counter"></section>');
-      content.appendTo(popup);
-      popup.appendTo("body");
-      countdown(10);
-    }
-    else {
-      $("#overlay").remove();
-      $("#timeup").remove();
-      countdown(60);
-    }
-  }
-
-});
-
-function onSignInCallback(authResult) {
-  helper.onSignInCallback(authResult);
-}
-
-function replaceSpeechTextForBubble(event)
-{
-  var user = {avatar:"/images/avatar.jpg", team:""};
-  var text = event['results'][0][0]['transcript'];
-
-  console.log("Old text: " +oldText);
-  console.log("New Text: " +text);
-  console.log("Replaced: " + text.replace(oldText, ""));
-  var replaced = text.replace(oldText, "");
-
-  //text = replaced;
-  if(replaced != "")
-    addBubble(user, replaced);
-  oldText = replaced;
-  //replaceSpeechText(event);
-}
