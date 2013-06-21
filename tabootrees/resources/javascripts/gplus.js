@@ -1,38 +1,37 @@
-var profID = undefined;
-var currentTeam = "NoTEAM";
-var currentRole = "NoRole"; 
-var currentName = "NoName";
+var currentUser = {"avatar": "", "name": "", "team": "", "role": ""};
+var players = [];
+var currentUserPlayerObject = null;
+
+
+var testingVar = "nulsssssl";
+
 
 var mainSpeech = null;
 var oldText = "";
 
+function updateUI()
+{
+  var teams = gameData.getTeams();
+  for(x=0;x<teams.length; x++)
+  {
+    var teamname = teams[x].getName();
+    console.log("Changing scrore for team :" + teamname);
+    teamname = teamname.replace(" ","");
 
+    console.log("divid :" + teamname + " with score " + teams[x].getScore());
+    $("#" + teamname).html(teams[x].getScore());
+  }
+}
 
 var helper = (function() {
   var authResult = undefined;
 
   return {
-    /**
-     * Hides the sign-in button and connects the server-side app after
-     * the user successfully signs in.
-     *
-     * @param {Object} authResult An Object which contains the access token and
-     *   other authentication information.
-     */
     onSignInCallback: function(authResult) {
-      $('#authResult').html('Auth Result:<br/>');
-      for (var field in authResult) {
-        $('#authResult').append(' ' + field + ': ' + authResult[field] + '<br/>');
-      }
       if (authResult['access_token']) {
         // The user is signed in
         this.authResult = authResult;
         $("#login").css({ display: "none" });
-        $("#jointeam").css({ display: "block" });
-        $("#help").css({ display: "block" });
-        $("body").css({ transition: "none", "-webkit-transition": "none"});
-        $("#jointeam").animate({ opacity: 1 }, 200);
-        $("#help").animate({ opacity: 1 }, 200);
         helper.connectServer();
         // After we load the Google+ API, render the profile data from Google+.
         gapi.client.load('plus','v1',this.renderProfile);
@@ -40,9 +39,6 @@ var helper = (function() {
         // There was an error, which means the user is not signed in.
         // As an example, you can troubleshoot by writing to the console:
         console.log('There was an error: ' + authResult['error']);
-        $('#authResult').append('Logged out');
-        $('#authOps').hide('slow');
-        $('#gConnect').show();
       }
       console.log('authResult', authResult);
 
@@ -53,6 +49,7 @@ var helper = (function() {
     renderProfile: function() {
       var request = gapi.client.plus.people.get( {'userId' : 'me'} );
       request.execute( function(profile) {
+<<<<<<< HEAD
           $('#profile').empty();
           if (profile.error) {
             $('#profile').append(profile.error);
@@ -99,21 +96,36 @@ var helper = (function() {
                   processData: false,
                   data: JSON.stringify({ "name": profile.displayName,
                    "avatar": profile.image.url,
-                   "team": "",
-                    "role": ""})
+                   "team": " ",
+                    "role": "",
+                    "client": currentClientID
+                  })
                 });
+=======
+        currentUser["avatar"] = profile.image.url;
+        getSelf(function() {
+          $("#jointeam").css({ display: "block" });
+          $("#help").css({ display: "block" });
+          $("body").css({ transition: "none", "-webkit-transition": "none"});
+          $("#jointeam").animate({ opacity: 1 }, 200);
+          $("#help").animate({ opacity: 1 }, 200);
+>>>>>>> d765bb42df56cdd73b268970b49cabcae49e4f7c
         });
-      $('#authOps').show('slow');
-      $('#gConnect').hide();
-
-
-
-
+        $.ajax({
+          type: 'POST',
+          // state!!!
+          url: window.location.href + 'adduser',
+          contentType: 'application/octet-stream; charset=utf-8',
+          processData: false,
+          data: JSON.stringify({ "name": profile.displayName,
+           "avatar": profile.image.url,
+           "team": "",
+            "role": ""})
+        });
+      });
     },
-    
     connectServer: function() {
       console.log("authresult " + this.authResult.code);
-      
       $.ajax({
         type: 'POST',
         // state!!!
@@ -121,13 +133,11 @@ var helper = (function() {
         contentType: 'application/octet-stream; charset=utf-8',
         success: function(result) {
           console.log(result);
-          console.log("HMMM");
           helper.people();
         },
         processData: false,
         data: this.authResult.code
       });
-      
     },
     /**
      * Calls the server endpoint to get the list of people visible to this app.
@@ -162,28 +172,88 @@ var helper = (function() {
   };
 })();
 
+function onSignInCallback(authResult) {
+  helper.onSignInCallback(authResult);
+}
+
+function update(){
+  $.ajax({
+    type: 'POST',
+    // state!!!
+    url: window.location.href + 'update',
+    contentType: 'application/octet-stream; charset=utf-8',
+    processData: false,
+    data: JSON.stringify({
+     // "avatar": profile.image.url,
+     "avatar": currentUser.avatar,
+     "team": currentUser.team,
+    "role": currentUser.role })
+  });
+}
+
+function getPlayers(callback){
+  $.getJSON('/getplayers', function(data) {
+    $.each(data, function(key, val) {
+      var toPush = {"name": val[0], "avatar": val[1], "role": val[2], "team": val[3]};
+      var cttPlayer = new Player(val[1], val[0], val[1], val[1], val[3]);
+      for(x=0; x<gameData.getTeams().length; x++)
+      {
+        var teams = gameData.getTeams();
+        if(teams[x].getName() == val[3])
+            teams[x].addPlayer(cttPlayer);
+      }
+
+      if(toPush.team && toPush.name != currentUser.name)
+        players.push(toPush);
+    });
+    callback();
+  });
+}
+
+function getSelf(callback){
+  $.getJSON("/getself", { avatar: currentUser.avatar })
+    .done(function(data) {
+      currentUser["role"]=data[0];
+      currentUser["team"]=data[1];
+      currentUser["name"]=data[2];
+      currentUserPlayerObject = new Player(currentUser.avatar, data[2],data[2], currentUser.avatar, data[1]);
+      callback();
+    });
+}
+
 
 $(document).ready(function() {
+    gplus();
+    handlers();
+});
 
 
-  // function signInCallback(authResult) {
-  //   if (authResult['access_token']) {
-  //   // Successfully authorized
-  //   // Hide the sign-in button now that the user is authorized, for example:
-  //     $("#login").css({ display: "none" });
-  //     $("#jointeam").css({ display: "block" });
-  //     $("#help").css({ display: "block" });
-  //     $("body").css({ transition: "none", "-webkit-transition": "none"});
-  //     $("#jointeam").animate({ opacity: 1 }, 200);
-  //     $("#help").animate({ opacity: 1 }, 200);
-  //   } else if (authResult['error']) {
-  //     // There was an error.
-  //     // Possible error codes:
-  //     //   "access_denied" - User denied access to your app
-  //     //   "immediate_failed" - Could not automatically log in the user
-  //     // console.log('There was an error: ' + authResult['error']);
-  //   }
-  // }
+
+function card() {
+  $(".vertcard").css({ height: ($(window).height() - 200) + "px" });
+}
+function saidIncorrect(e) {
+  //alert("You said an incorrect word!");
+  //handlers();ß
+  console.log("Said incorrect word");
+  var newPlay = gameData.skipCard();
+      changeCard(newPlay.getCard());
+      mainSpeech = new Speaker();
+      mainSpeech.startListeningForProhibited(newPlay.getCard().getTabooWord(), "saidIncorrect", "replaceSpeechTextForBubble", "");
+}
+
+function replaceSpeechTextForBubble(event)
+{
+  var user = {avatar:"/images/avatar.jpg", team:""};
+  var text = event['results'][0][0]['transcript'];
+  var replaced = text.replace(oldText, "");
+
+  //text = replaced;
+  if(replaced != "")
+    addBubble(user, replaced);
+  oldText = replaced;
+  //replaceSpeechText(event);
+}
 
   function gplus() {
     gapi.signin.render("signin", {
@@ -194,89 +264,106 @@ $(document).ready(function() {
       'scope': 'https://www.googleapis.com/auth/plus.login'
     });
   }
-$(document).ready(function() {
-  $('#disconnect').click(helper.disconnectServer);
-  if ($('[data-clientid="YOUR_CLIENT_ID"]').length > 0) {
-    alert('This sample requires your OAuth credentials (client ID) ' +
-        'from the Google APIs console:\n' +
-        '    https://code.google.com/apis/console/#:access\n\n' +
-        'Find and replace YOUR_CLIENT_ID with your client ID and ' +
-        'YOUR_CLIENT_SECRET with your client secret in the project sources.'
-    );
+
+  function changePage(page) {
+    var toLoad = page +' #container';
+    $('#container').hide('fast',loadContent);
+    $('#load').remove();
+    $('body').append('<span id="load">LOADING...</span>');
+    $('#load').fadeIn('normal');
+    function loadContent() {
+        $('#container').load(toLoad, function() {
+          if($(".counter")[0])
+            countdown(5);
+
+          if(toLoad == "/ #container") {
+            gplus();
+          }
+          if(toLoad != "/ #container") {
+            populateUser();
+          }
+          if(toLoad == "partials/gamescreen.html #container")
+          {
+            card();
+            renderRoles();
+            mainSpeech = new Speaker();
+            mainSpeech.startListeningForProhibited(["orange"], "saidIncorrect", "replaceSpeechTextForBubble", "");
+            currentPlay = gameData.start();
+
+            var currentCard = currentPlay.getCard();
+            console.log("Cureent card: " + currentPlay.getCard().toJSON());
+            $("#guess").html(currentCard.getWord());
+            var tabooWords = currentCard.getTabooWord();
+            for(x=0; x<tabooWords.length; x++)
+            {
+              var newWord = $('<li>' + tabooWords[x] + '</li>');
+              $('#tabooWords').append(newWord);
+            }
+
+          }
+          if(toLoad == "partials/lobby.html #container") {
+            loadPlayers();
+          }
+          handlers();
+          showNewContent();
+        });
+    }
+    function showNewContent() {
+        $('#container').show('normal', hideLoader());
+    }
+    function hideLoader() {
+        $('#load').fadeOut('normal');
+    }
   }
-});
 
   function handlers() {
     $('a').click(function(e){
       e.preventDefault();
-      var toLoad = $(this).attr('href')+' #container';
-      $('#container').hide('fast',loadContent);
-      $('#load').remove();
-      $('body').append('<span id="load">LOADING...</span>');
-      $('#load').fadeIn('normal');
-      function loadContent() {
-          $('#container').load(toLoad, function() {
-            if($(".counter")[0])
-              countdown(60);
-
-            if(toLoad == "partials/gamescreen.html #container")
-            {
-              mainSpeech = new Speaker();
-              mainSpeech.startListeningForProhibited(["orange"], "saidIncorrect", "replaceSpeechTextForBubble", "");
-              currentPlay = gameData.start();
-
-              var currentCard = currentPlay.getCard();
-              console.log("Cureent card: " + currentPlay.getCard().toJSON());
-              $("#guess").html(currentCard.getWord());
-              var tabooWords = currentCard.getTabooWord();
-              for(x=0; x<tabooWords.length; x++)
-              {
-                var newWord = $('<li>' + tabooWords[x] + '</li>');
-                $('#tabooWords').append(newWord);
-              }
-
-            }
-            if(toLoad == "partials/lobby.html #container")
-            {
-              var gameTeams = gameData.getTeams();
-
-              console.log("Game teams: " + JSON.stringify(gameTeams));
-
-              var team1User = gameTeams[0].getPlayers();
-
-              console.log("Team 1 users: "+JSON.stringify(team1User));
-
-              var team2User = gameTeams[1].getPlayers();
-              for(x=0;x<team1User.length;x++)
-              {
-                var playerName = team1User[x].getFullName();
-                var newElement = $('<article class="basic tertiary"><img class="avatar" src="images/avatar.jpg" /><span class="username">' + team1User[x].getFullName() + '</span></article>');
-                $("#team1").append(newElement);
-              }
-              for(x=0;x<team2User.length;x++)
-              {
-                var playerName = team2User[x].getFullName();
-                var newElement = $('<article class="basic tertiary"><img class="avatar" src="images/avatar.jpg" /><span class="username">' + team2User[x].getFullName() + '</span></article>');
-                $("#team2").append(newElement);
-              }
-            }
-
-            card();
-            gplus();
-            handlers();
-            showNewContent();
-          });
+      if($(this).hasClass("teamBtn")) {
+        currentUser["team"] = $(this).data("team");
+        update();
       }
-      function showNewContent() {
-          $('#container').show('normal', hideLoader());
+      if($(this).hasClass("backBtn")) {
+        players = [];
+        currentUser["team"] = "";
+        update();
       }
-      function hideLoader() {
-          $('#load').fadeOut('normal');
+      if($(this).hasClass("readyBtn")) {
+        if($(this).text() == "Ready") {
+          ready(currentUser);
+          $(this).text("Nevermind");
+        }
+        else {
+          unready(currentUser);
+          $(this).text("Ready");
+        }
+      }
+      else {
+        changePage($(this).attr("href"));
       }
     });
   }
 
-  var roundsLeft = 0;
+  function populateUser() {
+    $('.navatar').attr("src", currentUser.avatar);
+    $('#navusername').text(currentUser.name);
+  }
+
+  function loadPlayers() {
+    getPlayers(function() {
+      $.each(players, function(key, val) {
+        addUser(val);
+      });
+      addUser(currentUser);
+    });
+  }
+
+  function renderRoles() {
+    alert("hi");
+    //if(currentUser)
+  }
+
+  var roundsLeft = 1;
   function countdown(seconds) {
     function tick() {
         //This script expects an element with an ID = "counter". You can change that to what ever you want.
@@ -289,45 +376,27 @@ $(document).ready(function() {
           if($('#timeup:contains("Game is over!")')[0]) {
             $("#overlay").remove();
             $("#timeup").remove();
-            var toLoad = '/ #container';
-            $('#container').hide('fast',loadContent);
-            $('#load').remove();
-            $('body').append('<span id="load">LOADING...</span>');
-            $('#load').fadeIn('normal');
-            function loadContent() {
-                $('#container').load(toLoad, function() {
-                  card();
-                  gplus();
-                  handlers();
-                  showNewContent();
-                });
-            }
-            function showNewContent() {
-                $('#container').show('normal', hideLoader());
-            }
-            function hideLoader() {
-                $('#load').fadeOut('normal');
-            }
+            changePage("/");
           }
           else if(roundsLeft == 0 || $("#timeup")[0]) {
             timeup();
           }
           else {
-            timeup({"name": "Marvin", "avatar":"images/avatar.jpg", "team":"lumberjacks"}, 10);
+            var newPlay = gameData.changeUp();
+            testingVar=newPlay;
+            console.log("New play for new round "+newPlay );
+            console.log("New Plater Name: " + newPlay.getCurrentTeam().getPlayers()[newPlay.getGuesser()].getFirstName());
+            console.log("New Player Image: " + newPlay.getCurrentTeam().getPlayers()[newPlay.getGuesser()].getImage());
+            console.log("New Team Name: " + newPlay.getCurrentTeam().getName());
+
+
+
+            timeup({"name": newPlay.getCurrentTeam().getPlayers()[newPlay.getGuesser()].getFirstName(), "avatar":newPlay.getCurrentTeam().getPlayers()[newPlay.getGuesser()].getImage(), "team":newPlay.getCurrentTeam().getName()}, newPlay.getCurrentTeam().getScore());
           }
         }
     }
     tick();
   }
-
-  function card() {
-    $(".vertcard").css({ height: ($(window).height() - 200) + "px" });
-  }
-
-  $(window).resize(function() { card(); });
-
-  gplus();
-  handlers();
 
   function addUser(user) {
     var name = user.name;
@@ -338,9 +407,11 @@ $(document).ready(function() {
       toAdd.prependTo(".leftAdd");
     else
       toAdd.prependTo(".rightAdd");
-    var height = toAdd.height();
-    toAdd.css({ height: 0 });
-    toAdd.animate({ height: height + "px" }, 500);
+    toAdd.load(function() {
+      var height = toAdd.height();
+      toAdd.css({ height: 0 });
+      toAdd.animate({ height: height + "px" }, 500);
+    });
   }
 
   function removeUser(user) {
@@ -354,29 +425,29 @@ $(document).ready(function() {
     var article = $('article:contains("' + name + '")');
     var img = $('<img class="readyimg" src="images/ready.png" />');
     img.prependTo(article);
-    allReady();
+    //allReady();
+    changePage("partials/gamescreen.html");
+  }
+
+  function unready(user) {
+    var name = user.name;
+    $('article:contains("' + name + '") .readyimg').remove();
   }
 
   function allReady() {
-    if($('article').length == $('.readyimg').length) {
-      alert("hi");
-      $("#ready .btn").click();
+    if($('article').length == $('.readyimg').length && $('.leftAdd article').length > 1 && $('.rightAdd article').length > 1) {
+      changePage("partials/gamescreen.html");
     }
-    else
-      alert("fuck");
   }
 
   var changing = false;
   function changeCard(card) {
-    // var newCard = $('<ul><li>' + card.getWord() + '</li><hr></ul>');
-    // for(var taboo in card.getTaboo()) {
-    //   $('<li>' + taboo + '</li>').appendTo(newCard);
-    // }
     if(!changing) {
+      $("#bubbleItems").html(" ");
       changing = true;
       var word = card.getWord();
       var taboos = card.getTabooWord();
-      var newCard = $('<ul class="card"><li>' + "hi" + '</li><hr></ul>');
+      var newCard = $('<ul class="card"><li>' + word + '</li><hr></ul>');
       for(var i in taboos) {
         $('<li>' + taboos[i] + '</li>').appendTo(newCard);
       }
@@ -392,14 +463,6 @@ $(document).ready(function() {
       } });
     }
   }
-
-  $("body").keyup(function(e) {
-    if((e.keyCode || e.which) == 32 && $('.card')[0])
-    {
-      var newPlay = gameData.skipCard();
-      changeCard(newPlay.getCard());
-    }
-  });
 
   function timeup(user, score) {
     if(user) {
@@ -426,10 +489,11 @@ $(document).ready(function() {
     else {
       $("#overlay").remove();
       $("#timeup").remove();
-      countdown(60);
+      countdown(5);
     }
   }
 
+<<<<<<< HEAD
 });
 
 var prof= "https://lh3.googleusercontent.com/-Y-O9OQEoryo/AAAAAAAAAAI/AAAAAAAACLQ/FQfxcfxi-6U/photo.jpg?sz=50";
@@ -451,9 +515,31 @@ function update(){
          // "avatar": profile.image.url,
          "avatar": profID,
          "team": currentTeam,
-        "role": currentRole})
+        "role": currentRole,
+        "clientID": currentClientID
+        })
       });
 }
+
+
+function massText(someshit){
+  $.ajax({
+        type: 'POST',
+        // state!!!
+        url: window.location.href + 'masstext',
+        contentType: 'application/octet-stream; charset=utf-8',
+   
+        processData: false,
+        data: JSON.stringify({
+         // "avatar": profile.image.url,
+         "avatar": 'ava',
+         "team": 'team',
+        "role": 'rollin',
+        "clientID": 'cID'
+        })
+      });
+}
+
 
 //just call GetPlayers. It returns which player (0 through n...) - 
 //just ignore that number, order is pretty arbitrary
@@ -508,3 +594,9 @@ function replaceSpeechTextForBubble(event)
   oldText = replaced;
   //replaceSpeechText(event);
 }
+=======
+  $(window).unload(function() {
+    currentUser["team"] = "";
+    update();
+  });
+>>>>>>> d765bb42df56cdd73b268970b49cabcae49e4f7c

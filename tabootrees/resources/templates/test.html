@@ -3,8 +3,11 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" href="stylesheets/style.css">
+<<<<<<< HEAD
     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-    <script src="javascripts/polymer-all/polymer/polymer.min.js"></script>
+=======
+    <script src="javascripts/jquery.js"></script>
+>>>>>>> d765bb42df56cdd73b268970b49cabcae49e4f7c
     <script src="https://apis.google.com/js/client:plusone.js"></script>
     <script src="javascripts/gplus.js"></script>
     <script src="javascripts/game.js"></script>
@@ -15,51 +18,100 @@
     <script src="javascripts/gd/PlayState.js"></script>
     <script src="javascripts/gd/Team.js"></script>
     <script src="javascripts/speech.js"></script>
+    <script src="javascripts/cdog.js"></script>
+    <script type="text/javascript" src="/_ah/channel/jsapi"></script>
+    
+
 
     <script>
-var currentPlay = null;
-var gameData = null;
+    var currentPlay = null;
+    var gameData = null;
 
-clickedButton();
+    clickedButton();
 
+    function clickedButton()
+    {
+      console.log("Clicked");
+      gameData = new TabooGame(10, "lowCardCallback", "endGame");
+      var cardData = [new Card("apple", ["pie", "new york", "fruit"]), new Card("google", ["internet", "california", "search"]), new Card("google22", ["222", "cali222fornia", "se222arch"]) ];
+      var Team1 = new Team("team_1", [new Player(1, "F", "L", "", "team_1"), new Player(2, "F2", "L2", "", "team_1")]);
+      var Team2 = new Team("team_2", [new Player(3, "F3", "L3", "", "team_2"), new Player(4, "F24", "L24", "", "team_2")]);
+      var teamArray = [Team1, Team2];
+      gameData.setTeams(teamArray);
+      gameData.setCards(cardData);
+
+<<<<<<< HEAD
+      //currentPlay = gameData.start();
+      //console.log(currentPlay.getCard().toJSON());
+    }
+=======
 function clickedButton()
 {
   console.log("Clicked");
   gameData = new TabooGame(10, "lowCardCallback", "endGame");
-  var cardData = [new Card("apple", ["pie", "new york", "fruit"]), new Card("google", ["internet", "california", "search"]), new Card("google22", ["222", "cali222fornia", "se222arch"]) ];
-  var Team1 = new Team("team_1", [new Player(1, "F", "L", "", "team_1"), new Player(2, "F2", "L2", "", "team_1")]);
-  var Team2 = new Team("team_2", [new Player(3, "F3", "L3", "", "team_2"), new Player(4, "F24", "L24", "", "team_2")]);
+  var cardData = [];//[new Card("apple", ["pie", "new york", "fruit"]), new Card("google", ["internet", "california", "search"]), new Card("google22", ["222", "cali222fornia", "se222arch"]) ];
+
+  for(x=0;x<100;x++)
+  {
+    var newCardObj = new Card(card_list[x]['word'], [card_list[x]['taboo']['1'],card_list[x]['taboo']['2'],card_list[x]['taboo']['3'],card_list[x]['taboo']['4'],card_list[x]['taboo']['5']]);
+    cardData.push(newCardObj);
+    console.log("Card for " +x + "\n" + JSON.stringify(card_list[x]));
+  }
+
+  var Team1 = new Team("lumberjacks", [new Player(1, "FirstName", "LastName", "", "lumberjacks"), new Player(2, "F2", "L2", "", "lumberjacks")]);
+  var Team2 = new Team("tree huggers", [new Player(3, "F3", "L3", "", "tree huggers"), new Player(4, "F24", "L24", "", "tree huggers")]);
   var teamArray = [Team1, Team2];
   gameData.setTeams(teamArray);
   gameData.setCards(cardData);
+>>>>>>> d765bb42df56cdd73b268970b49cabcae49e4f7c
 
-  //currentPlay = gameData.start();
-  //console.log(currentPlay.getCard().toJSON());
-}
 
-function guessed()
-{
-  currentPlay = gameData.gotClue();
-  console.log(currentPlay.getCard().toJSON());
 
-}
+    function guessed()
+    {
+      currentPlay = gameData.gotClue();
+      console.log(currentPlay.getCard().toJSON());
 
-function endGame()
-{
-  alert("Game ended");
-}
-function lowCardCallback()
-{
-  console.log('Low on cards');
-}
+    }
 
-</script>
+    function endGame()
+    {
+      alert("Game ended");
+    }
+    function lowCardCallback()
+    {
+      console.log('Low on cards');
+    }
+
+    </script>
 
 
   </head>
 
   <body>
+  <script>
+  var currentClientID ='{{ clientID }}'
+  $(document).ready(function() {
+    var token = '{{ token }}';
+    var channel = new goog.appengine.Channel(token);
+    var handler = {
+          'onopen': onOpened,
+          'onmessage': onMessage,
+          'onerror': function() {},
+          'onclose': function() {}
+        };
 
+    // socket = channel.open();
+    // socket.onopen = onOpened;
+    // socket.onmessage = onMessage;
+    // socket.onerror = onError;
+    // socket.onclose = onClose;
+    var socket = channel.open(handler);
+        socket.onopen = onOpened;
+        socket.onmessage = onMessage;
+    });
+
+  </script>
     <!--<div id="colorify"></div>-->
     <div id="container">
       <div id="content" class="homescreen">
@@ -68,19 +120,8 @@ function lowCardCallback()
           <h1>Forbidden Wood</h1>
         </section>
       <section id="login">
-        <span id="signin" class="btn">Log In! (get it?)</span>
+        <span id="signin" class="btn">Log In! (get it?) </span>
       </section>
-        <!--<div id="gConnect">
-    <button class="g-signin"
-        data-scope="https://www.googleapis.com/auth/plus.login"
-        data-requestvisibleactions="http://schemas.google.com/AddActivity"
-        data-clientId="394867862713.apps.googleusercontent.com"
-        data-accesstype="offline"
-        data-callback="onSignInCallback"
-        data-theme="dark"
-        data-cookiepolicy="single_host_origin">
-    </button>
-  </div>-->
         <section id="jointeam">
           <a href="partials/teams.html" class="btn">Play</a>
         </section>
@@ -92,5 +133,6 @@ function lowCardCallback()
 
     <footer>
     </footer>
+    
   </body>
 </html>

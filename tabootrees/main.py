@@ -45,6 +45,7 @@ from google.appengine.ext import db, webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 # from webapp2_extras import json
 from webapp2_extras import sessions
+from google.appengine.api import channel
 
 # class BaseHandler(webapp2.RequestHandler):
     
@@ -59,6 +60,7 @@ class Player(db.Model):
     avatar = db.StringProperty(default=None)
     team = db.ReferenceProperty(default=None)
     teamName = db.StringProperty()
+    client = db.StringProperty()
    
 
 class Team(db.Model):
@@ -77,6 +79,13 @@ def gql_json_parser(query_obj):
 # on the API Access tab on the Google APIs
 # Console <http://code.google.com/apis/console>
 CLIENT_SECRETS = os.path.join(os.path.dirname(__file__), 'client_secrets.json')
+
+class OpenedPage(webapp.RequestHandler):
+  def post(self):
+    game = "hi"
+    # game = self.request.body()
+    # logging.debug("beeeep: " + game)
+    # GameUpdater(game).send_update()
 
 
 class MainHandler(webapp2.RequestHandler):
@@ -99,17 +108,27 @@ class MainHandler(webapp2.RequestHandler):
 
     def get(self):
 
+
+
         state = ''.join(random.choice(string.ascii_uppercase + string.digits)
-                  for x in xrange(32))
+                  for x in xrange(10))
         self.session['state'] = state
+        clientID = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
+        token = channel.create_channel(clientID)
+        # logging.debug(token)
 
         output = {
-                'STATE': 'SJAOE3GGWDPOLNW9SWCXCXYJWAIJZT0D'
+                'STATE': 'SJAOE3GGWDPOLNW9SWCXCXYJWAIJZT0D',
+                'token': token,
+                'clientID': clientID
                 }
-        path = os.path.join(os.path.dirname(__file__), 'resources/templates/test.html')
 
+        path = os.path.join(os.path.dirname(__file__), 'resources/templates/test.html')
         # path2 = os.path.join(os.path.dirname(__file__), 'resources/templates/test.html')
         self.response.write(template.render(path, output))
+        # channel.send_message(clientID,"{'foo':'bar'}")
+        # logging.debug("FUCKKKKKKKKKKKKK!!!")
+        
         # self.response.write(str(self.session_store))
 
 class Connect(webapp2.RequestHandler):
@@ -226,12 +245,12 @@ class People(webapp2.RequestHandler):
             self.response.status = 200
             self.response.out.write(json.dumps(result))
 
-            
-
         except AccessTokenRefreshError:
             self.response.headers['Content-Type'] = 'application/json'
             self.response.status = 500
             self.response.out.write(json.dumps('Failed to refresh access token.'))
+
+
 
 class GetSelf(webapp2.RequestHandler):
     def get(self):
@@ -287,6 +306,21 @@ class GetPlayers(webapp2.RequestHandler):
         # self.response.out.write(json.dumps(jata))
         # path2 = os.path.join(os.path.dirname(__file__), 'resources/templates/test.html')
         # self.response.write(template.render(path, output))
+class MassText(webapp2.RequestHandler):
+    def post(self):
+        info = self.request.body
+        allplayers = Player.all().order('teamName')
+        # jata = []
+        for playa in allplayers:
+            channel.send_message(playa.client,info)
+        
+            # jata2 = []
+            # jata2.append(playa.name)
+            # jata2.append(playa.avatar) 
+            # jata2.append(playa.role)            
+            # jata2.append(playa.teamName)
+            # jata.append(playa.clientID)
+
 
 
 class Update(webapp2.RequestHandler):
@@ -297,6 +331,7 @@ class Update(webapp2.RequestHandler):
         role = info['role']
         avatar = info['avatar']
         team = info['team']
+        clientID = info['clientID']
         players = Player.gql("WHERE avatar= :1",avatar).get()
         # players = db.GqlQuery("SELECT * FROM Player WHERE avatar = :1",avatar).get()
         logging.error("yarrr")
@@ -314,7 +349,11 @@ class Update(webapp2.RequestHandler):
             players.role = role
             # if (team != ''):
             players.teamName = team
-            logging.warning("updating team or role")
+            players.clientID = clientID
+#             message = simplejson.dumps({'foo':'bar'})
+# # players.token
+#             channel.send_message(clientID,message)
+            # logging.warning("updating team or role: " + players.token)
             players.put()
 
 class AddUser(webapp2.RequestHandler):
@@ -326,6 +365,8 @@ class AddUser(webapp2.RequestHandler):
         role = info['role']
         team = info['team']
         avatar = info['avatar']
+        client = info['client']
+        # token = info['token']
         team = "The Stinky hippies"
 
         players = db.GqlQuery("SELECT * FROM Player WHERE avatar = :1",url).get()
@@ -335,11 +376,42 @@ class AddUser(webapp2.RequestHandler):
             playa = Player()
             playa.name = name
             playa.role = role
+            playa.client = client
+            # playa.token = token
             # playa.team = team
             playa.avatar = avatar
             playa.put()
 
-       
+class GameUpdater():
+    
+    def get_game_message(self):
+        # The gameUpdate object is sent to the client to render the state of a game.
+        gameUpdate = {
+          # 'board': self.game.board,
+          # 'userX': self.game.userX.user_id(),
+          # 'userO': '' if not self.game.userO else self.game.userO.user_id(),
+          # 'moveX': self.game.moveX,
+          # 'winner': self.game.winner,
+          'tits': nice
+        }
+        return simplejson.dumps(gameUpdate)
+
+    def send_update(self):
+        message = self.get_game_message()
+        # channel.send_message(,message)
+
+    allplayers = Player.all().order('teamName')
+    clients = []
+    for playa in allplayers:
+        clients.append(playa.client)
+
+        # logging.warning(playa.avatar)
+        # logging.error("   ")
+    # json_query_data = gql_json_parser(allplayers)
+    # self.response.headers['Content-Type'] = 'application/json'
+    # self.response.out.write(json.dumps(jata))
+
+
 
 
 
@@ -355,6 +427,8 @@ app = webapp2.WSGIApplication([
     ('/update', Update),
     ('/getplayers', GetPlayers),
     ('/getself', GetSelf),
+    ('/opened', OpenedPage),
+    ('/masstext', MassText),
     ('/people', People)
 ], debug=True, config=config)
 

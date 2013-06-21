@@ -8,6 +8,7 @@ JS Library for game that will use the speech API
 */
 
 var currentObject = null;
+var prev = "";
 
 function Speaker () {
     var recognition = new webkitSpeechRecognition();
@@ -64,7 +65,7 @@ Speaker.prototype.stopListening = function() {
 
     console.log("************************Stopped listening to user***********************");
 
-    this.recognition.stop();
+    this.recognition.abort();
 };
 
 Speaker.prototype.setupForMatch = function() {
@@ -125,38 +126,57 @@ Speaker.prototype.setupForProhibited = function() {
         
         //Standar speech functions with callbacks.
         this.recognition.onresult = function (event) {
-            console.log('got result of \n' + event['results'][0][0]['transcript']);
-
-            var searchWords = currentObject.tabooWords;
-            var searchPhrase = event['results'][0][0]['transcript'];
-
-            var str=searchPhrase;
-            var wordArray=str.split(" ");
-            //console.log(wordArray);
-            //console.log("Length for prohiboted :" + wordArray.length);
-
-
-            for(x=wordArray.length;x>0;x--)
-            {
-                //console.log("In first loop, wordArray.length at index" + x );
-                for(y=0;y<searchWords.length;y++)
-                {
-                    //console.log("In second loop, searchWords.length at index" + y );
-                    //console.log("Searching for " + wordArray[x-1] + " in " + searchWords[y]);
-                    if(wordArray[x-1].indexOf(searchWords[y]) > -1)
-                    {
-                        window[currentObject.saidIncorrectCall](event);
-                        currentObject.stopListening();
-                    }
-                    //console.warn("The index is " + wordArray[x-1].indexOf(searchWords[y]));
+            var final_transcript = "";
+            var interim_transcript = "";
+            for (var i = event.resultIndex; i < event.results.length; ++i) {
+                  if (event.results[i].isFinal) {
+                    final_transcript += event.results[i][0].transcript;
+                  } else {
+                    interim_transcript += event.results[i][0].transcript;
+                  }
                 }
-            
+            console.log("final: " + final_transcript);
+            console.log("interim: " + interim_transcript);
+            //console.log('got result of \n' + event['results'][0][0]['transcript']);
 
+            var killWords = prev.split(" ");
+            prev = interim_transcript;
+            var toFilter = interim_transcript.split(" ");
+            for(var i = 0; i < killWords.length; i++) {
+                for(var j = 0; j < toFilter.length; j++) {
+                    if(killWords[i] == toFilter[j]) {
+                        toFilter[j] = "";
+                    }
+                }
+            }
+            var toSend = [];
+            for(var i = 0; i < toFilter.length; i++) {
+                if(toFilter[i] != "")
+                    toSend.push(toFilter[i]);
             }
 
-            //console.log("Found data " + JSON.stringify(event));
-            console.log('callback ' + currentObject.activeCallback);
-            window[currentObject.activeCallback](event);
+            var tempTaboo = currentObject.tabooWords;
+            var searchTaboo = [];
+            for(var i = 0; i < tempTaboo.length; i++) {
+                var temp = tempTaboo[i].split(" ");
+                temp = temp.join("-");
+                temp = temp.split("-");
+                for(var j = 0; j < temp.length; j++) {
+                    searchTaboo.push(temp[j]);
+                }
+            }
+            console.log(searchTaboo);
+
+            for(var x=0; x < searchTaboo.length; x++) {
+                for(var y = 0; y < toSend.length; y++) {
+                    if(searchTaboo[x].toLowerCase() == toSend[y].toLowerCase() ) {
+                        currentObject.stopListening();
+                        toSend = [];
+                        window[currentObject.saidIncorrectCall](event);
+                    }
+                }
+            }
+            window[currentObject.activeCallback](toSend.join(" "));
         };
 
         this.recognition.onerror = function (event) {
