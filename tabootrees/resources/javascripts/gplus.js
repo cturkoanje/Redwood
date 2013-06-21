@@ -165,26 +165,23 @@ function card() {
   $(".vertcard").css({ height: ($(window).height() - 200) + "px" });
 }
 function saidIncorrect(e) {
-  //alert("You said an incorrect word!");
-  //handlers();ß
-  console.log("Said incorrect word");
   var newPlay = gameData.skipCard();
-      changeCard(newPlay.getCard());
-      mainSpeech = new Speaker();
-      mainSpeech.startListeningForProhibited(newPlay.getCard().getTabooWord(), "saidIncorrect", "replaceSpeechTextForBubble", "");
+  changeCard(newPlay.getCard());
+  updateUI();
+  console.log("New incorrect:   " + JSON.stringify(newPlay.getCard().getTabooWord()));
+  currentObject.stopListening();
+  var tabooWords = newPlay.getCard().getTabooWord();
+  tabooWords.push(newPlay.getCard().getWord());
+  mainSpeech = new Speaker();
+  mainSpeech.startListeningForProhibited(tabooWords, "saidIncorrect", "replaceSpeechTextForBubble", "");
 }
 
-function replaceSpeechTextForBubble(event)
+function replaceSpeechTextForBubble(transcript)
 {
   var user = {avatar:"/images/avatar.jpg", team:""};
-  var text = event['results'][0][0]['transcript'];
-  var replaced = text.replace(oldText, "");
-
-  //text = replaced;
-  if(replaced != "")
-    addBubble(user, replaced);
-  oldText = replaced;
-  //replaceSpeechText(event);
+  var text = transcript;
+  if(text != "")
+    addBubble(user, text);
 }
 
   function gplus() {
@@ -217,13 +214,23 @@ function replaceSpeechTextForBubble(event)
           if(toLoad == "partials/gamescreen.html #container")
           {
             card();
-            renderRoles();
-            mainSpeech = new Speaker();
-            mainSpeech.startListeningForProhibited(["orange"], "saidIncorrect", "replaceSpeechTextForBubble", "");
+            $("body").keyup(function(e) {
+              if((e.keyCode || e.which) == 32 && $('.card')[0])
+              {
+                var newPlay = gameData.skipCard();
+                  changeCard(newPlay.getCard());
+                  updateUI();
+                  console.log("New incorrect:   " + JSON.stringify(newPlay.getCard().getTabooWord()));
+                  currentObject.stopListening();
+                  var tabooWords = newPlay.getCard().getTabooWord();
+                  tabooWords.push(newPlay.getCard().getWord());
+                  mainSpeech = new Speaker();
+                  mainSpeech.startListeningForProhibited(tabooWords, "saidIncorrect", "replaceSpeechTextForBubble", "");
+              }
+            });
             currentPlay = gameData.start();
-
             var currentCard = currentPlay.getCard();
-            console.log("Cureent card: " + currentPlay.getCard().toJSON());
+            console.log("Current card: " + currentPlay.getCard().toJSON());
             $("#guess").html(currentCard.getWord());
             var tabooWords = currentCard.getTabooWord();
             for(x=0; x<tabooWords.length; x++)
@@ -231,7 +238,9 @@ function replaceSpeechTextForBubble(event)
               var newWord = $('<li>' + tabooWords[x] + '</li>');
               $('#tabooWords').append(newWord);
             }
-
+            tabooWords.push(currentCard.getWord());
+            mainSpeech = new Speaker();
+            mainSpeech.startListeningForProhibited(tabooWords, "saidIncorrect", "replaceSpeechTextForBubble", "");
           }
           if(toLoad == "partials/lobby.html #container") {
             loadPlayers();
@@ -290,11 +299,6 @@ function replaceSpeechTextForBubble(event)
     });
   }
 
-  function renderRoles() {
-    alert("hi");
-    //if(currentUser)
-  }
-
   var roundsLeft = 0;
   function countdown(seconds) {
     function tick() {
@@ -308,9 +312,12 @@ function replaceSpeechTextForBubble(event)
           if($('#timeup:contains("Game is over!")')[0]) {
             $("#overlay").remove();
             $("#timeup").remove();
+            players = [];
+            currentUser["team"] = "";
             changePage("/");
           }
           else if(roundsLeft == 0 || $("#timeup")[0]) {
+            currentObject.stopListening();
             timeup();
           }
           else {
