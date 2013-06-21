@@ -230,22 +230,12 @@ function replaceSpeechTextForBubble(event)
           }
           if(toLoad == "partials/gamescreen.html #container")
           {
-            card();
-            renderRoles();
-            mainSpeech = new Speaker();
-            mainSpeech.startListeningForProhibited(["orange"], "saidIncorrect", "replaceSpeechTextForBubble", "");
-            currentPlay = gameData.start();
+            var currentUser = "guesser";
 
-            var currentCard = currentPlay.getCard();
-            console.log("Cureent card: " + currentPlay.getCard().toJSON());
-            $("#guess").html(currentCard.getWord());
-            var tabooWords = currentCard.getTabooWord();
-            for(x=0; x<tabooWords.length; x++)
-            {
-              var newWord = $('<li>' + tabooWords[x] + '</li>');
-              $('#tabooWords').append(newWord);
-            }
-
+            if(currentUser == "guesser")
+              loadGameForGuess();
+            if(currentUser == "describer")
+              loadGameForDescribe();
           }
           if(toLoad == "partials/lobby.html #container") {
             loadPlayers();
@@ -443,3 +433,45 @@ function replaceSpeechTextForBubble(event)
     currentUser["team"] = "";
     update();
   });
+
+
+  function loadGameForDescribe()
+  {
+            card();
+            renderRoles();
+            mainSpeech = new Speaker();
+            mainSpeech.startListeningForProhibited(["orange"], "saidIncorrect", "replaceSpeechTextForBubble", "");
+            currentPlay = gameData.start();
+
+            var currentCard = currentPlay.getCard();
+            console.log("Cureent card: " + currentPlay.getCard().toJSON());
+            $("#guess").html(currentCard.getWord());
+            var tabooWords = currentCard.getTabooWord();
+            for(x=0; x<tabooWords.length; x++)
+            {
+              var newWord = $('<li>' + tabooWords[x] + '</li>');
+              $('#tabooWords').append(newWord);
+            }
+
+            $("#speech").addClass("hidden");
+            $("#card").removeClass("hidden");
+  }
+
+  function loadGameForGuess()
+  {
+            card();
+            renderRoles();
+            mainSpeech = new Speaker();
+
+            var currentCard = currentPlay.getCard();
+            console.log("Cureent card: " + currentPlay.getCard().toJSON());
+            $("#guess").html(currentCard.getWord());
+
+            $("#speech").removeClass("hidden");
+            $("#card").addClass("hidden");
+
+            mainSpeech.startListeningForMatch(currentCard.getWord(), "gotCorrect", "replaceSpeechTextForBubble", "");
+  }
+
+
+
